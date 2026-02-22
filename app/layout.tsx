@@ -14,8 +14,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rupeez",
-  description: "Your Finance Managing Companion",
+  title: "RUPEEZ",
+  description: "Ultimate Finance Management Application",
+  applicationName: "RUPEEZ",
+  manifest: "/manifest.webmanifest",
+  themeColor: "#10b981",
+  icons: {
+    icon: "/icons/icon-192x192.png",
+    apple: "/icons/icon-192x192.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "RUPEEZ",
+    statusBarStyle: "default",
+  },
 };
 
 export default function RootLayout({
