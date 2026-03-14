@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# PWA build artifacts (if using next-pwa)
+/public/sw.js
+/public/workbox-*.js
+/public/sw.js.map (if generated)
+/public/workbox-*.js.map (if generated)
