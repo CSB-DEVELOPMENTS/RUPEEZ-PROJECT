@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/hooks/auth/useAuth";
 
@@ -9,7 +10,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 // App Router route: /login  (app/(auth)/login/page.tsx)
 // ---------------------------------------------------------------------------
 
-export default function LoginPage() {
+function LoginPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { signInWithEmail, signUpWithEmail, signInWithGoogle, loading, user } = useAuth();
@@ -239,5 +240,14 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={<div className="min-h-screen bg-linear-to-br from-emerald-50 to-teal-100" />}>
+      <LoginPageContent />
+    </Suspense>
   );
 }

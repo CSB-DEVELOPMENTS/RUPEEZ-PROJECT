@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   description: "Ultimate Finance Management Application",
   applicationName: "RUPEEZ",
   manifest: "/manifest.webmanifest",
-  themeColor: "#10b981",
   icons: {
     icon: "/icons/icon-192x192.png",
     apple: "/icons/icon-192x192.png",
@@ -28,6 +27,13 @@ export const metadata: Metadata = {
     title: "RUPEEZ",
     statusBarStyle: "default",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#10b981",
 };
 
 export default function RootLayout({
