@@ -41,6 +41,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const { pathname } = request.nextUrl;
+  const fullPath = `${pathname}${request.nextUrl.search}`;
 
   const isAuthRoute =
     pathname.startsWith("/login") || pathname.startsWith("/signup") || pathname.startsWith("/auth");
@@ -49,7 +50,7 @@ export async function updateSession(request: NextRequest) {
   if (!user && !isAuthRoute) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
-    loginUrl.searchParams.set("redirectTo", pathname);
+    loginUrl.searchParams.set("redirectTo", fullPath);
     return NextResponse.redirect(loginUrl);
   }
 

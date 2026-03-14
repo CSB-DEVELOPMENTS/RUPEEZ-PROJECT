@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  type ReactNode,
+  useMemo,
+} from "react";
 import type { Session, User, AuthError } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 
@@ -42,7 +50,7 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 // ---------------------------------------------------------------------------
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -66,8 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [supabase]);
 
   const signInWithEmail = useCallback(
     async (email: string, password: string) => {

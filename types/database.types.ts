@@ -2,7 +2,7 @@
  * Auto-generated Supabase database types.
  *
  * To regenerate after schema changes, run:
- *   supabase gen types typescript --project-id rpimfhhaxclvyuhcgtnm > types/database.types.ts
+ *   supabase gen types typescript --project-id <project-id> > types/database.types.ts
  *
  * Or locally (after `supabase start`):
  *   supabase gen types typescript --local > types/database.types.ts
