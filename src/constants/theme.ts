@@ -15,6 +15,12 @@ export const Colors = {
     primary: '#22C55E',
     primaryStrong: '#0B7D37',
     primaryMuted: '#E1F7E8',
+    brand: '#3B82F6',
+    brandStrong: '#1D4ED8',
+    brandSoft: '#93C5FD',
+    brandFaint: '#DBEAFE',
+    danger: '#EF4444',
+    dangerMuted: '#FEE2E2',
   },
   dark: {
     text: '#E7ECFF',
@@ -28,6 +34,12 @@ export const Colors = {
     primary: '#22C55E',
     primaryStrong: '#4ADE80',
     primaryMuted: '#0D2415',
+    brand: '#3B82F6',
+    brandStrong: '#2563EB',
+    brandSoft: '#60A5FA',
+    brandFaint: '#1E40AF',
+    danger: '#F87171',
+    dangerMuted: '#7F1D1D',
   },
 } as const;
 

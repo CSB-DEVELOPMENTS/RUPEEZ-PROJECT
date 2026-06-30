@@ -25,6 +25,13 @@
   --app-primary-strong: 11 125 55;
   --app-primary-contrast: 248 255 250;
   --app-primary-muted: 225 247 232;
+  --app-brand: 59 130 246;
+  --app-brand-strong: 29 78 216;
+  --app-brand-soft: 147 197 253;
+  --app-brand-faint: 219 234 254;
+  --app-brand-contrast: 255 255 255;
+  --app-danger: 239 68 68;
+  --app-danger-muted: 254 226 226;
   --app-shadow: 16 24 40;
 }
 
@@ -42,5 +49,12 @@
   --app-primary-strong: 74 222 128;
   --app-primary-contrast: 4 16 9;
   --app-primary-muted: 13 36 21;
+  --app-brand: 59 130 246;
+  --app-brand-strong: 37 99 235;
+  --app-brand-soft: 96 165 250;
+  --app-brand-faint: 30 64 175;
+  --app-brand-contrast: 239 246 255;
+  --app-danger: 248 113 113;
+  --app-danger-muted: 127 29 29;
   --app-shadow: 0 0 0;
 }

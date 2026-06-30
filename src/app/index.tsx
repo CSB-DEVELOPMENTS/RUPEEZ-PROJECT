@@ -1,19 +1,23 @@
-import { useState } from 'react';
-import { ScrollView, Text, View, useColorScheme, useWindowDimensions } from 'react-native';
+import { ScrollView, Text, View, useWindowDimensions } from "react-native";
 
-import { BrandMark } from '@/components/landing/BrandMark';
-import { FeatureList } from '@/components/landing/FeatureList';
-import { Footer } from '@/components/landing/Footer';
-import { HeroActions } from '@/components/landing/HeroActions';
-import { Showcase } from '@/components/landing/Showcase';
-import { ThemeToggle } from '@/components/landing/ThemeToggle';
+import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { BrandMark } from "@/components/landing/BrandMark";
+import { FeatureList } from "@/components/landing/FeatureList";
+import { Footer } from "@/components/landing/Footer";
+import { HeroActions } from "@/components/landing/HeroActions";
+import { Showcase } from "@/components/landing/Showcase";
+import { useAppTheme } from "@/components/theme/AppThemeProvider";
 
-const features = ['Track your cashflow', 'Plan your bills', 'Split with anyone', 'Build wealth together'];
+const features = [
+  "Track your cashflow",
+  "Plan your bills",
+  "Split with anyone",
+  "Build wealth together",
+];
 
 export default function Index() {
-  const systemTheme = useColorScheme();
   const { height } = useWindowDimensions();
-  const [theme, setTheme] = useState<'light' | 'dark'>(systemTheme === 'dark' ? 'dark' : 'light');
+  const { theme, setTheme } = useAppTheme();
 
   return (
     <View className={`${theme} flex-1 bg-app-bg`}>
@@ -30,7 +34,7 @@ export default function Index() {
                   <BrandMark />
 
                   <Text className="mt-12 font-display text-6xl font-semibold leading-[1.05] tracking-tight text-app-text md:text-7xl">
-                    Welcome to{'\n'}
+                    Welcome to{"\n"}
                     <Text className="text-app-primary">Rupeez</Text>
                   </Text>
 
@@ -45,10 +49,6 @@ export default function Index() {
                   <View className="mt-10">
                     <HeroActions />
                   </View>
-
-                  <Text className="mt-10 font-display text-lg uppercase tracking-[1.2px] text-app-soft">
-                    100% PRIVATE. SECURE. LOCAL-FIRST.
-                  </Text>
                 </View>
 
                 <Showcase theme={theme} />
