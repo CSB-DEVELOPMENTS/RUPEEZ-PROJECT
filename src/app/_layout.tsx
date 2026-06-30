@@ -1,10 +1,20 @@
-import "../../global.css";
 import { Stack } from "expo-router";
+import "../../global.css";
+
+import { AppThemeProvider } from "@/components/theme/AppThemeProvider";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-    </Stack>
+    <AppThemeProvider>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="index" />
+          <Stack.Screen name="login" />
+          <Stack.Screen name="signup" />
+          <Stack.Screen name="dashboard" />
+        </Stack>
+      </AuthProvider>
+    </AppThemeProvider>
   );
 }
