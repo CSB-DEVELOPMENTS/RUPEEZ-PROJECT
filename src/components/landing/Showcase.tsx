@@ -1,33 +1,26 @@
 import { Text, View } from "react-native";
 
-type ShowcaseProps = {
-  theme: "light" | "dark";
-};
-
-export function Showcase({ theme }: ShowcaseProps) {
+export function Showcase() {
   return (
     <View className="w-full flex-1 items-center justify-center">
       <View className="relative w-full max-w-[680px] px-4 py-10">
         <View className="absolute inset-y-6 left-6 right-6 rounded-[40px] bg-app-bg-accent opacity-80" />
 
-        <View
-          className="absolute left-0 top-0 rounded-[28px] border border-app-border bg-app-surface px-5 py-4 z-10 shadow-showcase-soft dark:shadow-showcase-soft-dark">
+        <View className="absolute left-0 top-0 rounded-[28px] border border-app-border bg-app-surface px-5 py-4 z-10 shadow-showcase-soft dark:shadow-showcase-soft-dark">
           <Text className="font-display text-sm font-semibold uppercase tracking-[1.5px] text-app-primary-strong">
             REAL-TIME SYNC
           </Text>
           <Text className="mt-2 font-display text-lg text-app-text">99.9% Uptime</Text>
         </View>
 
-        <View
-          className="absolute bottom-2 right-0 rounded-[28px] border border-app-border bg-app-surface px-5 py-4 z-10 shadow-showcase-soft dark:shadow-showcase-soft-dark">
+        <View className="absolute bottom-2 right-0 rounded-[28px] border border-app-border bg-app-surface px-5 py-4 z-10 shadow-showcase-soft dark:shadow-showcase-soft-dark">
           <Text className="font-display text-sm font-semibold uppercase tracking-[1.5px] text-app-primary-strong">
             CASHFLOW ACTIVE
           </Text>
           <Text className="mt-2 font-display text-lg text-app-text">+$4,230.00</Text>
         </View>
 
-        <View
-          className="overflow-hidden rounded-[36px] border border-app-border bg-app-surface p-5 shadow-showcase-strong">
+        <View className="overflow-hidden rounded-[36px] border border-app-border bg-app-surface p-5 shadow-showcase-strong">
           <View className="rounded-[28px] border border-app-border bg-app-panel p-4">
             <View className="rounded-[22px] bg-app-panel-strong p-4">
               <View className="mb-4 flex-row items-center justify-between">
@@ -86,8 +79,7 @@ export function Showcase({ theme }: ShowcaseProps) {
             </View>
           </View>
 
-          <View
-            className="pointer-events-none absolute bottom-5 left-1/2 w-[38%] -translate-x-1/2 rounded-[24px] border border-app-border/40 bg-app-panel p-3 shadow-showcase-phone">
+          <View className="pointer-events-none absolute bottom-5 left-1/2 w-[38%] -translate-x-1/2 rounded-[24px] border border-app-border/40 bg-app-panel p-3 shadow-showcase-phone">
             <View className="h-1 w-16 self-center rounded-full bg-app-text-muted/20" />
             <View className="mt-3 rounded-[18px] bg-app-surface p-3">
               <Text className="font-display text-xs text-app-text-muted">Mobile Snapshot</Text>
