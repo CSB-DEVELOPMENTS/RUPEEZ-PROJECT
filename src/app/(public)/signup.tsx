@@ -11,21 +11,16 @@ import { useAuth } from "@/hooks/auth/useAuth";
 
 type Feedback = { message: string; tone: "error" | "info" | "success" } | null;
 
-const signupHighlights = [
-  "Set up your personal finance hub",
-  "Track bills before they become stress",
-  "Invite others into shared budgets later",
-];
-
 export default function SignupScreen() {
   const router = useRouter();
-  const { signInWithEmail, loading } = useAuth();
+  const { signUpWithEmail } = useAuth();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   async function handleSignup() {
     if (!fullName.trim() || !email.trim() || !password) {
@@ -41,15 +36,17 @@ export default function SignupScreen() {
       return;
     }
 
+    setSubmitting(true);
     setFeedback(null);
 
-    const { error } = await signInWithEmail(email, password);
+    const { error } = await signUpWithEmail(email, password, fullName);
 
     if (error) {
       setFeedback({ tone: "error", message: error.message });
       return;
     }
 
+    setSubmitting(false);
     setFeedback({
       tone: "success",
       message: "Account created. Check your inbox for the verification email from Supabase.",
@@ -117,7 +114,7 @@ export default function SignupScreen() {
             </Text>
           </Pressable>
 
-          <AuthActionButton loading={loading} onPress={handleSignup}>
+          <AuthActionButton loading={submitting} onPress={handleSignup}>
             Create Account
           </AuthActionButton>
 
@@ -138,7 +135,7 @@ export default function SignupScreen() {
 
         <View className="flex-row flex-wrap items-center justify-center gap-2">
           <Text className="font-display text-lg text-app-muted">Already have an account?</Text>
-          <Link href="../login" asChild>
+          <Link href="/login" asChild>
             <Pressable>
               <Text className="font-display text-lg font-semibold text-app-primary-strong">
                 Log in

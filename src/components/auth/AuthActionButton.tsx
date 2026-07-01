@@ -1,3 +1,5 @@
+import { Colors } from "@/constants/theme";
+import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import { ActivityIndicator, Pressable, Text } from "react-native";
 
 type AuthActionButtonProps = {
@@ -15,6 +17,7 @@ export function AuthActionButton({
   onPress,
   variant = "primary",
 }: AuthActionButtonProps) {
+  const { theme } = useAppTheme();
   const primary = variant === "primary";
 
   return (
@@ -28,7 +31,10 @@ export function AuthActionButton({
       onPress={onPress}
       style={{ opacity: disabled || loading ? 0.55 : 1 }}>
       {loading ? (
-        <ActivityIndicator color={primary ? "var(--app-primary-contrast)" : "var(--app-success)"} />
+        <ActivityIndicator
+          className=""
+          color={primary ? Colors[theme].primaryContrast : Colors[theme].text}
+        />
       ) : (
         <Text
           className={

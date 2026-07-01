@@ -1,5 +1,5 @@
 import { Link, useRouter } from "expo-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 import { AuthActionButton } from "@/components/auth/AuthActionButton";
@@ -8,29 +8,16 @@ import { AuthInput } from "@/components/auth/AuthInput";
 import { AuthMessage } from "@/components/auth/AuthMessage";
 import { AuthScreen } from "@/components/auth/AuthScreen";
 import { useAuth } from "@/hooks/auth/useAuth";
-import { useSearchParams } from "expo-router/build/hooks";
 
 type Feedback = { message: string; tone: "error" | "info" | "success" } | null;
 
-const loginHighlights = [
-  "Sync your spending habits",
-  "Review monthly trends faster",
-  "Jump back into your shared goals",
-];
-
 export default function LoginScreen() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const { signInWithEmail, loading, user } = useAuth();
+  const { signInWithEmail } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [feedback, setFeedback] = useState<Feedback>(null);
-
-  useEffect(() => {
-    if (!loading && user) {
-      router.replace("/dashboard");
-    }
-  }, [loading, user, router, searchParams]);
+  const [submitting, setSubmitting] = useState(false);
 
   async function handleLogin() {
     if (!email.trim() || !password) {
@@ -38,6 +25,7 @@ export default function LoginScreen() {
       return;
     }
 
+    setSubmitting(true);
     setFeedback(null);
 
     const { error } = await signInWithEmail(email, password);
@@ -47,6 +35,7 @@ export default function LoginScreen() {
       return;
     }
 
+    setSubmitting(false);
     setFeedback({ tone: "success", message: "Login successful. Redirecting you now." });
     router.replace("/dashboard");
   }
@@ -89,7 +78,7 @@ export default function LoginScreen() {
             toggleLabel="Forgot Password?"
             value={password}
           />
-          <AuthActionButton loading={loading} onPress={handleLogin}>
+          <AuthActionButton loading={submitting} onPress={handleLogin}>
             Login
           </AuthActionButton>
 
@@ -110,7 +99,7 @@ export default function LoginScreen() {
         <View className="items-center gap-8 pt-2">
           <View className="flex-row flex-wrap items-center justify-center gap-2">
             <Text className="font-display text-lg text-app-muted">{"Don't have an account?"}</Text>
-            <Link href="../signup" asChild>
+            <Link href="/signup" asChild>
               <Pressable>
                 <Text className="font-display text-lg font-semibold text-app-primary-strong">
                   Start investing

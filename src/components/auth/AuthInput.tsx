@@ -1,6 +1,6 @@
 import { Pressable, Text, TextInput, View } from "react-native";
 
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type AuthInputProps = {
@@ -48,12 +48,13 @@ export function AuthInput({
       <TextInput
         autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
-        className="min-h-16 rounded-2xl border border-app-border bg-app-panel px-5 font-display text-xl text-app-text"
+        className="min-h-16 rounded-2xl border border-app-border bg-app-panel px-5 text-xl text-app-text"
         keyboardType={keyboardType}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={Colors[theme].textSoft}
         secureTextEntry={secureTextEntry}
+        style={{ fontFamily: Fonts.sans }}
         value={value}
       />
     </View>
