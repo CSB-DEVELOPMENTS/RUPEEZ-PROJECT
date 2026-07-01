@@ -9,10 +9,8 @@ export default function RootLayout() {
     <AppThemeProvider>
       <AuthProvider>
         <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="signup" />
-          <Stack.Screen name="dashboard" />
+          <Stack.Screen name="(public)" />
+          <Stack.Screen name="(protected)" />
         </Stack>
       </AuthProvider>
     </AppThemeProvider>

@@ -49,18 +49,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase, handleAuthStateChange]);
+  }, [handleAuthStateChange]);
 
-  const signInWithEmail = useCallback(
-    async (email: string, password: string) => {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      return { error };
-    },
-    [supabase],
-  );
+  const signInWithEmail = useCallback(async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    return { error };
+  }, []);
 
   const signUpWithEmail = useCallback(
     async (email: string, password: string, fullName?: string) => {
@@ -76,23 +73,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       return { error };
     },
-    [supabase],
+    [],
   );
 
   const signOut = useCallback(async () => {
     const { error } = await supabase.auth.signOut();
     return { error };
-  }, [supabase]);
+  }, []);
 
-  const resetPassword = useCallback(
-    async (email: string) => {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: getRedirectUrl("?next=/reset-password"),
-      });
-      return { error };
-    },
-    [supabase],
-  );
+  const resetPassword = useCallback(async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: getRedirectUrl("?next=/reset-password"),
+    });
+    return { error };
+  }, []);
 
   return (
     <AuthContext.Provider
