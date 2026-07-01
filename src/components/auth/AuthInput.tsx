@@ -1,12 +1,12 @@
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View } from "react-native";
 
-import { Colors } from '@/constants/theme';
-import { useAppTheme } from '@/components/theme/AppThemeProvider';
+import { Colors } from "@/constants/theme";
+import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type AuthInputProps = {
-  autoCapitalize?: 'none' | 'sentences' | 'words';
-  autoComplete?: 'email' | 'name' | 'password' | 'off';
-  keyboardType?: 'default' | 'email-address';
+  autoCapitalize?: "none" | "sentences" | "words";
+  autoComplete?: "email" | "name" | "password" | "off";
+  keyboardType?: "default" | "email-address";
   label: string;
   onChangeText: (value: string) => void;
   placeholder: string;
@@ -17,9 +17,9 @@ type AuthInputProps = {
 };
 
 export function AuthInput({
-  autoCapitalize = 'none',
-  autoComplete = 'off',
-  keyboardType = 'default',
+  autoCapitalize = "none",
+  autoComplete = "off",
+  keyboardType = "default",
   label,
   onChangeText,
   placeholder,

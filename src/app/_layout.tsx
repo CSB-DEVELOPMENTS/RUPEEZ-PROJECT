@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import "../../global.css";
 
-import { AppThemeProvider } from "@/components/theme/AppThemeProvider";
+import { AppThemeProvider } from "@/contexts/AppThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export default function RootLayout() {
