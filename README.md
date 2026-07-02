@@ -1,48 +1,116 @@
-# Welcome to Rupeez 👋
+# Rupeez
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Rupeez is a mobile-first finance application built with Expo and Supabase. The product is designed to help users manage personal money, plan recurring commitments, split expenses with others, and grow toward savings or wealth goals inside one experience.
 
-## Get started
+The current codebase includes:
 
-1. Install dependencies
+- A branded public landing page
+- Email/password authentication with Supabase
+- Protected routing with Expo Router
+- Theme-aware UI
+- A dashboard experience built with reusable finance components
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Install Android Platform Tools
+- Expo 56
+- React 19
+- React Native 0.85
+- Expo Router
+- NativeWind + Tailwind CSS
+- Supabase
+- TypeScript
 
-   ```bash
-   winget install Google.PlatformTools
-   ```
+## Project Structure
 
-3. Start the app
+```text
+src/
+  app/
+    _layout.tsx            # Root providers and router stack
+    (public)/              # Landing, login, signup
+    (protected)/           # Auth-only screens such as dashboard
+  components/              # Reusable UI by feature area
+  constants/               # Mock/product constants
+  contexts/                # Auth and theme providers
+  hooks/                   # Shared hooks
+  lib/                     # External client setup, including Supabase
+  types/                   # Shared TypeScript types
+```
 
-   ```bash
-   npx expo start
-   ```
+## Setup
 
-In the output, you'll find options to open the app in a
+### 1. Install dependencies
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+```bash
+npm install
+```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 2. Configure environment variables
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Create a local environment file named `.env.local` based on `.env.example`.
 
-### Other setup steps
+```env
+EXPO_PUBLIC_SUPABASE_URL=<your-supabase-url>
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your-supabase-publishable-key>
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Notes:
 
-## Learn more
+- `src/lib/supabase.ts` expects both values at runtime.
+- The publishable key is the public client key used by the Expo app.
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Optional Android tooling
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+If you want to run on a local Android emulator or device from Windows, install Android platform tools:
 
+```bash
+winget install Google.PlatformTools
+```
+
+You may also need Android Studio if you plan to use an emulator.
+
+### 4. Start the app
+
+```bash
+npm run start
+```
+
+You can also use:
+
+```bash
+npm run android
+npm run ios
+npm run web
+```
+
+## Current State
+
+What is implemented now:
+
+- Branded marketing/landing UI
+- Login and signup flows
+- Theme toggling
+- Protected dashboard shell
+- Dashboard cards and finance widgets backed by mock constants
+
+What is planned by the domain model:
+
+- Wallet categories and transaction categories
+- Shared goals and contribution proofs
+- Shared expenses and settlement flows
+- Savings boxes / millionaire box
+- Loans and loan-linked transactions
+- Notifications, preferences, logs, and achievements
+
+## AI/Contributor Context
+
+For a fuller project briefing based on the codebase, ER diagram, and design references, see [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md).
+
+## Useful Commands
+
+```bash
+npm run start
+npm run lint
+npm run android
+npm run ios
+npm run web
+```
