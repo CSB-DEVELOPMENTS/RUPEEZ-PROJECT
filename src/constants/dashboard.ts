@@ -1,9 +1,14 @@
 import type {
+  CashFlowHeroData,
   DashboardCalendarActivity,
   DashboardCalendarDay,
   DashboardCategory,
   DashboardOverviewData,
   DashboardPortfolioAsset,
+  DashboardSafeSpendFlowItem,
+  DashboardSafeSpendObligation,
+  DashboardSafeSpendStat,
+  DashboardSafeSpendSummary,
   DashboardStat,
   DashboardSubscriptionAvatar,
   DashboardTransaction,
@@ -17,6 +22,7 @@ export const DASHBOARD_STATS: DashboardStat[] = [
   {
     caption: "Safe to spend",
     detail: "After bills this month",
+    href: "/safe-to-spend",
     title: "LKR 48,750.00",
     tone: "positive",
     trend: "72%",
@@ -48,6 +54,7 @@ export const DASHBOARD_STATS: DashboardStat[] = [
 ];
 
 export const DASHBOARD_OVERVIEW: DashboardOverviewData = {
+  detailHref: "/cash-flow",
   expenseTotal: "LKR 96,250.00",
   incomeTotal: "LKR 180,000.00",
   periodLabel: "May 2025",
@@ -62,25 +69,42 @@ export const DASHBOARD_OVERVIEW: DashboardOverviewData = {
   ],
 };
 
+export const DASHBOARD_OVERVIEW_FULL: DashboardOverviewData = {
+  periodLabel: "May 2025",
+  points: [
+    { expense: 18, income: 34, label: "1" },
+    { expense: 22, income: 41, label: "5" },
+    { expense: 19, income: 38, label: "10" },
+    { expense: 31, income: 57, label: "15" },
+    { expense: 24, income: 48, label: "20" },
+    { expense: 29, income: 61, label: "25" },
+    { expense: 27, income: 54, label: "30" },
+  ],
+  fileterRanges: ["1M", "3M", "6M", "YTD"],
+};
+
 export const DASHBOARD_TRANSACTIONS: DashboardTransaction[] = [
   {
-    amount: "-2,450.00",
+    id: "1",
+    amount: 2450,
     category: "Food",
-    merchant: "Keells Super",
+    title: "Keells Super",
     note: "Today",
     tone: "expense",
   },
   {
-    amount: "-1,150.00",
+    id: "2",
+    amount: -1150,
     category: "Transport",
-    merchant: "Uber Ride",
+    title: "Uber Ride",
     note: "Today",
     tone: "expense",
   },
   {
-    amount: "+180,000.00",
+    id: "3",
+    amount: 180000,
     category: "Income",
-    merchant: "Monthly Salary",
+    title: "Monthly Salary",
     note: "Yesterday",
     tone: "income",
   },
@@ -331,6 +355,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
 
 export const DASHBOARD_CALENDAR_MONTH_LABEL = getDashboardCalendarMonthLabel(2026, 6);
 export const DASHBOARD_CALENDAR_DAYS = createMonthCalendarDays(2026, 6, JULY_2026_ACTIVITY_ENTRIES);
+export const DASHBOARD_CALENDAR_DEFAULT_DETAIL_DATE = "2026-07-17";
+export const CALENDAR_HEATMAP_TITLE = "Flow Heatmap";
+export const CALENDAR_HEATMAP_FILTER_PLACEHOLDER = "Filter transactions...";
 
 export const DASHBOARD_PORTFOLIO: DashboardPortfolioAsset[] = [
   {
@@ -357,3 +384,156 @@ export const DASHBOARD_SUBSCRIPTIONS: DashboardSubscriptionAvatar[] = [
 ];
 
 export const DASHBOARD_WEEK_DAYS = ["M", "T", "W", "T", "F", "S", "S"] as const;
+
+export const SAFE_TO_SPEND_TITLE = "Safe to Spend";
+export const SAFE_TO_SPEND_SUBTITLE = "Daily operational budget based on remaining cash flow.";
+
+export const CASH_FLOW_HERO: CashFlowHeroData = {
+  periodLabel: "May 12 - May 18, 2025",
+  title: "Total Cash Flow",
+  totalValue: "+LKR 84,250.00",
+  totals: [
+    {
+      label: "Income",
+      tone: "positive",
+      value: "LKR 180,000.00",
+    },
+    {
+      label: "Expenses",
+      tone: "negative",
+      value: "-LKR 95,750.00",
+    },
+  ],
+};
+
+export const CASH_FLOW_INFLOW: DashboardTransaction[] = [
+  {
+    id: "1",
+    amount: 85000,
+    category: "Salary",
+    date: "May 15, 2025",
+    icon: "briefcase",
+    title: "TechCorp Salary",
+    tone: "income",
+  },
+  {
+    id: "2",
+    amount: 12500,
+    date: "May 12, 2025",
+    icon: "chart",
+    category: "Investments",
+    title: "Dividend Yield",
+    tone: "income",
+  },
+  {
+    id: "3",
+    amount: 8500,
+    date: "May 10, 2025",
+    icon: "crypto",
+    category: "Crypto",
+    title: "Crypto Stake",
+    tone: "income",
+  },
+  {
+    id: "4",
+    amount: 18500,
+    date: "May 05, 2025",
+    icon: "invoice",
+    category: "Freelance",
+    title: "Freelance Invoice",
+    tone: "income",
+  },
+];
+
+export const CASH_FLOW_OUTFLOW: DashboardTransaction[] = [
+  {
+    id: "1",
+    amount: 32000,
+    date: "May 01, 2025",
+    icon: "home",
+    category: "Mortgage",
+    title: "Mortgage Payment",
+    tone: "expense",
+  },
+  {
+    id: "2",
+    amount: 8500,
+    date: "May 03, 2025",
+    icon: "car",
+    category: "Transport",
+    title: "Tesla Lease",
+    tone: "expense",
+  },
+  {
+    id: "3",
+    amount: 4200,
+    date: "May 14, 2025",
+    icon: "food",
+    category: "Food & Dining",
+    title: "Dining & Leisure",
+    tone: "expense",
+  },
+  {
+    id: "4",
+    amount: 3800,
+    date: "May 10, 2025",
+    icon: "bill",
+    category: "Utilities",
+    title: "Utilities & Internet",
+    tone: "expense",
+  },
+];
+
+export const SAFE_TO_SPEND_SUMMARY: DashboardSafeSpendSummary = {
+  availableNow: "LKR 14,250.00",
+  dailyTarget: "LKR 20,000.00",
+  percentRemaining: 71,
+  resetIn: "Resets in 14h 22m",
+  title: "Today's allowance",
+};
+
+export const SAFE_TO_SPEND_STATS: DashboardSafeSpendStat[] = [
+  {
+    detail: "12% below average",
+    title: "Spent today",
+    value: "LKR 5,750.00",
+  },
+  {
+    detail: "Locked from daily budget",
+    title: "Reserved for bills",
+    value: "LKR 84,000.00",
+  },
+];
+
+export const SAFE_TO_SPEND_OBLIGATIONS: DashboardSafeSpendObligation[] = [
+  {
+    amount: "LKR 12,400.00",
+    dueLabel: "Due tomorrow",
+    name: "Electric Utility",
+  },
+  {
+    amount: "LKR 8,950.00",
+    dueLabel: "Jul 05",
+    name: "Auto Insurance",
+  },
+  {
+    amount: "LKR 6,500.00",
+    dueLabel: "Jul 08",
+    name: "Internet Service",
+  },
+];
+
+export const SAFE_TO_SPEND_FLOW_ITEMS: DashboardSafeSpendFlowItem[] = [
+  {
+    amount: "+LKR 320,000.00",
+    label: "Direct Deposit",
+    note: "Yesterday",
+    tone: "income",
+  },
+  {
+    amount: "-LKR 5,750.00",
+    label: "Arpico Supercentre",
+    note: "Today, 10:42 AM",
+    tone: "expense",
+  },
+];

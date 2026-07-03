@@ -1,3 +1,4 @@
+import { Href, useRouter } from "expo-router";
 import { useState } from "react";
 import { Modal, Platform, Pressable, Text, View } from "react-native";
 import { LineChart } from "react-native-chart-kit/v2";
@@ -19,24 +20,69 @@ import { DashboardCard } from "./DashboardCard";
 
 function SectionHeader({
   action,
+  actionHref,
   eyebrow,
   title,
+  filterRanges,
 }: {
   action?: string;
+  actionHref?: Href;
   eyebrow?: string;
   title: string;
+  filterRanges?: string[];
 }) {
+  const [selectedRange, setSelectedRange] = useState<string>("1M");
+  const router = useRouter();
+
   return (
-    <View className="mb-5 flex-row items-start justify-between gap-4">
-      <View className="gap-1">
-        <Text className="font-display text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight text-app-text">
-          {title}
-        </Text>
-        {eyebrow ? <Text className="font-display text-base text-app-muted">{eyebrow}</Text> : null}
+    <View className="mb-5 gap-4">
+      <View className="flex-row items-start gap-4 justify-between">
+        <View className="gap-1">
+          <Text className="font-display text-xl md:text-2xl 2xl:text-3xl font-semibold tracking-tight text-app-text">
+            {title}
+          </Text>
+          {eyebrow ? (
+            <Text className="font-display text-base text-app-muted">{eyebrow}</Text>
+          ) : null}
+        </View>
+        {action ? (
+          actionHref ? (
+            <Pressable
+              accessibilityHint="Opens this detail page"
+              accessibilityRole="button"
+              onPress={() => router.push(actionHref)}>
+              <Text className="font-display text-sm font-semibold text-app-primary-strong">
+                {action}
+              </Text>
+            </Pressable>
+          ) : (
+            <Text className="font-display text-sm font-semibold text-app-primary-strong">
+              {action}
+            </Text>
+          )
+        ) : null}
       </View>
-      {action ? (
-        <Text className="font-display text-sm font-semibold text-app-primary-strong">{action}</Text>
-      ) : null}
+      {filterRanges && (
+        <View className="flex-row flex-wrap gap-2">
+          {filterRanges.map((range) => {
+            const isActive = range === selectedRange;
+
+            return (
+              <Pressable
+                key={range}
+                className={`rounded-2xl px-4 py-2 ${isActive ? "bg-app-panel" : "bg-app-panel/35"}`}
+                onPress={() => setSelectedRange(range)}>
+                <Text
+                  className={`font-display text-sm font-semibold uppercase tracking-[1.2px] ${
+                    isActive ? "text-app-text" : "text-app-muted"
+                  }`}>
+                  {range}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 }
@@ -112,7 +158,7 @@ function OverviewMetric({
   valueClassName: string;
 }) {
   return (
-    <View className="min-w-[10rem] flex-1 gap-1">
+    <View className="w-full flex-1 gap-1 md:min-w-[10rem]">
       <Text className="font-display text-sm uppercase tracking-[1.2px] text-app-muted">
         {label}
       </Text>
@@ -127,15 +173,29 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
 
   return (
     <DashboardCard>
-      <SectionHeader title="Cash Flow Overview" eyebrow={data.periodLabel} />
+      <SectionHeader
+        action={data.detailHref ? "See more" : undefined}
+        actionHref={data.detailHref}
+        title="Cash Flow Overview"
+        eyebrow={data.periodLabel}
+        filterRanges={data.fileterRanges}
+      />
 
       <View className="mb-8 gap-4 md:flex-row">
-        <OverviewMetric label="Income" value={data.incomeTotal} valueClassName="text-app-primary" />
-        <OverviewMetric
-          label="Expenses"
-          value={data.expenseTotal}
-          valueClassName="text-app-danger"
-        />
+        {data.incomeTotal && (
+          <OverviewMetric
+            label="Income"
+            value={data.incomeTotal}
+            valueClassName="text-app-primary"
+          />
+        )}
+        {data.expenseTotal && (
+          <OverviewMetric
+            label="Expenses"
+            value={data.expenseTotal}
+            valueClassName="text-app-danger"
+          />
+        )}
       </View>
 
       <View
@@ -202,7 +262,11 @@ export function DashboardCalendarCard({
   return (
     <>
       <DashboardCard className="relative overflow-visible z-10">
-        <SectionHeader title="Calendar Heatmap" action={monthLabel} />
+        <SectionHeader
+          title="Calendar Heatmap"
+          action={monthLabel}
+          actionHref="/calendar-heatmap"
+        />
 
         <View className="mb-5 flex-row justify-between px-1">
           {DASHBOARD_WEEK_DAYS.map((day, index) => (
@@ -222,7 +286,7 @@ export function DashboardCalendarCard({
             return (
               <View key={day.date} className="items-center" style={{ width: "14.2857%" }}>
                 <Pressable
-                  className={`h-11 w-11 items-center justify-center rounded-2xl border md:h-12 md:w-12 ${dayStyles.bg} ${
+                  className={`h-9 w-9 items-center justify-center rounded-2xl border sm:h-12 sm:w-12 ${dayStyles.bg} ${
                     isSelected ? "scale-105 border-app-primary" : ""
                   }`}
                   disabled={!day.isCurrentMonth}
@@ -423,6 +487,13 @@ export function DashboardPortfolioCard({ items }: { items: DashboardPortfolioAss
   );
 }
 
+export function formatTransactionAmount(type: string, amount: number) {
+  if (type === "income") {
+    return `+LKR ${amount.toLocaleString()}`;
+  }
+  return `-LKR ${Math.abs(amount).toLocaleString()}`;
+}
+
 export function DashboardTransactionsCard({ items }: { items: DashboardTransaction[] }) {
   return (
     <DashboardCard>
@@ -431,12 +502,12 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
       <View className="gap-5">
         {items.map((item) => (
           <View
-            key={item.merchant}
+            key={item.id}
             className="gap-2 flex-row sm:items-center sm:justify-between sm:gap-4">
             <View className="min-w-0 flex-1 flex-row items-center gap-4">
               <View className="flex-1">
                 <Text className="font-display text-lg md:text-xl font-semibold text-app-text">
-                  {item.merchant}
+                  {item.title}
                 </Text>
                 <Text className="font-display text-sm text-app-muted">
                   {item.note} - {item.category}
@@ -445,7 +516,7 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
             </View>
             <Text
               className={`shrink text-right font-display text-lg md:text-xl font-semibold sm:text-2xl ${transactionToneClass(item.tone)}`}>
-              {item.amount}
+              {formatTransactionAmount(item.tone, item.amount)}
             </Text>
           </View>
         ))}
