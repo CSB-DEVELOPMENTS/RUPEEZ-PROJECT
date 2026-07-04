@@ -1,0 +1,200 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Alert, Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Colors } from "@/constants/theme";
+import { useAuth } from "@/hooks/auth/useAuth";
+import { useAppTheme } from "@/hooks/theme/useAppTheme";
+
+type SidebarItem = {
+  label: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+};
+
+const navigationItems: SidebarItem[] = [
+  { label: "Dashboard", icon: "view-dashboard-outline" },
+  { label: "Flow", icon: "swap-horizontal" },
+  { label: "Calendar", icon: "calendar-blank-outline" },
+  { label: "Accounts", icon: "cash-multiple" },
+  { label: "Social Finance", icon: "account-group-outline" },
+  { label: "Wealth", icon: "piggy-bank-outline" },
+  { label: "Analytics", icon: "chart-box-outline" },
+  { label: "Subscriptions", icon: "credit-card-clock-outline" },
+  { label: "Settings", icon: "cog-outline" },
+];
+
+type SidebarPanelProps = {
+  mobile?: boolean;
+  onClose?: () => void;
+  onSignOut: () => void;
+  signingOut: boolean;
+};
+
+function SidebarPanel({ mobile = false, onClose, onSignOut, signingOut }: SidebarPanelProps) {
+  const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
+  const colors = Colors[theme];
+
+  return (
+    <View
+      style={mobile ? { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 24 } : undefined}
+      className={
+        mobile
+          ? "h-full w-72 border-r border-app-border bg-app-bg-accent px-4"
+          : "hidden h-full w-64 shrink-0 border-r border-app-border bg-app-bg-accent px-4 pb-7 pt-9 md:flex"
+      }>
+      <View className={mobile ? "mb-8 flex-row items-center px-2" : "mb-12 flex-row items-center px-2"}>
+        <View className="flex-1 flex-row items-center gap-3">
+          <View className="h-10 w-10 items-center justify-center rounded-lg bg-app-primary-strong">
+            <MaterialCommunityIcons
+              name="cash-multiple"
+              size={23}
+              color={colors.primaryContrast}
+            />
+          </View>
+
+          <View>
+            <Text className="font-display text-[23px] font-bold tracking-tight text-app-text">
+              Rupeez
+            </Text>
+            <Text className="font-display text-[9px] font-bold uppercase tracking-[1px] text-app-primary-strong">
+              CSB Development
+            </Text>
+          </View>
+        </View>
+
+        {mobile ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Close navigation menu"
+            onPress={onClose}
+            className="h-10 w-10 items-center justify-center rounded-full active:bg-app-panel">
+            <MaterialCommunityIcons name="close" size={25} color={colors.text} />
+          </Pressable>
+        ) : null}
+      </View>
+
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="gap-1.5">
+          {navigationItems.map((item) => {
+            const active = item.label === "Dashboard";
+
+            return (
+              <View
+                key={item.label}
+                accessibilityRole="tab"
+                accessibilityState={{ selected: active, disabled: !active }}
+                className={
+                  active
+                    ? "relative h-12 flex-row items-center gap-3 overflow-hidden rounded-xl bg-app-primary-muted px-4"
+                    : "h-12 flex-row items-center gap-3 px-4"
+                }>
+                <MaterialCommunityIcons
+                  name={item.icon}
+                  size={22}
+                  color={active ? colors.primaryStrong : colors.textMuted}
+                />
+                <Text
+                  className={
+                    active
+                      ? "font-display text-sm font-medium text-app-primary-strong"
+                      : "font-display text-sm text-app-text-muted"
+                  }>
+                  {item.label}
+                </Text>
+                {active ? (
+                  <View className="absolute bottom-0 right-0 top-0 w-1 rounded-l-full bg-app-primary-strong" />
+                ) : null}
+              </View>
+            );
+          })}
+        </View>
+      </ScrollView>
+
+      <View className="gap-1.5 pt-3">
+        <View className="h-12 flex-row items-center gap-3 px-4">
+          <MaterialCommunityIcons name="help-circle-outline" size={22} color={colors.textMuted} />
+          <Text numberOfLines={1} className="flex-1 font-display text-sm text-app-text-muted">
+            Help &amp; Support
+          </Text>
+        </View>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Log out"
+          disabled={signingOut}
+          onPress={onSignOut}
+          className="h-12 flex-row items-center gap-3 rounded-xl px-4 active:bg-app-danger-muted">
+          <MaterialCommunityIcons name="logout" size={22} color={colors.danger} />
+          <Text className="font-display text-sm font-medium text-app-danger">
+            {signingOut ? "Logging out..." : "Log out"}
+          </Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
+export default function Sidebar() {
+  const router = useRouter();
+  const { signOut } = useAuth();
+  const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
+  const colors = Colors[theme];
+
+  const handleSignOut = async () => {
+    if (signingOut) {
+      return;
+    }
+
+    setSigningOut(true);
+    const { error } = await signOut();
+
+    if (error) {
+      setSigningOut(false);
+      Alert.alert("Unable to log out", error.message);
+      return;
+    }
+
+    router.replace("/");
+  };
+
+  return (
+    <>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Open navigation menu"
+        onPress={() => setMobileOpen(true)}
+        style={{ top: insets.top + 16 }}
+        className="absolute left-4 z-10 h-11 w-11 items-center justify-center rounded-xl border border-app-border bg-app-surface shadow-sm active:bg-app-panel md:hidden">
+        <MaterialCommunityIcons name="menu" size={26} color={colors.primaryStrong} />
+      </Pressable>
+
+      <SidebarPanel onSignOut={handleSignOut} signingOut={signingOut} />
+
+      <Modal
+        animationType="fade"
+        transparent
+        visible={mobileOpen}
+        onRequestClose={() => setMobileOpen(false)}>
+        <View className="flex-1 flex-row bg-black/50">
+          <SidebarPanel
+            mobile
+            onClose={() => setMobileOpen(false)}
+            onSignOut={handleSignOut}
+            signingOut={signingOut}
+          />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Close navigation menu"
+            onPress={() => setMobileOpen(false)}
+            className="flex-1"
+          />
+        </View>
+      </Modal>
+    </>
+  );
+}
