@@ -1,5 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useRouter } from "expo-router";
+import { type Href, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
 import { Alert, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -10,10 +10,11 @@ import { useAppTheme } from "@/hooks/theme/useAppTheme";
 type SidebarItem = {
   label: string;
   icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+  href?: Href;
 };
 
 const navigationItems: SidebarItem[] = [
-  { label: "Dashboard", icon: "view-dashboard-outline" },
+  { label: "Dashboard", icon: "view-dashboard-outline", href: "/dashboard" },
   { label: "Flow", icon: "swap-horizontal" },
   { label: "Calendar", icon: "calendar-blank-outline" },
   { label: "Accounts", icon: "cash-multiple" },
@@ -27,11 +28,20 @@ const navigationItems: SidebarItem[] = [
 type SidebarPanelProps = {
   mobile?: boolean;
   onClose?: () => void;
+  pathname: string;
+  onNavigate: (href: Href) => void;
   onSignOut: () => void;
   signingOut: boolean;
 };
 
-function SidebarPanel({ mobile = false, onClose, onSignOut, signingOut }: SidebarPanelProps) {
+function SidebarPanel({
+  mobile = false,
+  onClose,
+  pathname,
+  onNavigate,
+  onSignOut,
+  signingOut,
+}: SidebarPanelProps) {
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
   const colors = Colors[theme];
@@ -78,17 +88,24 @@ function SidebarPanel({ mobile = false, onClose, onSignOut, signingOut }: Sideba
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-1.5">
           {navigationItems.map((item) => {
-            const active = item.label === "Dashboard";
+            const active = item.href === pathname;
+            const disabled = !item.href;
 
             return (
-              <View
+              <Pressable
                 key={item.label}
                 accessibilityRole="tab"
-                accessibilityState={{ selected: active, disabled: !active }}
+                accessibilityState={{ selected: active, disabled }}
+                disabled={disabled}
+                onPress={() => {
+                  if (item.href) {
+                    onNavigate(item.href);
+                  }
+                }}
                 className={
                   active
                     ? "relative h-12 flex-row items-center gap-3 overflow-hidden rounded-xl bg-app-primary-muted px-4"
-                    : "h-12 flex-row items-center gap-3 px-4"
+                    : "h-12 flex-row items-center gap-3 rounded-xl px-4 active:bg-app-panel"
                 }>
                 <MaterialCommunityIcons
                   name={item.icon}
@@ -106,7 +123,7 @@ function SidebarPanel({ mobile = false, onClose, onSignOut, signingOut }: Sideba
                 {active ? (
                   <View className="absolute bottom-0 right-0 top-0 w-1 rounded-l-full bg-app-primary-strong" />
                 ) : null}
-              </View>
+              </Pressable>
             );
           })}
         </View>
@@ -137,6 +154,7 @@ function SidebarPanel({ mobile = false, onClose, onSignOut, signingOut }: Sideba
 }
 
 export default function Sidebar() {
+  const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useAuth();
   const { theme } = useAppTheme();
@@ -144,6 +162,11 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const colors = Colors[theme];
+
+  const handleNavigate = (href: Href) => {
+    router.push(href);
+    setMobileOpen(false);
+  };
 
   const handleSignOut = async () => {
     if (signingOut) {
@@ -173,7 +196,12 @@ export default function Sidebar() {
         <MaterialCommunityIcons name="menu" size={26} color={colors.primaryStrong} />
       </Pressable>
 
-      <SidebarPanel onSignOut={handleSignOut} signingOut={signingOut} />
+      <SidebarPanel
+        pathname={pathname}
+        onNavigate={handleNavigate}
+        onSignOut={handleSignOut}
+        signingOut={signingOut}
+      />
 
       <Modal
         animationType="fade"
@@ -184,6 +212,8 @@ export default function Sidebar() {
           <SidebarPanel
             mobile
             onClose={() => setMobileOpen(false)}
+            pathname={pathname}
+            onNavigate={handleNavigate}
             onSignOut={handleSignOut}
             signingOut={signingOut}
           />
