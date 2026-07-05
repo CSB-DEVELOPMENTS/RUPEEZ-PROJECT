@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { type Href, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { Alert, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
@@ -15,14 +15,14 @@ type SidebarItem = {
 
 const navigationItems: SidebarItem[] = [
   { label: "Dashboard", icon: "view-dashboard-outline", href: "/dashboard" },
-  { label: "Flow", icon: "swap-horizontal" },
-  { label: "Calendar", icon: "calendar-blank-outline" },
-  { label: "Accounts", icon: "cash-multiple" },
-  { label: "Social Finance", icon: "account-group-outline" },
-  { label: "Wealth", icon: "piggy-bank-outline" },
-  { label: "Analytics", icon: "chart-box-outline" },
-  { label: "Subscriptions", icon: "credit-card-clock-outline" },
-  { label: "Settings", icon: "cog-outline" },
+  { label: "Flow", icon: "swap-horizontal", href: "/cash-flow" },
+  { label: "Calendar", icon: "calendar-blank-outline", href: "/calendar-heatmap" },
+  { label: "Accounts", icon: "cash-multiple", href: "/accounts" },
+  { label: "Social Finance", icon: "account-group-outline", href: "/social-finance" },
+  { label: "Wealth", icon: "piggy-bank-outline", href: "/wealth" },
+  { label: "Analytics", icon: "chart-box-outline", href: "/analytics" },
+  { label: "Subscriptions", icon: "credit-card-clock-outline", href: "/subscriptions" },
+  { label: "Settings", icon: "cog-outline", href: "/settings" },
 ];
 
 type SidebarPanelProps = {
@@ -185,6 +185,25 @@ export default function Sidebar() {
     router.replace("/");
   };
 
+  const mobileSidebar = (
+    <View className="absolute inset-0 z-20 flex-row bg-black/50 md:hidden">
+      <SidebarPanel
+        mobile
+        onClose={() => setMobileOpen(false)}
+        pathname={pathname}
+        onNavigate={handleNavigate}
+        onSignOut={handleSignOut}
+        signingOut={signingOut}
+      />
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Close navigation menu"
+        onPress={() => setMobileOpen(false)}
+        className="flex-1"
+      />
+    </View>
+  );
+
   return (
     <>
       <Pressable
@@ -203,28 +222,17 @@ export default function Sidebar() {
         signingOut={signingOut}
       />
 
-      <Modal
-        animationType="fade"
-        transparent
-        visible={mobileOpen}
-        onRequestClose={() => setMobileOpen(false)}>
-        <View className="flex-1 flex-row bg-black/50">
-          <SidebarPanel
-            mobile
-            onClose={() => setMobileOpen(false)}
-            pathname={pathname}
-            onNavigate={handleNavigate}
-            onSignOut={handleSignOut}
-            signingOut={signingOut}
-          />
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Close navigation menu"
-            onPress={() => setMobileOpen(false)}
-            className="flex-1"
-          />
-        </View>
-      </Modal>
+      {Platform.OS === "web" ? (
+        mobileOpen ? mobileSidebar : null
+      ) : (
+        <Modal
+          animationType="fade"
+          transparent
+          visible={mobileOpen}
+          onRequestClose={() => setMobileOpen(false)}>
+          {mobileSidebar}
+        </Modal>
+      )}
     </>
   );
 }
