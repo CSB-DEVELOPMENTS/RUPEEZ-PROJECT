@@ -1,11 +1,6 @@
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import { Pressable, Text, View } from "react-native";
 
-type ThemeToggleProps = {
-  theme: "light" | "dark";
-  onChange: (theme: "light" | "dark") => void;
-};
-
 export function ThemeToggle() {
   const { theme, setTheme } = useAppTheme();
 

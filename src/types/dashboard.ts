@@ -1,0 +1,135 @@
+import { Href } from "expo-router";
+
+export type DashboardStatTone = "negative" | "neutral" | "positive";
+
+export type DashboardLegendTone = DashboardStatTone | "soft";
+
+export type DashboardStat = {
+  caption: string;
+  detail: string;
+  href?: Href;
+  title: string;
+  tone: DashboardStatTone;
+  trend?: string;
+  variant?: "progress" | "trend";
+};
+
+export type DashboardTransactionTone = "expense" | "income";
+
+export type CashFlowEntryIcon =
+  | "briefcase"
+  | "chart"
+  | "crypto"
+  | "invoice"
+  | "home"
+  | "car"
+  | "food"
+  | "bill";
+
+export type DashboardTransaction = {
+  id: string;
+  amount: number;
+  category: string;
+  title: string;
+  tone: DashboardTransactionTone;
+  note?: string;
+  date?: string;
+  icon?: CashFlowEntryIcon;
+};
+
+export type DashboardCategory = {
+  label: string;
+  tone: DashboardLegendTone;
+  value: string;
+};
+
+export type DashboardCashFlowPoint = {
+  expense: number;
+  income: number;
+  label: string;
+};
+
+export type DashboardOverviewData = {
+  detailHref?: "/cash-flow";
+  expenseTotal?: string;
+  incomeTotal?: string;
+  points: DashboardCashFlowPoint[];
+  periodLabel: string;
+  fileterRanges?: string[];
+};
+
+export type CashFlowMetricTone = "negative" | "neutral" | "positive";
+
+export type CashFlowHeroMetric = {
+  label: string;
+  tone: CashFlowMetricTone;
+  value: string;
+};
+
+export type CashFlowHeroData = {
+  periodLabel: string;
+  title: string;
+  totalValue: string;
+  totals: CashFlowHeroMetric[];
+};
+
+export type CashFlowListTone = "expense" | "income";
+
+export type DashboardCalendarActivity = {
+  amount: number;
+  category?: string;
+  id: string;
+  label: string;
+  time?: string;
+  type?: "expense" | "income";
+};
+
+export type DashboardCalendarDay = {
+  activities: DashboardCalendarActivity[];
+  activityCount: number;
+  date: string;
+  dayLabel: string;
+  isCurrentMonth: boolean;
+  tone?: DashboardLegendTone;
+  totalLabel?: string;
+};
+
+export type DashboardPortfolioAsset = {
+  change: string;
+  chipTone: "brand" | "primary";
+  subtitle: string;
+  symbol: string;
+  value: string;
+};
+
+export type DashboardSubscriptionAvatar = {
+  label: string;
+  tone: "brand" | "neutral" | "negative" | "positive";
+};
+
+export type DashboardSafeSpendSummary = {
+  availableNow: string;
+  dailyTarget: string;
+  percentRemaining: number;
+  resetIn: string;
+  title: string;
+};
+
+export type DashboardSafeSpendStat = {
+  detail: string;
+  title: string;
+  value: string;
+};
+
+export type DashboardSafeSpendObligation = {
+  amount: string;
+  dueLabel: string;
+  name: string;
+};
+
+export type DashboardSafeSpendFlowItem = {
+  amount: string;
+  label: string;
+  note: string;
+  tone: "expense" | "income";
+};
