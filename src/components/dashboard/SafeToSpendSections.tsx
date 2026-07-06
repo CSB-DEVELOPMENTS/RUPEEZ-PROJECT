@@ -38,7 +38,8 @@ export function SafeSpendSummaryCard({ data }: { data: DashboardSafeSpendSummary
           <Text className="font-display text-sm font-semibold uppercase tracking-[1.5px] text-app-muted">
             {data.title}
           </Text>
-          <View className={`rounded-2xl bg-app-panel/80 px-4 py-2 ${isCompact ? "self-start" : ""}`}>
+          <View
+            className={`rounded-2xl bg-app-panel/80 px-4 py-2 ${isCompact ? "self-start" : ""}`}>
             <Text className="font-display text-sm text-app-muted">{data.resetIn}</Text>
           </View>
         </View>
@@ -99,7 +100,7 @@ export function ObligationsCard({ data }: { data: DashboardSafeSpendObligation[]
   const isCompact = width < 480;
 
   return (
-    <DashboardCard className="h-full">
+    <DashboardCard>
       <SectionTitle action="View all" title="Next 7 Days Obligations" />
 
       <View className="gap-4">
@@ -129,7 +130,7 @@ export function ObligationsCard({ data }: { data: DashboardSafeSpendObligation[]
 }
 
 function flowAmountClassName(tone: "expense" | "income") {
-  return tone === "income" ? "text-app-primary" : "text-app-text";
+  return tone === "income" ? "text-app-primary" : "text-app-danger";
 }
 
 export function RecentFlowCard({ data }: { data: DashboardSafeSpendFlowItem[] }) {
@@ -137,18 +138,18 @@ export function RecentFlowCard({ data }: { data: DashboardSafeSpendFlowItem[] })
   const isCompact = width < 480;
 
   return (
-    <DashboardCard className="h-full">
+    <DashboardCard>
       <SectionTitle title="Recent Flow Context" />
 
       <View className="gap-4">
         {data.map((item) => (
           <View
             key={`${item.label}-${item.note}`}
-            className={`rounded-[24px] bg-app-panel/40 px-4 py-5 ${
-              isCompact ? "gap-3" : "flex-row items-center gap-4"
+            className={`rounded-[24px] bg-app-panel/40 px-4 py-5 flex-row ${
+              isCompact ? "gap-3" : "items-center gap-4"
             }`}>
             <View
-              className={`h-9 w-2 rounded-full ${item.tone === "income" ? "bg-app-primary" : "bg-app-border"}`}
+              className={`h-9 w-2 rounded-full ${item.tone === "income" ? "bg-app-primary" : "bg-app-danger"}`}
             />
             <View className="min-w-0 flex-1 gap-1">
               <Text className="font-display text-lg font-semibold text-app-text">{item.label}</Text>

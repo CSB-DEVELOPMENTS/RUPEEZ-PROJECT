@@ -2,12 +2,14 @@ import { Pressable, Text, View, useWindowDimensions } from "react-native";
 
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { DASHBOARD_CALENDAR_DAYS, DASHBOARD_WEEK_DAYS } from "@/constants/dashboard";
-import type { DashboardCalendarActivity, DashboardCalendarDay } from "@/types/dashboard";
+import type { DashboardCalendarDay } from "@/types/dashboard";
+import TransactionCard from "../cash-flow/TransactionCard";
 
 function calendarToneClass(day: DashboardCalendarDay) {
   if (!day.isCurrentMonth) {
     return {
       container: "border-transparent bg-transparent",
+      selectedContainer: "border-transparent bg-transparent",
       text: "text-app-soft",
     };
   }
@@ -16,21 +18,25 @@ function calendarToneClass(day: DashboardCalendarDay) {
     case "positive":
       return {
         container: "border-app-primary/25 bg-app-primary/15",
+        selectedContainer: "border-app-primary bg-app-primary/20",
         text: "text-app-primary",
       };
     case "negative":
       return {
         container: "border-app-danger/25 bg-app-danger/15",
+        selectedContainer: "border-app-primary bg-app-danger/20",
         text: "text-app-danger",
       };
     case "neutral":
       return {
         container: "border-app-brand/25 bg-app-brand/15",
+        selectedContainer: "border-app-primary bg-app-brand/20",
         text: "text-app-text",
       };
     default:
       return {
         container: "border-app-border bg-app-panel/20",
+        selectedContainer: "border-app-primary bg-app-panel/35",
         text: "text-app-text",
       };
   }
@@ -64,10 +70,10 @@ function formatCurrency(value: number) {
 
 export function buildDaySummary(day: DashboardCalendarDay) {
   const inflow = day.activities.reduce((total, activity) => {
-    return activity.type === "income" ? total + activity.amount : total;
+    return activity.tone === "income" ? total + activity.amount : total;
   }, 0);
   const outflow = day.activities.reduce((total, activity) => {
-    return activity.type === "expense" ? total + activity.amount : total;
+    return activity.tone === "expense" ? total + activity.amount : total;
   }, 0);
 
   return {
@@ -83,42 +89,6 @@ function SectionTitle({ title }: { title: string }) {
       <Text className="font-display text-2xl font-semibold tracking-tight text-app-text md:text-3xl">
         {title}
       </Text>
-    </View>
-  );
-}
-
-export function DailyActivityItem({ activity }: { activity: DashboardCalendarActivity }) {
-  const { width } = useWindowDimensions();
-  const isIncome = activity.type === "income";
-  const isCompact = width < 480;
-
-  return (
-    <View
-      className={`rounded-[22px] bg-app-panel/40 px-4 py-4 ${
-        isCompact ? "gap-3" : "flex-row items-center gap-4"
-      }`}>
-      <View
-        className={`h-10 w-10 items-center justify-center rounded-2xl ${
-          isIncome ? "bg-app-primary/15" : "bg-app-danger/15"
-        }`}>
-        <View
-          className={`h-2.5 w-2.5 rounded-full ${isIncome ? "bg-app-primary" : "bg-app-danger"}`}
-        />
-      </View>
-      <View className="min-w-0 flex-1 gap-1">
-        <Text className="font-display text-lg font-semibold text-app-text">{activity.label}</Text>
-        <Text className="font-display text-sm font-semibold uppercase tracking-[1.2px] text-app-muted">
-          {[activity.category, activity.time].filter(Boolean).join(" - ")}
-        </Text>
-      </View>
-      <View className={isCompact ? "pl-14" : ""}>
-        <Text
-          className={`font-display text-xl font-semibold ${
-            isCompact ? "text-left" : "text-right"
-          } ${isIncome ? "text-app-primary" : "text-app-danger"}`}>
-          {`${isIncome ? "+" : "-"}${formatCurrency(activity.amount).replace("LKR ", "")}`}
-        </Text>
-      </View>
     </View>
   );
 }
@@ -193,8 +163,8 @@ export function CalendarHeatmapGrid({
               <Pressable
                 accessibilityRole="button"
                 className={`relative items-center justify-center rounded-3xl border ${
-                  styles.container
-                } ${isSelected ? "border-app-primary shadow-showcase-soft" : ""}`}
+                  isSelected ? styles.selectedContainer : styles.container
+                }`}
                 disabled={!day.isCurrentMonth}
                 onPress={() => setSelectedDate(day.date)}
                 style={{ height: dayCellSize, width: dayCellSize }}>
@@ -218,6 +188,7 @@ export function CalendarDayDetailCard({ selectedDay }: { selectedDay: DashboardC
   const selectedSummary = buildDaySummary(selectedDay);
   const selectedNetClassName = selectedSummary.net >= 0 ? "text-app-primary" : "text-app-danger";
   const selectedActivities = selectedDay.activities;
+  const hasActivities = selectedActivities.length > 0;
   const isCompact = width < 480;
 
   return (
@@ -295,9 +266,9 @@ export function CalendarDayDetailCard({ selectedDay }: { selectedDay: DashboardC
       </View>
 
       <View className="gap-3">
-        {selectedActivities.length > 0 ? (
+        {hasActivities ? (
           selectedActivities.map((activity) => (
-            <DailyActivityItem key={activity.id} activity={activity} />
+            <TransactionCard key={activity.id} item={activity} />
           ))
         ) : (
           <View className="rounded-[22px] bg-app-panel/30 px-4 py-6">

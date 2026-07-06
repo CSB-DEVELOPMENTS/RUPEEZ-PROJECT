@@ -1,6 +1,5 @@
 import type {
   CashFlowHeroData,
-  DashboardCalendarActivity,
   DashboardCalendarDay,
   DashboardCategory,
   DashboardOverviewData,
@@ -116,15 +115,15 @@ export const DASHBOARD_CATEGORIES: DashboardCategory[] = [
   { label: "Shopping", tone: "soft", value: "14%" },
 ];
 
-function resolveCalendarTone(activities: DashboardCalendarActivity[]) {
+function resolveCalendarTone(activities: DashboardTransaction[]) {
   const totalIncomeValue = activities.reduce((total, activity) => {
-    if (activity.type === "income" && activity.amount) {
+    if (activity.tone === "income" && activity.amount) {
       return total + activity.amount;
     }
     return total;
   }, 0);
   const totalExpenseValue = activities.reduce((total, activity) => {
-    if (activity.type === "expense" && activity.amount) {
+    if (activity.tone === "expense" && activity.amount) {
       return total + activity.amount;
     }
     return total;
@@ -145,7 +144,7 @@ function resolveCalendarTone(activities: DashboardCalendarActivity[]) {
 function createMonthCalendarDays(
   year: number,
   monthIndex: number, // 0-based month index (0 = January, 11 = December)
-  entries: Record<string, DashboardCalendarActivity[]>,
+  entries: Record<string, DashboardTransaction[]>,
 ) {
   const firstDay = new Date(Date.UTC(year, monthIndex, 1));
   const firstWeekday = (firstDay.getUTCDay() + 6) % 7;
@@ -210,15 +209,15 @@ export function getDashboardCalendarMonthLabel(year: number, monthIndex: number)
   }).format(new Date(Date.UTC(year, monthIndex, 1)));
 }
 
-const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = {
+const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardTransaction[]> = {
   "2026-07-02": [
     {
       amount: 2450.0,
       category: "Food",
       id: "grocery-run",
-      label: "Keells grocery run",
+      title: "Keells grocery run",
       time: "6:10 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-04": [
@@ -226,17 +225,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 1850.0,
       category: "Bills",
       id: "wifi-bill",
-      label: "Wi-Fi bill paid",
+      title: "Wi-Fi bill paid",
       time: "8:30 AM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 850.0,
       category: "Transport",
       id: "fuel-top-up",
-      label: "Fuel top-up",
+      title: "Fuel top-up",
       time: "7:45 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-11": [
@@ -244,9 +243,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 4200.0,
       category: "Shopping",
       id: "home-needs",
-      label: "Household essentials",
+      title: "Household essentials",
       time: "2:20 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-13": [
@@ -254,9 +253,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 180000.0,
       category: "Income",
       id: "salary-credit",
-      label: "Salary credited",
+      title: "Salary credited",
       time: "9:00 AM",
-      type: "income",
+      tone: "income",
     },
   ],
   "2026-07-17": [
@@ -264,25 +263,25 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 2100.0,
       category: "Food",
       id: "family-lunch",
-      label: "Family lunch",
+      title: "Family lunch",
       time: "12:30 PM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 1350.0,
       category: "Transport",
       id: "weekend-ride",
-      label: "Weekend ride",
+      title: "Weekend ride",
       time: "4:15 PM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 750.0,
       category: "Entertainment",
       id: "movie-night",
-      label: "Movie night snacks",
+      title: "Movie night snacks",
       time: "8:40 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-18": [
@@ -290,9 +289,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 3500.0,
       category: "Health",
       id: "pharmacy",
-      label: "Pharmacy pickup",
+      title: "Pharmacy pickup",
       time: "10:05 AM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-19": [
@@ -300,17 +299,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 1250.0,
       category: "Transport",
       id: "office-commute",
-      label: "Office commute",
+      title: "Office commute",
       time: "8:05 AM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 650.0,
       category: "Coffee",
       id: "team-coffee",
-      label: "Team coffee stop",
+      title: "Team coffee stop",
       time: "3:35 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-20": [
@@ -318,9 +317,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 9800.0,
       category: "Savings",
       id: "savings-transfer",
-      label: "Savings transfer",
+      title: "Savings transfer",
       time: "7:15 AM",
-      type: "income",
+      tone: "income",
+    },
+    {
+      amount: 1250.0,
+      category: "Transport",
+      id: "bus-pass",
+      title: "Monthly bus pass",
+      time: "3:15 PM",
+      tone: "expense",
     },
   ],
   "2026-07-24": [
@@ -328,9 +335,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 2900.0,
       category: "Dining",
       id: "dinner-out",
-      label: "Dinner with friends",
+      title: "Dinner with friends",
       time: "8:10 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-28": [
@@ -338,17 +345,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 1100.0,
       category: "Subscriptions",
       id: "music-renewal",
-      label: "Music subscription renewal",
+      title: "Music subscription renewal",
       time: "6:45 AM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 680.0,
       category: "Transport",
       id: "late-ride",
-      label: "Late ride home",
+      title: "Late ride home",
       time: "9:15 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
 };

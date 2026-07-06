@@ -1,16 +1,16 @@
 import type { ReactNode } from "react";
-import { Text, View, useWindowDimensions } from "react-native";
+import { Text, View } from "react-native";
 import Svg, { Path, Rect } from "react-native-svg";
 
-import type { CashFlowEntryIcon, CashFlowListTone, DashboardTransaction } from "@/types/dashboard";
+import type {
+  CashFlowEntryIcon,
+  DashboardTransaction,
+  DashboardTransactionTone,
+} from "@/types/dashboard";
 import { DashboardCard } from "../dashboard/DashboardCard";
-import { formatTransactionAmount } from "../dashboard/DashboardSections";
+import TransactionCard, { listToneColor } from "./TransactionCard";
 
-function listToneColor(tone: CashFlowListTone) {
-  return tone === "income" ? "text-app-primary" : "text-app-danger";
-}
-
-function IconShell({ children, tone }: { children: ReactNode; tone: CashFlowListTone }) {
+function IconShell({ children, tone }: { children: ReactNode; tone: DashboardTransactionTone }) {
   return (
     <View
       className={`h-11 w-11 items-center justify-center rounded-2xl ${
@@ -21,7 +21,13 @@ function IconShell({ children, tone }: { children: ReactNode; tone: CashFlowList
   );
 }
 
-function CashFlowEntryGlyph({ icon, tone }: { icon?: CashFlowEntryIcon; tone: CashFlowListTone }) {
+function CashFlowEntryGlyph({
+  icon,
+  tone,
+}: {
+  icon?: CashFlowEntryIcon;
+  tone: DashboardTransactionTone;
+}) {
   const stroke = tone === "income" ? "#22C55E" : "#F87171";
 
   switch (icon) {
@@ -152,7 +158,7 @@ function CashFlowEntryGlyph({ icon, tone }: { icon?: CashFlowEntryIcon; tone: Ca
   }
 }
 
-function listDirectionLabel(tone: CashFlowListTone) {
+function listDirectionLabel(tone: DashboardTransactionTone) {
   return tone === "income" ? "+" : "-";
 }
 
@@ -162,45 +168,23 @@ export function CashFlowListCard({
   data,
 }: {
   title: string;
-  tone: CashFlowListTone;
+  tone: DashboardTransactionTone;
   data: DashboardTransaction[];
 }) {
-  const { width } = useWindowDimensions();
-  const isCompact = width < 480;
-
   return (
-    <DashboardCard className="h-full">
+    <DashboardCard>
       <View className="mb-5 flex-row items-center gap-3">
         <Text className={`font-display text-2xl font-semibold ${listToneColor(tone)}`}>
           {listDirectionLabel(tone)}
         </Text>
-        <Text className="font-display text-2xl font-semibold tracking-tight text-app-text md:text-3xl">
+        <Text className="font-display text-2xl font-semibold text-app-text md:text-3xl">
           {title}
         </Text>
       </View>
 
       <View className="gap-2">
         {data.map((item) => (
-          <View
-            key={item.id}
-            className={`rounded-[24px] border border-app-border/60 bg-app-panel/25 px-4 py-4 ${
-              isCompact ? "gap-3" : "flex-row items-center gap-4"
-            }`}>
-            {/* <CashFlowEntryGlyph icon={item.icon} tone={tone} /> */}
-            <View className="min-w-0 flex-1 gap-1">
-              <Text className="font-display text-lg font-semibold text-app-text">{item.title}</Text>
-              <Text className="font-display text-sm font-semibold uppercase tracking-[1.2px] text-app-muted">
-                {item.date}
-              </Text>
-            </View>
-
-            <Text
-              className={`font-display text-xl font-semibold tracking-tight md:text-2xl ${
-                isCompact ? "pl-14 text-left" : "text-right"
-              } ${listToneColor(tone)}`}>
-              {formatTransactionAmount(item.tone, item.amount)}
-            </Text>
-          </View>
+          <TransactionCard key={item.id} item={item} />
         ))}
       </View>
     </DashboardCard>

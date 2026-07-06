@@ -35,6 +35,7 @@ export type DashboardTransaction = {
   note?: string;
   date?: string;
   icon?: CashFlowEntryIcon;
+  time?: string;
 };
 
 export type DashboardCategory = {
@@ -73,19 +74,8 @@ export type CashFlowHeroData = {
   totals: CashFlowHeroMetric[];
 };
 
-export type CashFlowListTone = "expense" | "income";
-
-export type DashboardCalendarActivity = {
-  amount: number;
-  category?: string;
-  id: string;
-  label: string;
-  time?: string;
-  type?: "expense" | "income";
-};
-
 export type DashboardCalendarDay = {
-  activities: DashboardCalendarActivity[];
+  activities: DashboardTransaction[];
   activityCount: number;
   date: string;
   dayLabel: string;

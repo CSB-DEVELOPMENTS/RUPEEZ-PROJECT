@@ -1,4 +1,3 @@
-import { Href, useRouter } from "expo-router";
 import { useState } from "react";
 import { Modal, Platform, Pressable, Text, View } from "react-native";
 import { LineChart } from "react-native-chart-kit/v2";
@@ -17,75 +16,7 @@ import type {
 } from "@/types/dashboard";
 
 import { DashboardCard } from "./DashboardCard";
-
-function SectionHeader({
-  action,
-  actionHref,
-  eyebrow,
-  title,
-  filterRanges,
-}: {
-  action?: string;
-  actionHref?: Href;
-  eyebrow?: string;
-  title: string;
-  filterRanges?: string[];
-}) {
-  const [selectedRange, setSelectedRange] = useState<string>("1M");
-  const router = useRouter();
-
-  return (
-    <View className="mb-5 gap-4">
-      <View className="flex-row items-start gap-4 justify-between">
-        <View className="gap-1">
-          <Text className="font-display text-xl md:text-2xl 2xl:text-3xl font-semibold tracking-tight text-app-text">
-            {title}
-          </Text>
-          {eyebrow ? (
-            <Text className="font-display text-base text-app-muted">{eyebrow}</Text>
-          ) : null}
-        </View>
-        {action ? (
-          actionHref ? (
-            <Pressable
-              accessibilityHint="Opens this detail page"
-              accessibilityRole="button"
-              onPress={() => router.push(actionHref)}>
-              <Text className="font-display text-sm font-semibold text-app-primary-strong">
-                {action}
-              </Text>
-            </Pressable>
-          ) : (
-            <Text className="font-display text-sm font-semibold text-app-primary-strong">
-              {action}
-            </Text>
-          )
-        ) : null}
-      </View>
-      {filterRanges && (
-        <View className="flex-row flex-wrap gap-2">
-          {filterRanges.map((range) => {
-            const isActive = range === selectedRange;
-
-            return (
-              <Pressable
-                key={range}
-                className={`rounded-2xl px-4 py-2 ${isActive ? "bg-app-panel" : "bg-app-panel/35"}`}
-                onPress={() => setSelectedRange(range)}>
-                <Text
-                  className={`font-display text-sm font-semibold uppercase tracking-[1.2px] ${
-                    isActive ? "text-app-text" : "text-app-muted"
-                  }`}>
-                  {range}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-      )}
-    </View>
-  );
-}
+import SectionHeader from "./SectionHeader";
 
 function dotToneClass(tone: DashboardLegendTone) {
   switch (tone) {
@@ -286,14 +217,13 @@ export function DashboardCalendarCard({
             return (
               <View key={day.date} className="items-center" style={{ width: "14.2857%" }}>
                 <Pressable
-                  className={`h-9 w-9 items-center justify-center rounded-2xl border sm:h-12 sm:w-12 ${dayStyles.bg} ${
-                    isSelected ? "scale-105 border-app-primary" : ""
+                  className={`h-9 w-9 items-center justify-center rounded-2xl border sm:h-10 sm:w-10 ${dayStyles.bg} ${
+                    isSelected ? "border-app-primary" : ""
                   }`}
                   disabled={!day.isCurrentMonth}
                   onHoverIn={Platform.OS === "web" ? () => setSelectedDay(day) : undefined}
                   onHoverOut={Platform.OS === "web" ? () => setSelectedDay(null) : undefined}
-                  // onPress={Platform.OS === "web" ? undefined : () => setSelectedDay(day)}
-                >
+                  onPress={Platform.OS === "web" ? undefined : () => setSelectedDay(day)}>
                   <Text className={`font-display text-base md:text-lg ${dayStyles.text}`}>
                     {day.dayLabel}
                   </Text>
@@ -310,7 +240,7 @@ export function DashboardCalendarCard({
                         {day.activities.slice(0, 3).map((activity) => (
                           <View key={activity.id} className="gap-1">
                             <Text className="font-display text-sm font-semibold text-app-text">
-                              {activity.label}
+                              {activity.title}
                             </Text>
                             <Text className="font-display text-xs text-app-muted">
                               {[
@@ -368,7 +298,7 @@ export function DashboardCalendarCard({
                           key={activity.id}
                           className="rounded-[20px] border border-app-border bg-app-panel/35 px-4 py-3">
                           <Text className="font-display text-base font-semibold text-app-text">
-                            {activity.label}
+                            {activity.title}
                           </Text>
                           <Text className="mt-1 font-display text-sm text-app-muted">
                             {[activity.category, activity.time, activity.amount]
@@ -527,14 +457,14 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
 
 export function DashboardInsightsCard() {
   return (
-    <View className="relative min-h-[280px] overflow-hidden rounded-[30px] border border-app-border bg-app-surface p-6 shadow-showcase-soft dark:shadow-showcase-soft-dark">
+    <View className="relative min-h-[285px] overflow-hidden rounded-[30px] border border-app-border bg-app-surface p-6 shadow-showcase-soft dark:shadow-showcase-soft-dark">
       <SectionHeader title="Insights" />
-      <Text className="max-w-[18rem] font-display text-xl leading-8 text-app-text">
+      <Text className="max-w-[18rem] font-display text-lg lg:text-xl leading-8 text-app-text">
         You spent <Text className="font-semibold text-app-primary">25% more</Text> on Food & Dining
         compared to last month.
       </Text>
 
-      <View className="mt-8 self-start rounded-2xl bg-app-panel px-5 py-3">
+      <View className="mt-5 self-start rounded-2xl bg-app-panel px-5 py-3">
         <Text className="font-display text-base font-semibold text-app-text">View Analysis</Text>
       </View>
 

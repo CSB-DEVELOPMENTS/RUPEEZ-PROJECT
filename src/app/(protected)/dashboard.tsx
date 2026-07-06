@@ -60,8 +60,12 @@ export default function Dashboard() {
 
             <View className="mx-[-8px] flex-row flex-wrap">
               {DASHBOARD_STATS.map((item) => (
-                <View key={item.caption} className="p-2" style={{ width: `${100 / statColumns}%` }}>
-                  <DashboardStatCard {...item} />
+                <View
+                  key={item.caption}
+                  className="flex-auto p-2"
+                  // style={{ width: `${100 / statColumns}%` }}
+                >
+                  <DashboardStatCard key={item.caption} {...item} />
                 </View>
               ))}
             </View>

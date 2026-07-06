@@ -31,6 +31,7 @@ export default function LoginScreen() {
     const { error } = await signInWithEmail(email, password);
 
     if (error) {
+      setSubmitting(false);
       setFeedback({ tone: "error", message: error.message });
       return;
     }
