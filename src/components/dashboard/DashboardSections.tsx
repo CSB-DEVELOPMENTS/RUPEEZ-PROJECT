@@ -12,9 +12,9 @@ import type {
   DashboardPortfolioAsset,
   DashboardSubscriptionAvatar,
   DashboardTransaction,
-  DashboardTransactionTone,
 } from "@/types/dashboard";
 
+import { formatTransactionAmount, transactionToneClass } from "../cash-flow/TransactionCard";
 import { DashboardCard } from "./DashboardCard";
 import SectionHeader from "./SectionHeader";
 
@@ -46,10 +46,6 @@ function calendarToneClass(day: DashboardCalendarDay) {
     default:
       return { bg: "border-app-border bg-app-panel/30", text: "text-app-text" };
   }
-}
-
-function transactionToneClass(tone: DashboardTransactionTone) {
-  return tone === "income" ? "text-app-primary" : "text-app-danger";
 }
 
 function subscriptionToneClass(tone: DashboardSubscriptionAvatar["tone"]) {
@@ -417,17 +413,14 @@ export function DashboardPortfolioCard({ items }: { items: DashboardPortfolioAss
   );
 }
 
-export function formatTransactionAmount(type: string, amount: number) {
-  if (type === "income") {
-    return `+LKR ${amount.toLocaleString()}`;
-  }
-  return `-LKR ${Math.abs(amount).toLocaleString()}`;
-}
-
 export function DashboardTransactionsCard({ items }: { items: DashboardTransaction[] }) {
   return (
     <DashboardCard>
-      <SectionHeader title="Recent Transactions" action="See all" />
+      <SectionHeader
+        title="Recent Transactions"
+        action="See all"
+        actionHref="/recent-transactions"
+      />
 
       <View className="gap-5">
         {items.map((item) => (

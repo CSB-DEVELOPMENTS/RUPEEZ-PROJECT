@@ -1,12 +1,28 @@
 import type { DashboardTransaction, DashboardTransactionTone } from "@/types/dashboard";
 import { Text, useWindowDimensions, View } from "react-native";
-import { formatTransactionAmount } from "../dashboard/DashboardSections";
 
-export function listToneColor(tone: DashboardTransactionTone) {
-  return tone === "income" ? "text-app-primary" : "text-app-danger";
+export function transactionToneClass(tone: DashboardTransactionTone) {
+  switch (tone) {
+    case "income":
+      return "text-app-primary";
+    case "expense":
+      return "text-app-danger";
+    default:
+      return "text-app-text";
+  }
 }
 
-export default function TransactionCard({ item }: { item: DashboardTransaction }) {
+export function formatTransactionAmount(type: string, amount: number) {
+  if (type === "income") {
+    return `+LKR ${amount.toLocaleString()}`;
+  }
+  if (type === "transfer") {
+    return `LKR ${Math.abs(amount).toLocaleString()}`;
+  }
+  return `-LKR ${Math.abs(amount).toLocaleString()}`;
+}
+
+export function TransactionCard({ item }: { item: DashboardTransaction }) {
   const { width } = useWindowDimensions();
   const isCompact = width < 480;
   const metadata = [item.category, item.date, item.time].filter(Boolean).join(" - ");
@@ -29,7 +45,7 @@ export default function TransactionCard({ item }: { item: DashboardTransaction }
       <Text
         className={`font-display text-lg font-semibold tracking-tight md:text-xl ${
           isCompact ? "self-center" : "text-right"
-        } ${listToneColor(item.tone)}`}>
+        } ${transactionToneClass(item.tone)}`}>
         {formatTransactionAmount(item.tone, item.amount)}
       </Text>
     </View>

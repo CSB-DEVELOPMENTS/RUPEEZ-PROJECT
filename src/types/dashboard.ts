@@ -14,7 +14,7 @@ export type DashboardStat = {
   variant?: "progress" | "trend";
 };
 
-export type DashboardTransactionTone = "expense" | "income";
+export type DashboardTransactionTone = "expense" | "income" | "transfer";
 
 export type CashFlowEntryIcon =
   | "briefcase"
@@ -24,11 +24,15 @@ export type CashFlowEntryIcon =
   | "home"
   | "car"
   | "food"
-  | "bill";
+  | "bill"
+  | "cart"
+  | "bank"
+  | "transfer";
 
 export type DashboardTransaction = {
   id: string;
   amount: number;
+  account?: string;
   category: string;
   title: string;
   tone: DashboardTransactionTone;
@@ -36,6 +40,21 @@ export type DashboardTransaction = {
   date?: string;
   icon?: CashFlowEntryIcon;
   time?: string;
+};
+
+export type TransactionsPageData = {
+  dateRange: string;
+  filters: string[];
+  pagination: {
+    currentPage: number;
+    pageSize: number;
+    totalItems: number;
+    totalPages: number;
+  };
+  searchPlaceholder: string;
+  subtitle: string;
+  title: string;
+  transactions: DashboardTransaction[];
 };
 
 export type DashboardCategory = {

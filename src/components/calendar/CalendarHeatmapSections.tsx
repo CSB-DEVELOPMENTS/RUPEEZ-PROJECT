@@ -3,7 +3,7 @@ import { Pressable, Text, View, useWindowDimensions } from "react-native";
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { DASHBOARD_CALENDAR_DAYS, DASHBOARD_WEEK_DAYS } from "@/constants/dashboard";
 import type { DashboardCalendarDay } from "@/types/dashboard";
-import TransactionCard from "../cash-flow/TransactionCard";
+import { TransactionCard } from "../cash-flow/TransactionCard";
 
 function calendarToneClass(day: DashboardCalendarDay) {
   if (!day.isCurrentMonth) {

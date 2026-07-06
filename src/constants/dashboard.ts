@@ -11,6 +11,7 @@ import type {
   DashboardStat,
   DashboardSubscriptionAvatar,
   DashboardTransaction,
+  TransactionsPageData,
 } from "@/types/dashboard";
 
 export const DASHBOARD_GREETING = "Good morning, Tharindu";
@@ -108,6 +109,72 @@ export const DASHBOARD_TRANSACTIONS: DashboardTransaction[] = [
     tone: "income",
   },
 ];
+
+export const RECENT_TRANSACTIONS_PAGE: TransactionsPageData = {
+  dateRange: "May 12 - May 18, 2025",
+  filters: ["This Month", "Type: All", "Category", "Account"],
+  pagination: {
+    currentPage: 1,
+    pageSize: 5,
+    totalItems: 12,
+    totalPages: 3,
+  },
+  searchPlaceholder: "Search transactions, categories...",
+  subtitle: "A clear view of your latest cash movement across accounts.",
+  title: "Recent Transactions",
+  transactions: [
+    {
+      id: "recent-1",
+      account: "Cyber Credit ••42",
+      amount: 4500,
+      category: "Dining",
+      date: "May 18, 2025",
+      icon: "food",
+      title: "Neon Burger Joint",
+      tone: "expense",
+    },
+    {
+      id: "recent-2",
+      account: "Main Vault ••88",
+      amount: 150000,
+      category: "Income",
+      date: "May 17, 2025",
+      icon: "briefcase",
+      title: "Freelance Payment - OmniCorp",
+      tone: "income",
+    },
+    {
+      id: "recent-3",
+      account: "Everyday Debit ••12",
+      amount: 12450,
+      category: "Groceries",
+      date: "May 16, 2025",
+      icon: "cart",
+      title: "MegaMart Hypermarket",
+      tone: "expense",
+    },
+    {
+      id: "recent-4",
+      account: "Cyber Credit ••42",
+      amount: 850,
+      category: "Transport",
+      date: "May 15, 2025",
+      icon: "car",
+      title: "City Transit Authority",
+      tone: "expense",
+    },
+    {
+      id: "recent-5",
+      account: "Main to Crypto",
+      amount: 25000,
+      category: "Internal Transfer",
+      date: "May 14, 2025",
+      icon: "transfer",
+      title: "Transfer to Savings",
+      tone: "transfer",
+    },
+  ],
+};
 
 export const DASHBOARD_CATEGORIES: DashboardCategory[] = [
   { label: "Food & Groceries", tone: "positive", value: "34%" },
