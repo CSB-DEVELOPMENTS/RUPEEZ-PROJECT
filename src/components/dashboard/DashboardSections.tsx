@@ -128,7 +128,7 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
       <View
         className="overflow-hidden rounded-[28px] border border-app-border bg-app-panel/30 px-3 py-4 md:px-4"
         onLayout={(event) => setChartWidth(Math.floor(event.nativeEvent.layout.width))}>
-        {chartWidth > 0 ? (
+        {chartWidth > 0 ?
           <LineChart
             area
             axisLabelAnimation={false}
@@ -170,7 +170,7 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
               },
             ]}
           />
-        ) : null}
+        : null}
       </View>
     </DashboardCard>
   );
@@ -225,13 +225,13 @@ export function DashboardCalendarCard({
                   </Text>
                 </Pressable>
 
-                {Platform.OS === "web" && isSelected ? (
+                {Platform.OS === "web" && isSelected ?
                   <View className="pointer-events-none absolute left-1/2 top-full z-20 mt-3 w-52 -translate-x-1/2 rounded-[20px] border border-app-border bg-app-surface px-4 py-3 shadow-showcase-soft">
                     <Text className="font-display text-sm font-semibold text-app-text">
                       {formatCalendarDate(day.date)}
                     </Text>
                     <Text className="mt-1 font-display text-xs text-app-muted">{popupText}</Text>
-                    {day.activities.length > 0 ? (
+                    {day.activities.length > 0 ?
                       <View className="mt-3 gap-2">
                         {day.activities.slice(0, 3).map((activity) => (
                           <View key={activity.id} className="gap-1">
@@ -250,9 +250,9 @@ export function DashboardCalendarCard({
                           </View>
                         ))}
                       </View>
-                    ) : null}
+                    : null}
                   </View>
-                ) : null}
+                : null}
               </View>
             );
           })}
@@ -269,7 +269,7 @@ export function DashboardCalendarCard({
             <Pressable
               className="rounded-[28px] border border-app-border bg-app-surface p-5 shadow-showcase-soft"
               onPress={() => {}}>
-              {selectedDay ? (
+              {selectedDay ?
                 <View className="gap-4">
                   <View className="flex-row items-start justify-between gap-4">
                     <View className="flex-1 gap-1">
@@ -287,7 +287,7 @@ export function DashboardCalendarCard({
                     </Pressable>
                   </View>
 
-                  {selectedDay.activities.length > 0 ? (
+                  {selectedDay.activities.length > 0 ?
                     <View className="gap-3">
                       {selectedDay.activities.map((activity) => (
                         <View
@@ -304,9 +304,9 @@ export function DashboardCalendarCard({
                         </View>
                       ))}
                     </View>
-                  ) : null}
+                  : null}
                 </View>
-              ) : null}
+              : null}
             </Pressable>
           </View>
         </Pressable>
@@ -324,7 +324,7 @@ export function DashboardCategoriesCard({
 }) {
   return (
     <DashboardCard>
-      <SectionHeader title="Top Categories" />
+      <SectionHeader title="Top Categories" action="See all" actionHref="/top-categories" />
 
       <View className="items-center pb-6 pt-2">
         <View className="h-36 w-36 items-center justify-center rounded-full border-[12px] border-app-danger">
@@ -377,7 +377,7 @@ export function DashboardSubscriptionsCard({ items }: { items: DashboardSubscrip
 export function DashboardPortfolioCard({ items }: { items: DashboardPortfolioAsset[] }) {
   return (
     <DashboardCard className="min-h-[280px]">
-      <SectionHeader title="Crypto Portfolio" action="+6.35%" />
+      <SectionHeader title="Crypto Portfolio" action="See all" actionHref="/crypto-assets" />
 
       <View className="gap-5">
         {items.map((asset) => (

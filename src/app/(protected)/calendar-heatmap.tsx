@@ -77,10 +77,7 @@ export default function CalendarHeatmapScreen() {
                   label="Net flow (month)"
                   value={`${netFlow >= 0 ? "+" : "-"}LKR ${Math.abs(netFlow).toLocaleString(
                     "en-US",
-                    {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    },
+                    { maximumFractionDigits: 2, minimumFractionDigits: 2 },
                   )}`}
                 />
                 <SummaryCard
