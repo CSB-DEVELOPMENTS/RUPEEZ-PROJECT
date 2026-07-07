@@ -6,7 +6,6 @@ export const TOP_CATEGORIES_PAGE: TopCategoriesPageData = {
     items: [
       {
         amountLabel: "$1,785.00",
-        colorClassName: "bg-app-primary",
         label: "Housing",
         momLabel: "42%",
         progress: 42,
@@ -15,7 +14,6 @@ export const TOP_CATEGORIES_PAGE: TopCategoriesPageData = {
       },
       {
         amountLabel: "$1,062.50",
-        colorClassName: "bg-app-primary/45",
         label: "Food & Dining",
         momLabel: "25%",
         progress: 25,
@@ -24,7 +22,6 @@ export const TOP_CATEGORIES_PAGE: TopCategoriesPageData = {
       },
       {
         amountLabel: "$637.50",
-        colorClassName: "bg-app-surface",
         label: "Transport",
         momLabel: "15%",
         progress: 15,
@@ -33,7 +30,6 @@ export const TOP_CATEGORIES_PAGE: TopCategoriesPageData = {
       },
       {
         amountLabel: "$425.00",
-        colorClassName: "bg-app-panel",
         label: "Bills & Utilities",
         momLabel: "10%",
         progress: 10,
@@ -42,7 +38,6 @@ export const TOP_CATEGORIES_PAGE: TopCategoriesPageData = {
       },
       {
         amountLabel: "$340.00",
-        colorClassName: "bg-app-border",
         label: "Other",
         momLabel: "8%",
         progress: 8,

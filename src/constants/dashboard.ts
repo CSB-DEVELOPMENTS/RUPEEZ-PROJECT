@@ -113,12 +113,7 @@ export const DASHBOARD_TRANSACTIONS: DashboardTransaction[] = [
 export const RECENT_TRANSACTIONS_PAGE: TransactionsPageData = {
   dateRange: "May 12 - May 18, 2025",
   filters: ["This Month", "Type: All", "Category", "Account"],
-  pagination: {
-    currentPage: 1,
-    pageSize: 5,
-    totalItems: 12,
-    totalPages: 3,
-  },
+  pagination: { currentPage: 1, pageSize: 5, totalItems: 12, totalPages: 3 },
   searchPlaceholder: "Search transactions, categories...",
   subtitle: "A clear view of your latest cash movement across accounts.",
   title: "Recent Transactions",
@@ -177,9 +172,10 @@ export const RECENT_TRANSACTIONS_PAGE: TransactionsPageData = {
 };
 
 export const DASHBOARD_CATEGORIES: DashboardCategory[] = [
-  { label: "Food & Groceries", tone: "positive", value: "34%" },
-  { label: "Transport", tone: "neutral", value: "18%" },
-  { label: "Shopping", tone: "soft", value: "14%" },
+  { label: "Food & Groceries", value: "34%" },
+  { label: "Transport", value: "18%" },
+  { label: "Shopping", value: "14%" },
+  { label: "Bills & Utilities", value: "12%" },
 ];
 
 function resolveCalendarTone(activities: DashboardTransaction[]) {
@@ -245,9 +241,9 @@ function createMonthCalendarDays(
       isCurrentMonth: true,
       tone: resolveCalendarTone(activities),
       totalLabel:
-        activities.length > 0
-          ? `${activities.length} activit${activities.length === 1 ? "y" : "ies"}`
-          : undefined,
+        activities.length > 0 ?
+          `${activities.length} activit${activities.length === 1 ? "y" : "ies"}`
+        : undefined,
     });
   }
 
@@ -434,20 +430,8 @@ export const CALENDAR_HEATMAP_TITLE = "Flow Heatmap";
 export const CALENDAR_HEATMAP_FILTER_PLACEHOLDER = "Filter transactions...";
 
 export const DASHBOARD_PORTFOLIO: DashboardPortfolioAsset[] = [
-  {
-    change: "+4.21%",
-    chipTone: "primary",
-    subtitle: "BTC",
-    symbol: "BTC",
-    value: "LKR 45,250.00",
-  },
-  {
-    change: "+7.32%",
-    chipTone: "brand",
-    subtitle: "ETH",
-    symbol: "ETH",
-    value: "LKR 38,780.00",
-  },
+  { change: "+4.21%", chipTone: "primary", subtitle: "BTC", symbol: "BTC", value: "LKR 45,250.00" },
+  { change: "+7.32%", chipTone: "brand", subtitle: "ETH", symbol: "ETH", value: "LKR 38,780.00" },
 ];
 
 export const DASHBOARD_SUBSCRIPTIONS: DashboardSubscriptionAvatar[] = [
@@ -467,16 +451,8 @@ export const CASH_FLOW_HERO: CashFlowHeroData = {
   title: "Total Cash Flow",
   totalValue: "+LKR 84,250.00",
   totals: [
-    {
-      label: "Income",
-      tone: "positive",
-      value: "LKR 180,000.00",
-    },
-    {
-      label: "Expenses",
-      tone: "negative",
-      value: "-LKR 95,750.00",
-    },
+    { label: "Income", tone: "positive", value: "LKR 180,000.00" },
+    { label: "Expenses", tone: "negative", value: "-LKR 95,750.00" },
   ],
 };
 
@@ -567,43 +543,18 @@ export const SAFE_TO_SPEND_SUMMARY: DashboardSafeSpendSummary = {
 };
 
 export const SAFE_TO_SPEND_STATS: DashboardSafeSpendStat[] = [
-  {
-    detail: "12% below average",
-    title: "Spent today",
-    value: "LKR 5,750.00",
-  },
-  {
-    detail: "Locked from daily budget",
-    title: "Reserved for bills",
-    value: "LKR 84,000.00",
-  },
+  { detail: "12% below average", title: "Spent today", value: "LKR 5,750.00" },
+  { detail: "Locked from daily budget", title: "Reserved for bills", value: "LKR 84,000.00" },
 ];
 
 export const SAFE_TO_SPEND_OBLIGATIONS: DashboardSafeSpendObligation[] = [
-  {
-    amount: "LKR 12,400.00",
-    dueLabel: "Due tomorrow",
-    name: "Electric Utility",
-  },
-  {
-    amount: "LKR 8,950.00",
-    dueLabel: "Jul 05",
-    name: "Auto Insurance",
-  },
-  {
-    amount: "LKR 6,500.00",
-    dueLabel: "Jul 08",
-    name: "Internet Service",
-  },
+  { amount: "LKR 12,400.00", dueLabel: "Due tomorrow", name: "Electric Utility" },
+  { amount: "LKR 8,950.00", dueLabel: "Jul 05", name: "Auto Insurance" },
+  { amount: "LKR 6,500.00", dueLabel: "Jul 08", name: "Internet Service" },
 ];
 
 export const SAFE_TO_SPEND_FLOW_ITEMS: DashboardSafeSpendFlowItem[] = [
-  {
-    amount: "+LKR 320,000.00",
-    label: "Direct Deposit",
-    note: "Yesterday",
-    tone: "income",
-  },
+  { amount: "+LKR 320,000.00", label: "Direct Deposit", note: "Yesterday", tone: "income" },
   {
     amount: "-LKR 5,750.00",
     label: "Arpico Supercentre",

@@ -20,23 +20,12 @@ export type CryptoHolding = {
   valueLabel: string;
 };
 
-export type CryptoAllocationItem = {
-  colorClassName: string;
-  label: string;
-  valueLabel: string;
-};
+export type CryptoAllocationItem = { label: string; valueLabel: string };
 
 export type CryptoPortfolioPageData = {
-  allocation: {
-    items: CryptoAllocationItem[];
-    title: string;
-    totalAssetsLabel: string;
-  };
+  allocation: { items: CryptoAllocationItem[]; title: string; totalAssetsLabel: string };
   dateRange: string;
-  holdings: {
-    items: CryptoHolding[];
-    title: string;
-  };
+  holdings: { items: CryptoHolding[]; title: string };
   searchPlaceholder: string;
   stats: CryptoSummaryCardData[];
   subtitle: string;

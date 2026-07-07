@@ -9,12 +9,7 @@ import type { CashFlowEntryIcon, DashboardTransaction } from "@/types/dashboard"
 import { formatTransactionAmount, transactionToneClass } from "../cash-flow/TransactionCard";
 
 type TransactionsTableProps = {
-  pagination: {
-    currentPage: number;
-    pageSize: number;
-    totalItems: number;
-    totalPages: number;
-  };
+  pagination: { currentPage: number; pageSize: number; totalItems: number; totalPages: number };
   transactions: DashboardTransaction[];
 };
 
@@ -98,7 +93,7 @@ function TransactionsTableRow({ item }: { item: DashboardTransaction }) {
 export function TransactionsTable({ pagination, transactions }: TransactionsTableProps) {
   return (
     <DashboardCard className="overflow-hidden p-0">
-      <View className="border-b border-app-border px-6 py-4 md:flex-row md:items-center">
+      <View className="hidden border-b border-app-border px-6 py-4 md:flex md:flex-row md:items-center">
         <Text className="font-display text-xs font-semibold uppercase  text-app-muted md:w-[28%]">
           Transaction
         </Text>

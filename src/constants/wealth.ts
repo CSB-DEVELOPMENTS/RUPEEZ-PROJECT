@@ -3,10 +3,10 @@ import type { CryptoPortfolioPageData } from "@/types/wealth";
 export const CRYPTO_PORTFOLIO_PAGE: CryptoPortfolioPageData = {
   allocation: {
     items: [
-      { colorClassName: "bg-app-primary", label: "Bitcoin (BTC)", valueLabel: "56%" },
-      { colorClassName: "bg-app-brand", label: "Ethereum (ETH)", valueLabel: "30%" },
-      { colorClassName: "bg-app-primary/70", label: "Solana (SOL)", valueLabel: "10%" },
-      { colorClassName: "bg-app-brand/70", label: "USD Coin (USDC)", valueLabel: "4%" },
+      { label: "Bitcoin (BTC)", valueLabel: "56%" },
+      { label: "Ethereum (ETH)", valueLabel: "30%" },
+      { label: "Solana (SOL)", valueLabel: "10%" },
+      { label: "USD Coin (USDC)", valueLabel: "4%" },
     ],
     title: "Allocation",
     totalAssetsLabel: "4",

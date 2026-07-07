@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Text, TextInput, View } from "react-native";
 
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type TransactionsHeroProps = {
@@ -44,6 +44,7 @@ export function TransactionsHero({
             placeholder={searchPlaceholder}
             placeholderTextColor={colors.textMuted}
             className="flex-1 font-display text-base text-app-text"
+            style={{ fontFamily: Fonts.sans }}
           />
         </View>
       </View>

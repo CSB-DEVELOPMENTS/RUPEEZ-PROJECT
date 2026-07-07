@@ -45,29 +45,16 @@ export type DashboardTransaction = {
 export type TransactionsPageData = {
   dateRange: string;
   filters: string[];
-  pagination: {
-    currentPage: number;
-    pageSize: number;
-    totalItems: number;
-    totalPages: number;
-  };
+  pagination: { currentPage: number; pageSize: number; totalItems: number; totalPages: number };
   searchPlaceholder: string;
   subtitle: string;
   title: string;
   transactions: DashboardTransaction[];
 };
 
-export type DashboardCategory = {
-  label: string;
-  tone: DashboardLegendTone;
-  value: string;
-};
+export type DashboardCategory = { label: string; value: string };
 
-export type DashboardCashFlowPoint = {
-  expense: number;
-  income: number;
-  label: string;
-};
+export type DashboardCashFlowPoint = { expense: number; income: number; label: string };
 
 export type DashboardOverviewData = {
   detailHref?: "/cash-flow";
@@ -80,11 +67,7 @@ export type DashboardOverviewData = {
 
 export type CashFlowMetricTone = "negative" | "neutral" | "positive";
 
-export type CashFlowHeroMetric = {
-  label: string;
-  tone: CashFlowMetricTone;
-  value: string;
-};
+export type CashFlowHeroMetric = { label: string; tone: CashFlowMetricTone; value: string };
 
 export type CashFlowHeroData = {
   periodLabel: string;
@@ -124,17 +107,9 @@ export type DashboardSafeSpendSummary = {
   title: string;
 };
 
-export type DashboardSafeSpendStat = {
-  detail: string;
-  title: string;
-  value: string;
-};
+export type DashboardSafeSpendStat = { detail: string; title: string; value: string };
 
-export type DashboardSafeSpendObligation = {
-  amount: string;
-  dueLabel: string;
-  name: string;
-};
+export type DashboardSafeSpendObligation = { amount: string; dueLabel: string; name: string };
 
 export type DashboardSafeSpendFlowItem = {
   amount: string;

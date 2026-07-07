@@ -1,13 +1,15 @@
 import { ScrollView, View } from "react-native";
 
 import { ThemeToggle } from "@/components/common/ThemeToggle";
-import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import {
   DashboardCalendarCard,
   DashboardCategoriesCard,
-  DashboardInsightsCard,
   DashboardOverviewCard,
   DashboardPortfolioCard,
+} from "@/components/dashboard";
+import { DashboardHero } from "@/components/dashboard/DashboardHero";
+import {
+  DashboardInsightsCard,
   DashboardSubscriptionsCard,
   DashboardTransactionsCard,
 } from "@/components/dashboard/DashboardSections";

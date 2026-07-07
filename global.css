@@ -32,6 +32,16 @@
   --app-brand-contrast: 255 255 255;
   --app-danger: 239 68 68;
   --app-danger-muted: 254 226 226;
+  --app-chart-track: 220 223 228;
+  --app-chart-green: 34 197 94;
+  --app-chart-blue: 59 130 246;
+  --app-chart-purple: 139 92 246;
+  --app-chart-orange: 249 115 22;
+  --app-chart-teal: 20 184 166;
+  --app-chart-pink: 236 72 153;
+  --app-chart-yellow: 234 179 8;
+  --app-chart-indigo: 99 102 241;
+  --app-chart-red: 239 68 68;
   --app-shadow: 16 24 40;
 }
 
@@ -56,5 +66,15 @@
   --app-brand-contrast: 239 246 255;
   --app-danger: 248 113 113;
   --app-danger-muted: 127 29 29;
+  --app-chart-track: 38 51 68;
+  --app-chart-green: 34 197 94;
+  --app-chart-blue: 59 130 246;
+  --app-chart-purple: 139 92 246;
+  --app-chart-orange: 249 115 22;
+  --app-chart-teal: 20 184 166;
+  --app-chart-pink: 236 72 153;
+  --app-chart-yellow: 234 179 8;
+  --app-chart-indigo: 99 102 241;
+  --app-chart-red: 239 68 68;
   --app-shadow: 0 0 0;
 }
