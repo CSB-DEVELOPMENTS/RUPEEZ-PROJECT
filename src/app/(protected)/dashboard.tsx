@@ -24,7 +24,7 @@ import {
   DASHBOARD_OVERVIEW_COPY,
   DASHBOARD_PORTFOLIO,
   DASHBOARD_STATS,
-  DASHBOARD_SUBSCRIPTIONS,
+  DASHBOARD_SUBSCRIPTIONS_CARD,
   DASHBOARD_TRANSACTIONS,
 } from "@/constants/dashboard";
 
@@ -64,7 +64,7 @@ export default function Dashboard() {
 
                 <View className="gap-4 md:flex-row">
                   <View className="md:flex-1">
-                    <DashboardSubscriptionsCard items={DASHBOARD_SUBSCRIPTIONS} />
+                    <DashboardSubscriptionsCard data={DASHBOARD_SUBSCRIPTIONS_CARD} />
                   </View>
                   <View className="md:flex-1">
                     <DashboardPortfolioCard items={DASHBOARD_PORTFOLIO} />

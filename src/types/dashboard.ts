@@ -99,6 +99,43 @@ export type DashboardSubscriptionAvatar = {
   tone: "brand" | "neutral" | "negative" | "positive";
 };
 
+export type DashboardSubscriptionsOverviewData = {
+  activeCountLabel: string;
+  detailHref?: "/subscriptions";
+  items: DashboardSubscriptionAvatar[];
+  summaryValue: string;
+};
+
+export type SubscriptionSummaryCardData = {
+  detail: string;
+  eyebrow: string;
+  id: string;
+  meta?: string;
+  tone: DashboardSubscriptionAvatar["tone"];
+  value: string;
+};
+
+export type ActiveSubscriptionItem = {
+  amountLabel: string;
+  billingCycleLabel: string;
+  id: string;
+  isActive: boolean;
+  name: string;
+  plan: string;
+  renewalLabel: string;
+  statusLabel: string;
+  tone: DashboardSubscriptionAvatar["tone"];
+};
+
+export type ActiveSubscriptionsPageData = {
+  dateRange: string;
+  searchPlaceholder: string;
+  subtitle: string;
+  summaryCards: SubscriptionSummaryCardData[];
+  subscriptions: ActiveSubscriptionItem[];
+  title: string;
+};
+
 export type DashboardSafeSpendSummary = {
   availableNow: string;
   dailyTarget: string;

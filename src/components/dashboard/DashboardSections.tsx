@@ -5,6 +5,7 @@ import type {
   DashboardCalendarDay,
   DashboardLegendTone,
   DashboardPortfolioAsset,
+  DashboardSubscriptionsOverviewData,
   DashboardSubscriptionAvatar,
   DashboardTransaction,
 } from "@/types/dashboard";
@@ -101,17 +102,21 @@ export function chartPaletteColor(theme: "light" | "dark", index: number) {
   return palette[index % palette.length];
 }
 
-export function DashboardSubscriptionsCard({ items }: { items: DashboardSubscriptionAvatar[] }) {
+export function DashboardSubscriptionsCard({ data }: { data: DashboardSubscriptionsOverviewData }) {
   return (
     <DashboardCard className="min-h-[280px]">
-      <SectionHeader title="Subscriptions" />
+      <SectionHeader
+        title="Subscriptions"
+        action={data.detailHref ? "See all" : undefined}
+        actionHref={data.detailHref}
+      />
       <Text className="font-display text-4xl font-semibold tracking-tight text-app-text">
-        LKR 18,750.00
+        {data.summaryValue}
       </Text>
-      <Text className="mt-2 font-display text-base text-app-muted">6 active subscriptions</Text>
+      <Text className="mt-2 font-display text-base text-app-muted">{data.activeCountLabel}</Text>
 
       <View className="mt-8 flex-row flex-wrap gap-3">
-        {items.map((item) => (
+        {data.items.map((item) => (
           <View
             key={item.label}
             className={`h-10 min-w-10 items-center justify-center rounded-xl px-3 ${subscriptionToneClass(item.tone)}`}>

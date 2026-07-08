@@ -1,4 +1,5 @@
 import type {
+  ActiveSubscriptionsPageData,
   CashFlowHeroData,
   DashboardCalendarDay,
   DashboardCategory,
@@ -10,6 +11,7 @@ import type {
   DashboardSafeSpendSummary,
   DashboardStat,
   DashboardSubscriptionAvatar,
+  DashboardSubscriptionsOverviewData,
   DashboardTransaction,
   TransactionsPageData,
 } from "@/types/dashboard";
@@ -434,12 +436,118 @@ export const DASHBOARD_PORTFOLIO: DashboardPortfolioAsset[] = [
   { change: "+7.32%", chipTone: "brand", subtitle: "ETH", symbol: "ETH", value: "LKR 38,780.00" },
 ];
 
-export const DASHBOARD_SUBSCRIPTIONS: DashboardSubscriptionAvatar[] = [
+export const DASHBOARD_SUBSCRIPTION_AVATARS: DashboardSubscriptionAvatar[] = [
   { label: "N", tone: "negative" },
   { label: "S", tone: "positive" },
   { label: "A", tone: "brand" },
   { label: "+2", tone: "neutral" },
 ];
+
+export const DASHBOARD_SUBSCRIPTIONS_CARD: DashboardSubscriptionsOverviewData = {
+  activeCountLabel: "6 active subscriptions",
+  detailHref: "/subscriptions",
+  items: DASHBOARD_SUBSCRIPTION_AVATARS,
+  summaryValue: "LKR 18,750.00",
+};
+
+export const ACTIVE_SUBSCRIPTIONS_PAGE: ActiveSubscriptionsPageData = {
+  dateRange: "Jul 08 - Jul 14, 2026",
+  searchPlaceholder: "Search subscriptions...",
+  subtitle: "Manage your recurring payments and monthly cash flow.",
+  summaryCards: [
+    {
+      detail: "LKR 2,150 less than last month",
+      eyebrow: "Monthly commitment",
+      id: "monthly-commitment",
+      tone: "positive",
+      value: "LKR 18,750.00",
+    },
+    {
+      detail: "Across 4 categories",
+      eyebrow: "Active subscriptions",
+      id: "active-subscriptions",
+      tone: "neutral",
+      value: "6",
+    },
+    {
+      detail: "Tomorrow",
+      eyebrow: "Next renewal",
+      id: "next-renewal",
+      meta: "LKR 2,290.00",
+      tone: "negative",
+      value: "Netflix Premium",
+    },
+  ],
+  subscriptions: [
+    {
+      amountLabel: "LKR 2,290.00",
+      billingCycleLabel: "Monthly",
+      id: "netflix",
+      isActive: true,
+      name: "Netflix",
+      plan: "Premium 4K",
+      renewalLabel: "Renews on Jul 09",
+      statusLabel: "Active",
+      tone: "negative",
+    },
+    {
+      amountLabel: "LKR 1,490.00",
+      billingCycleLabel: "Monthly",
+      id: "spotify",
+      isActive: true,
+      name: "Spotify",
+      plan: "Duo Plan",
+      renewalLabel: "Renews on Jul 12",
+      statusLabel: "Active",
+      tone: "positive",
+    },
+    {
+      amountLabel: "LKR 5,490.00",
+      billingCycleLabel: "Monthly",
+      id: "adobe",
+      isActive: true,
+      name: "Adobe CC",
+      plan: "All Apps",
+      renewalLabel: "Renews on Jul 18",
+      statusLabel: "Active",
+      tone: "negative",
+    },
+    {
+      amountLabel: "LKR 2,890.00",
+      billingCycleLabel: "Monthly",
+      id: "notion",
+      isActive: true,
+      name: "Notion",
+      plan: "Plus Workspace",
+      renewalLabel: "Renews on Jul 21",
+      statusLabel: "Active",
+      tone: "brand",
+    },
+    {
+      amountLabel: "LKR 3,390.00",
+      billingCycleLabel: "Monthly",
+      id: "icloud",
+      isActive: true,
+      name: "iCloud+",
+      plan: "2TB Family",
+      renewalLabel: "Renews on Jul 25",
+      statusLabel: "Active",
+      tone: "brand",
+    },
+    {
+      amountLabel: "LKR 3,200.00",
+      billingCycleLabel: "Monthly",
+      id: "fibernet",
+      isActive: true,
+      name: "FiberNet",
+      plan: "Home Internet",
+      renewalLabel: "Renews on Jul 28",
+      statusLabel: "Active",
+      tone: "neutral",
+    },
+  ],
+  title: "Active Subscriptions",
+};
 
 export const DASHBOARD_WEEK_DAYS = ["M", "T", "W", "T", "F", "S", "S"] as const;
 
