@@ -25,9 +25,9 @@ export default function CalendarHeatmapScreen() {
     return DASHBOARD_CALENDAR_DAYS.reduce(
       (totals, day) => {
         day.activities.forEach((activity) => {
-          if (activity.type === "income") {
+          if (activity.tone === "income") {
             totals.inflow += activity.amount;
-          } else if (activity.type === "expense") {
+          } else if (activity.tone === "expense") {
             totals.outflow += activity.amount;
           }
         });
@@ -77,10 +77,7 @@ export default function CalendarHeatmapScreen() {
                   label="Net flow (month)"
                   value={`${netFlow >= 0 ? "+" : "-"}LKR ${Math.abs(netFlow).toLocaleString(
                     "en-US",
-                    {
-                      maximumFractionDigits: 2,
-                      minimumFractionDigits: 2,
-                    },
+                    { maximumFractionDigits: 2, minimumFractionDigits: 2 },
                   )}`}
                 />
                 <SummaryCard

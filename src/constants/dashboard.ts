@@ -1,6 +1,6 @@
 import type {
+  ActiveSubscriptionsPageData,
   CashFlowHeroData,
-  DashboardCalendarActivity,
   DashboardCalendarDay,
   DashboardCategory,
   DashboardOverviewData,
@@ -11,7 +11,9 @@ import type {
   DashboardSafeSpendSummary,
   DashboardStat,
   DashboardSubscriptionAvatar,
+  DashboardSubscriptionsOverviewData,
   DashboardTransaction,
+  TransactionsPageData,
 } from "@/types/dashboard";
 
 export const DASHBOARD_GREETING = "Good morning, Tharindu";
@@ -110,21 +112,83 @@ export const DASHBOARD_TRANSACTIONS: DashboardTransaction[] = [
   },
 ];
 
+export const RECENT_TRANSACTIONS_PAGE: TransactionsPageData = {
+  dateRange: "May 12 - May 18, 2025",
+  filters: ["This Month", "Type: All", "Category", "Account"],
+  pagination: { currentPage: 1, pageSize: 5, totalItems: 12, totalPages: 3 },
+  searchPlaceholder: "Search transactions, categories...",
+  subtitle: "A clear view of your latest cash movement across accounts.",
+  title: "Recent Transactions",
+  transactions: [
+    {
+      id: "recent-1",
+      account: "Cyber Credit ••42",
+      amount: 4500,
+      category: "Dining",
+      date: "May 18, 2025",
+      icon: "food",
+      title: "Neon Burger Joint",
+      tone: "expense",
+    },
+    {
+      id: "recent-2",
+      account: "Main Vault ••88",
+      amount: 150000,
+      category: "Income",
+      date: "May 17, 2025",
+      icon: "briefcase",
+      title: "Freelance Payment - OmniCorp",
+      tone: "income",
+    },
+    {
+      id: "recent-3",
+      account: "Everyday Debit ••12",
+      amount: 12450,
+      category: "Groceries",
+      date: "May 16, 2025",
+      icon: "cart",
+      title: "MegaMart Hypermarket",
+      tone: "expense",
+    },
+    {
+      id: "recent-4",
+      account: "Cyber Credit ••42",
+      amount: 850,
+      category: "Transport",
+      date: "May 15, 2025",
+      icon: "car",
+      title: "City Transit Authority",
+      tone: "expense",
+    },
+    {
+      id: "recent-5",
+      account: "Main to Crypto",
+      amount: 25000,
+      category: "Internal Transfer",
+      date: "May 14, 2025",
+      icon: "transfer",
+      title: "Transfer to Savings",
+      tone: "transfer",
+    },
+  ],
+};
+
 export const DASHBOARD_CATEGORIES: DashboardCategory[] = [
-  { label: "Food & Groceries", tone: "positive", value: "34%" },
-  { label: "Transport", tone: "neutral", value: "18%" },
-  { label: "Shopping", tone: "soft", value: "14%" },
+  { label: "Food & Groceries", value: "34%" },
+  { label: "Transport", value: "18%" },
+  { label: "Shopping", value: "14%" },
+  { label: "Bills & Utilities", value: "12%" },
 ];
 
-function resolveCalendarTone(activities: DashboardCalendarActivity[]) {
+function resolveCalendarTone(activities: DashboardTransaction[]) {
   const totalIncomeValue = activities.reduce((total, activity) => {
-    if (activity.type === "income" && activity.amount) {
+    if (activity.tone === "income" && activity.amount) {
       return total + activity.amount;
     }
     return total;
   }, 0);
   const totalExpenseValue = activities.reduce((total, activity) => {
-    if (activity.type === "expense" && activity.amount) {
+    if (activity.tone === "expense" && activity.amount) {
       return total + activity.amount;
     }
     return total;
@@ -145,7 +209,7 @@ function resolveCalendarTone(activities: DashboardCalendarActivity[]) {
 function createMonthCalendarDays(
   year: number,
   monthIndex: number, // 0-based month index (0 = January, 11 = December)
-  entries: Record<string, DashboardCalendarActivity[]>,
+  entries: Record<string, DashboardTransaction[]>,
 ) {
   const firstDay = new Date(Date.UTC(year, monthIndex, 1));
   const firstWeekday = (firstDay.getUTCDay() + 6) % 7;
@@ -179,9 +243,9 @@ function createMonthCalendarDays(
       isCurrentMonth: true,
       tone: resolveCalendarTone(activities),
       totalLabel:
-        activities.length > 0
-          ? `${activities.length} activit${activities.length === 1 ? "y" : "ies"}`
-          : undefined,
+        activities.length > 0 ?
+          `${activities.length} activit${activities.length === 1 ? "y" : "ies"}`
+        : undefined,
     });
   }
 
@@ -210,15 +274,15 @@ export function getDashboardCalendarMonthLabel(year: number, monthIndex: number)
   }).format(new Date(Date.UTC(year, monthIndex, 1)));
 }
 
-const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = {
+const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardTransaction[]> = {
   "2026-07-02": [
     {
       amount: 2450.0,
       category: "Food",
       id: "grocery-run",
-      label: "Keells grocery run",
+      title: "Keells grocery run",
       time: "6:10 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-04": [
@@ -226,17 +290,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 1850.0,
       category: "Bills",
       id: "wifi-bill",
-      label: "Wi-Fi bill paid",
+      title: "Wi-Fi bill paid",
       time: "8:30 AM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 850.0,
       category: "Transport",
       id: "fuel-top-up",
-      label: "Fuel top-up",
+      title: "Fuel top-up",
       time: "7:45 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-11": [
@@ -244,9 +308,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 4200.0,
       category: "Shopping",
       id: "home-needs",
-      label: "Household essentials",
+      title: "Household essentials",
       time: "2:20 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-13": [
@@ -254,9 +318,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 180000.0,
       category: "Income",
       id: "salary-credit",
-      label: "Salary credited",
+      title: "Salary credited",
       time: "9:00 AM",
-      type: "income",
+      tone: "income",
     },
   ],
   "2026-07-17": [
@@ -264,25 +328,25 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 2100.0,
       category: "Food",
       id: "family-lunch",
-      label: "Family lunch",
+      title: "Family lunch",
       time: "12:30 PM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 1350.0,
       category: "Transport",
       id: "weekend-ride",
-      label: "Weekend ride",
+      title: "Weekend ride",
       time: "4:15 PM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 750.0,
       category: "Entertainment",
       id: "movie-night",
-      label: "Movie night snacks",
+      title: "Movie night snacks",
       time: "8:40 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-18": [
@@ -290,9 +354,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 3500.0,
       category: "Health",
       id: "pharmacy",
-      label: "Pharmacy pickup",
+      title: "Pharmacy pickup",
       time: "10:05 AM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-19": [
@@ -300,17 +364,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 1250.0,
       category: "Transport",
       id: "office-commute",
-      label: "Office commute",
+      title: "Office commute",
       time: "8:05 AM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 650.0,
       category: "Coffee",
       id: "team-coffee",
-      label: "Team coffee stop",
+      title: "Team coffee stop",
       time: "3:35 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-20": [
@@ -318,9 +382,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 9800.0,
       category: "Savings",
       id: "savings-transfer",
-      label: "Savings transfer",
+      title: "Savings transfer",
       time: "7:15 AM",
-      type: "income",
+      tone: "income",
+    },
+    {
+      amount: 1250.0,
+      category: "Transport",
+      id: "bus-pass",
+      title: "Monthly bus pass",
+      time: "3:15 PM",
+      tone: "expense",
     },
   ],
   "2026-07-24": [
@@ -328,9 +400,9 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 2900.0,
       category: "Dining",
       id: "dinner-out",
-      label: "Dinner with friends",
+      title: "Dinner with friends",
       time: "8:10 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
   "2026-07-28": [
@@ -338,17 +410,17 @@ const JULY_2026_ACTIVITY_ENTRIES: Record<string, DashboardCalendarActivity[]> = 
       amount: 1100.0,
       category: "Subscriptions",
       id: "music-renewal",
-      label: "Music subscription renewal",
+      title: "Music subscription renewal",
       time: "6:45 AM",
-      type: "expense",
+      tone: "expense",
     },
     {
       amount: 680.0,
       category: "Transport",
       id: "late-ride",
-      label: "Late ride home",
+      title: "Late ride home",
       time: "9:15 PM",
-      type: "expense",
+      tone: "expense",
     },
   ],
 };
@@ -360,28 +432,122 @@ export const CALENDAR_HEATMAP_TITLE = "Flow Heatmap";
 export const CALENDAR_HEATMAP_FILTER_PLACEHOLDER = "Filter transactions...";
 
 export const DASHBOARD_PORTFOLIO: DashboardPortfolioAsset[] = [
-  {
-    change: "+4.21%",
-    chipTone: "primary",
-    subtitle: "BTC",
-    symbol: "BTC",
-    value: "LKR 45,250.00",
-  },
-  {
-    change: "+7.32%",
-    chipTone: "brand",
-    subtitle: "ETH",
-    symbol: "ETH",
-    value: "LKR 38,780.00",
-  },
+  { change: "+4.21%", chipTone: "primary", subtitle: "BTC", symbol: "BTC", value: "LKR 45,250.00" },
+  { change: "+7.32%", chipTone: "brand", subtitle: "ETH", symbol: "ETH", value: "LKR 38,780.00" },
 ];
 
-export const DASHBOARD_SUBSCRIPTIONS: DashboardSubscriptionAvatar[] = [
+export const DASHBOARD_SUBSCRIPTION_AVATARS: DashboardSubscriptionAvatar[] = [
   { label: "N", tone: "negative" },
   { label: "S", tone: "positive" },
   { label: "A", tone: "brand" },
   { label: "+2", tone: "neutral" },
 ];
+
+export const DASHBOARD_SUBSCRIPTIONS_CARD: DashboardSubscriptionsOverviewData = {
+  activeCountLabel: "6 active subscriptions",
+  detailHref: "/subscriptions",
+  items: DASHBOARD_SUBSCRIPTION_AVATARS,
+  summaryValue: "LKR 18,750.00",
+};
+
+export const ACTIVE_SUBSCRIPTIONS_PAGE: ActiveSubscriptionsPageData = {
+  dateRange: "Jul 08 - Jul 14, 2026",
+  searchPlaceholder: "Search subscriptions...",
+  subtitle: "Manage your recurring payments and monthly cash flow.",
+  summaryCards: [
+    {
+      detail: "LKR 2,150 less than last month",
+      eyebrow: "Monthly commitment",
+      id: "monthly-commitment",
+      tone: "positive",
+      value: "LKR 18,750.00",
+    },
+    {
+      detail: "Across 4 categories",
+      eyebrow: "Active subscriptions",
+      id: "active-subscriptions",
+      tone: "neutral",
+      value: "6",
+    },
+    {
+      detail: "Tomorrow",
+      eyebrow: "Next renewal",
+      id: "next-renewal",
+      meta: "LKR 2,290.00",
+      tone: "negative",
+      value: "Netflix Premium",
+    },
+  ],
+  subscriptions: [
+    {
+      amountLabel: "LKR 2,290.00",
+      billingCycleLabel: "Monthly",
+      id: "netflix",
+      isActive: true,
+      name: "Netflix",
+      plan: "Premium 4K",
+      renewalLabel: "Renews on Jul 09",
+      statusLabel: "Active",
+      tone: "negative",
+    },
+    {
+      amountLabel: "LKR 1,490.00",
+      billingCycleLabel: "Monthly",
+      id: "spotify",
+      isActive: true,
+      name: "Spotify",
+      plan: "Duo Plan",
+      renewalLabel: "Renews on Jul 12",
+      statusLabel: "Active",
+      tone: "positive",
+    },
+    {
+      amountLabel: "LKR 5,490.00",
+      billingCycleLabel: "Monthly",
+      id: "adobe",
+      isActive: true,
+      name: "Adobe CC",
+      plan: "All Apps",
+      renewalLabel: "Renews on Jul 18",
+      statusLabel: "Active",
+      tone: "negative",
+    },
+    {
+      amountLabel: "LKR 2,890.00",
+      billingCycleLabel: "Monthly",
+      id: "notion",
+      isActive: true,
+      name: "Notion",
+      plan: "Plus Workspace",
+      renewalLabel: "Renews on Jul 21",
+      statusLabel: "Active",
+      tone: "brand",
+    },
+    {
+      amountLabel: "LKR 3,390.00",
+      billingCycleLabel: "Monthly",
+      id: "icloud",
+      isActive: true,
+      name: "iCloud+",
+      plan: "2TB Family",
+      renewalLabel: "Renews on Jul 25",
+      statusLabel: "Active",
+      tone: "brand",
+    },
+    {
+      amountLabel: "LKR 3,200.00",
+      billingCycleLabel: "Monthly",
+      id: "fibernet",
+      isActive: true,
+      name: "FiberNet",
+      plan: "Home Internet",
+      renewalLabel: "Renews on Jul 28",
+      statusLabel: "Active",
+      tone: "neutral",
+    },
+  ],
+  title: "Active Subscriptions",
+};
 
 export const DASHBOARD_WEEK_DAYS = ["M", "T", "W", "T", "F", "S", "S"] as const;
 
@@ -393,16 +559,8 @@ export const CASH_FLOW_HERO: CashFlowHeroData = {
   title: "Total Cash Flow",
   totalValue: "+LKR 84,250.00",
   totals: [
-    {
-      label: "Income",
-      tone: "positive",
-      value: "LKR 180,000.00",
-    },
-    {
-      label: "Expenses",
-      tone: "negative",
-      value: "-LKR 95,750.00",
-    },
+    { label: "Income", tone: "positive", value: "LKR 180,000.00" },
+    { label: "Expenses", tone: "negative", value: "-LKR 95,750.00" },
   ],
 };
 
@@ -493,43 +651,18 @@ export const SAFE_TO_SPEND_SUMMARY: DashboardSafeSpendSummary = {
 };
 
 export const SAFE_TO_SPEND_STATS: DashboardSafeSpendStat[] = [
-  {
-    detail: "12% below average",
-    title: "Spent today",
-    value: "LKR 5,750.00",
-  },
-  {
-    detail: "Locked from daily budget",
-    title: "Reserved for bills",
-    value: "LKR 84,000.00",
-  },
+  { detail: "12% below average", title: "Spent today", value: "LKR 5,750.00" },
+  { detail: "Locked from daily budget", title: "Reserved for bills", value: "LKR 84,000.00" },
 ];
 
 export const SAFE_TO_SPEND_OBLIGATIONS: DashboardSafeSpendObligation[] = [
-  {
-    amount: "LKR 12,400.00",
-    dueLabel: "Due tomorrow",
-    name: "Electric Utility",
-  },
-  {
-    amount: "LKR 8,950.00",
-    dueLabel: "Jul 05",
-    name: "Auto Insurance",
-  },
-  {
-    amount: "LKR 6,500.00",
-    dueLabel: "Jul 08",
-    name: "Internet Service",
-  },
+  { amount: "LKR 12,400.00", dueLabel: "Due tomorrow", name: "Electric Utility" },
+  { amount: "LKR 8,950.00", dueLabel: "Jul 05", name: "Auto Insurance" },
+  { amount: "LKR 6,500.00", dueLabel: "Jul 08", name: "Internet Service" },
 ];
 
 export const SAFE_TO_SPEND_FLOW_ITEMS: DashboardSafeSpendFlowItem[] = [
-  {
-    amount: "+LKR 320,000.00",
-    label: "Direct Deposit",
-    note: "Yesterday",
-    tone: "income",
-  },
+  { amount: "+LKR 320,000.00", label: "Direct Deposit", note: "Yesterday", tone: "income" },
   {
     amount: "-LKR 5,750.00",
     label: "Arpico Supercentre",

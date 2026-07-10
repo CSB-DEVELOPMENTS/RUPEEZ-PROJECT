@@ -2,7 +2,7 @@ import { ScrollView, View } from "react-native";
 
 import { CashFlowHero } from "@/components/cash-flow/CashFlowHero";
 import { CashFlowListCard } from "@/components/cash-flow/CashFlowListCard";
-import { DashboardOverviewCard } from "@/components/dashboard/DashboardSections";
+import { DashboardOverviewCard } from "@/components/dashboard/DashboardOverviewCard";
 import {
   CASH_FLOW_HERO,
   CASH_FLOW_INFLOW,

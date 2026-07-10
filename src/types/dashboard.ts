@@ -14,7 +14,7 @@ export type DashboardStat = {
   variant?: "progress" | "trend";
 };
 
-export type DashboardTransactionTone = "expense" | "income";
+export type DashboardTransactionTone = "expense" | "income" | "transfer";
 
 export type CashFlowEntryIcon =
   | "briefcase"
@@ -24,30 +24,37 @@ export type CashFlowEntryIcon =
   | "home"
   | "car"
   | "food"
-  | "bill";
+  | "bill"
+  | "cart"
+  | "bank"
+  | "transfer";
 
 export type DashboardTransaction = {
   id: string;
   amount: number;
+  account?: string;
   category: string;
   title: string;
   tone: DashboardTransactionTone;
   note?: string;
   date?: string;
   icon?: CashFlowEntryIcon;
+  time?: string;
 };
 
-export type DashboardCategory = {
-  label: string;
-  tone: DashboardLegendTone;
-  value: string;
+export type TransactionsPageData = {
+  dateRange: string;
+  filters: string[];
+  pagination: { currentPage: number; pageSize: number; totalItems: number; totalPages: number };
+  searchPlaceholder: string;
+  subtitle: string;
+  title: string;
+  transactions: DashboardTransaction[];
 };
 
-export type DashboardCashFlowPoint = {
-  expense: number;
-  income: number;
-  label: string;
-};
+export type DashboardCategory = { label: string; value: string };
+
+export type DashboardCashFlowPoint = { expense: number; income: number; label: string };
 
 export type DashboardOverviewData = {
   detailHref?: "/cash-flow";
@@ -60,11 +67,7 @@ export type DashboardOverviewData = {
 
 export type CashFlowMetricTone = "negative" | "neutral" | "positive";
 
-export type CashFlowHeroMetric = {
-  label: string;
-  tone: CashFlowMetricTone;
-  value: string;
-};
+export type CashFlowHeroMetric = { label: string; tone: CashFlowMetricTone; value: string };
 
 export type CashFlowHeroData = {
   periodLabel: string;
@@ -73,19 +76,8 @@ export type CashFlowHeroData = {
   totals: CashFlowHeroMetric[];
 };
 
-export type CashFlowListTone = "expense" | "income";
-
-export type DashboardCalendarActivity = {
-  amount: number;
-  category?: string;
-  id: string;
-  label: string;
-  time?: string;
-  type?: "expense" | "income";
-};
-
 export type DashboardCalendarDay = {
-  activities: DashboardCalendarActivity[];
+  activities: DashboardTransaction[];
   activityCount: number;
   date: string;
   dayLabel: string;
@@ -107,6 +99,43 @@ export type DashboardSubscriptionAvatar = {
   tone: "brand" | "neutral" | "negative" | "positive";
 };
 
+export type DashboardSubscriptionsOverviewData = {
+  activeCountLabel: string;
+  detailHref?: "/subscriptions";
+  items: DashboardSubscriptionAvatar[];
+  summaryValue: string;
+};
+
+export type SubscriptionSummaryCardData = {
+  detail: string;
+  eyebrow: string;
+  id: string;
+  meta?: string;
+  tone: DashboardSubscriptionAvatar["tone"];
+  value: string;
+};
+
+export type ActiveSubscriptionItem = {
+  amountLabel: string;
+  billingCycleLabel: string;
+  id: string;
+  isActive: boolean;
+  name: string;
+  plan: string;
+  renewalLabel: string;
+  statusLabel: string;
+  tone: DashboardSubscriptionAvatar["tone"];
+};
+
+export type ActiveSubscriptionsPageData = {
+  dateRange: string;
+  searchPlaceholder: string;
+  subtitle: string;
+  summaryCards: SubscriptionSummaryCardData[];
+  subscriptions: ActiveSubscriptionItem[];
+  title: string;
+};
+
 export type DashboardSafeSpendSummary = {
   availableNow: string;
   dailyTarget: string;
@@ -115,17 +144,9 @@ export type DashboardSafeSpendSummary = {
   title: string;
 };
 
-export type DashboardSafeSpendStat = {
-  detail: string;
-  title: string;
-  value: string;
-};
+export type DashboardSafeSpendStat = { detail: string; title: string; value: string };
 
-export type DashboardSafeSpendObligation = {
-  amount: string;
-  dueLabel: string;
-  name: string;
-};
+export type DashboardSafeSpendObligation = { amount: string; dueLabel: string; name: string };
 
 export type DashboardSafeSpendFlowItem = {
   amount: string;

@@ -28,6 +28,18 @@ module.exports = {
           "brand-contrast": "rgb(var(--app-brand-contrast) / <alpha-value>)",
           danger: "rgb(var(--app-danger) / <alpha-value>)",
           "danger-muted": "rgb(var(--app-danger-muted) / <alpha-value>)",
+          chart: {
+            track: "rgb(var(--app-chart-track) / <alpha-value>)",
+            green: "rgb(var(--app-chart-green) / <alpha-value>)",
+            blue: "rgb(var(--app-chart-blue) / <alpha-value>)",
+            purple: "rgb(var(--app-chart-purple) / <alpha-value>)",
+            orange: "rgb(var(--app-chart-orange) / <alpha-value>)",
+            teal: "rgb(var(--app-chart-teal) / <alpha-value>)",
+            pink: "rgb(var(--app-chart-pink) / <alpha-value>)",
+            yellow: "rgb(var(--app-chart-yellow) / <alpha-value>)",
+            indigo: "rgb(var(--app-chart-indigo) / <alpha-value>)",
+            red: "rgb(var(--app-chart-red) / <alpha-value>)",
+          },
         },
       },
       boxShadow: {

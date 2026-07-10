@@ -1,13 +1,15 @@
-import { ScrollView, View, useWindowDimensions } from "react-native";
+import { ScrollView, View } from "react-native";
 
 import { ThemeToggle } from "@/components/common/ThemeToggle";
-import { DashboardHero } from "@/components/dashboard/DashboardHero";
 import {
   DashboardCalendarCard,
   DashboardCategoriesCard,
-  DashboardInsightsCard,
   DashboardOverviewCard,
   DashboardPortfolioCard,
+} from "@/components/dashboard";
+import { DashboardHero } from "@/components/dashboard/DashboardHero";
+import {
+  DashboardInsightsCard,
   DashboardSubscriptionsCard,
   DashboardTransactionsCard,
 } from "@/components/dashboard/DashboardSections";
@@ -22,25 +24,11 @@ import {
   DASHBOARD_OVERVIEW_COPY,
   DASHBOARD_PORTFOLIO,
   DASHBOARD_STATS,
-  DASHBOARD_SUBSCRIPTIONS,
+  DASHBOARD_SUBSCRIPTIONS_CARD,
   DASHBOARD_TRANSACTIONS,
 } from "@/constants/dashboard";
 
 export default function Dashboard() {
-  const { width } = useWindowDimensions();
-  const pageHorizontalPadding = width >= 1024 ? 80 : width >= 768 ? 64 : 32;
-  const statGap = 16;
-  const availableWidth = Math.max(width - pageHorizontalPadding, 320);
-  const maxColumns = Math.max(1, Math.floor((availableWidth + statGap) / 280));
-  const statColumns =
-    maxColumns >= DASHBOARD_STATS.length
-      ? DASHBOARD_STATS.length
-      : maxColumns >= 2
-        ? maxColumns % 2 === 0
-          ? maxColumns
-          : maxColumns - 1
-        : 1;
-
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>
       <View className="items-end">
@@ -60,8 +48,12 @@ export default function Dashboard() {
 
             <View className="mx-[-8px] flex-row flex-wrap">
               {DASHBOARD_STATS.map((item) => (
-                <View key={item.caption} className="p-2" style={{ width: `${100 / statColumns}%` }}>
-                  <DashboardStatCard {...item} />
+                <View
+                  key={item.caption}
+                  className="flex-auto p-2"
+                  // style={{ width: `${100 / statColumns}%` }}
+                >
+                  <DashboardStatCard key={item.caption} {...item} />
                 </View>
               ))}
             </View>
@@ -72,7 +64,7 @@ export default function Dashboard() {
 
                 <View className="gap-4 md:flex-row">
                   <View className="md:flex-1">
-                    <DashboardSubscriptionsCard items={DASHBOARD_SUBSCRIPTIONS} />
+                    <DashboardSubscriptionsCard data={DASHBOARD_SUBSCRIPTIONS_CARD} />
                   </View>
                   <View className="md:flex-1">
                     <DashboardPortfolioCard items={DASHBOARD_PORTFOLIO} />

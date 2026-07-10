@@ -43,15 +43,12 @@ export function DashboardStatCard({ caption, detail, href, title, tone, trend }:
         ) : null}
       </View>
 
-      <Text
-        className={`font-display text-2xl font-semibold tracking-tight md:text-3xl ${cardToneClass(tone)}`}>
+      <Text className={`font-display text-2xl font-semibold tracking-tight ${cardToneClass(tone)}`}>
         {title}
       </Text>
 
       <View className="flex-row items-end justify-between gap-4">
-        <Text className="max-w-[72%] flex-1 font-display text-base leading-6 text-app-muted">
-          {detail}
-        </Text>
+        <Text className="flex-1 font-display text-base leading-6 text-app-muted">{detail}</Text>
       </View>
     </View>
   );
