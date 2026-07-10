@@ -1,6 +1,5 @@
 import { ScrollView, Text, View } from "react-native";
 
-import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import type { SettingsFooterAction, SettingsPageIntro } from "@/types/settings";
 
 import { SettingsActionButton } from "./SettingsActionButton";
@@ -21,7 +20,6 @@ export function SettingsPageShell({ children, footerAction, intro }: SettingsPag
 
           <View className="relative gap-5">
             <View className="max-w-3xl gap-3">
-              {intro.breadcrumbs ? <Breadcrumbs items={intro.breadcrumbs} /> : null}
               <View className="gap-2">
                 <Text className="font-display text-3xl font-semibold tracking-tight text-app-text md:text-5xl">
                   {intro.title}
@@ -34,11 +32,11 @@ export function SettingsPageShell({ children, footerAction, intro }: SettingsPag
 
             {children}
 
-            {footerAction ? (
+            {footerAction ?
               <View className="items-stretch md:items-end">
                 <SettingsActionButton {...footerAction} />
               </View>
-            ) : null}
+            : null}
           </View>
         </View>
       </View>

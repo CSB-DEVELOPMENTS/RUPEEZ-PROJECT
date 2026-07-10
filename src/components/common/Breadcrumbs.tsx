@@ -1,4 +1,4 @@
-import { BreadcrumbItem } from "@/types/settings";
+import type { BreadcrumbItem } from "@/types/navigation";
 import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 

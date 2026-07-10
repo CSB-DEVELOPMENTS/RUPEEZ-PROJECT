@@ -6,7 +6,6 @@ import type {
 
 export const SETTINGS_OVERVIEW_PAGE: SettingsOverviewPageData = {
   intro: {
-    breadcrumbs: [{ label: "Settings", href: "/settings" }],
     description:
       "Manage your account credentials, personal information, and regional preferences from one place.",
     title: "Profile & Security",
@@ -69,10 +68,6 @@ export const SETTINGS_OVERVIEW_PAGE: SettingsOverviewPageData = {
 
 export const SETTINGS_PREFERENCES_PAGE: SettingsPreferencesPageData = {
   intro: {
-    breadcrumbs: [
-      { href: "/settings", label: "Settings" },
-      { label: "Preferences", href: "/settings/preferences" },
-    ],
     description:
       "Customize your regional settings, notification triggers, and display preferences for your workspace.",
     title: "Preferences",
@@ -116,10 +111,6 @@ export const SETTINGS_PREFERENCES_PAGE: SettingsPreferencesPageData = {
 
 export const SETTINGS_SECURITY_PAGE: SettingsSecurityPageData = {
   intro: {
-    breadcrumbs: [
-      { href: "/settings", label: "Settings" },
-      { label: "Security", href: "/settings/security" },
-    ],
     description: "Manage your authentication methods, password, and account security protocols.",
     title: "Security Settings",
   },

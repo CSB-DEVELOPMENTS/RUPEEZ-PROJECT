@@ -1,7 +1,5 @@
 import type { Href } from "expo-router";
 
-export type BreadcrumbItem = { href: Href; label: string };
-
 export type SettingsFooterAction = {
   href?: Href;
   icon?: string;
@@ -10,7 +8,6 @@ export type SettingsFooterAction = {
 };
 
 export type SettingsPageIntro = {
-  breadcrumbs?: BreadcrumbItem[];
   description: string;
   title: string;
 };
