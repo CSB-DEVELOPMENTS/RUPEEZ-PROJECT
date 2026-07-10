@@ -1,16 +1,10 @@
 import { ScrollView, Text, View } from "react-native";
 
-import type { SettingsFooterAction, SettingsPageIntro } from "@/types/settings";
+import type { SettingsPageIntro } from "@/types/settings";
 
-import { SettingsActionButton } from "./SettingsActionButton";
+type SettingsPageShellProps = { children: React.ReactNode; intro: SettingsPageIntro };
 
-type SettingsPageShellProps = {
-  children: React.ReactNode;
-  footerAction?: SettingsFooterAction;
-  intro: SettingsPageIntro;
-};
-
-export function SettingsPageShell({ children, footerAction, intro }: SettingsPageShellProps) {
+export function SettingsPageShell({ children, intro }: SettingsPageShellProps) {
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>
       <View className="mx-auto w-full px-4 py-6 md:px-8 md:py-8 lg:px-10">
@@ -31,12 +25,6 @@ export function SettingsPageShell({ children, footerAction, intro }: SettingsPag
             </View>
 
             {children}
-
-            {footerAction ?
-              <View className="items-stretch md:items-end">
-                <SettingsActionButton {...footerAction} />
-              </View>
-            : null}
           </View>
         </View>
       </View>

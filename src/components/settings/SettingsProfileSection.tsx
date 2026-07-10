@@ -18,19 +18,18 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
     <SettingsSectionCard>
       <View className="gap-8">
         <View className="gap-5 border-b border-app-border pb-8 md:flex-row md:items-center md:justify-between">
-          <View className="flex-row items-center gap-4">
+          <View className="flex-col sm:flex-row items-center gap-4">
             <View className="h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-app-border bg-app-panel">
-              {data.identity.imageUri ? (
+              {data.identity.imageUri ?
                 <Image
                   contentFit="cover"
                   source={{ uri: data.identity.imageUri }}
                   style={{ height: "100%", width: "100%" }}
                 />
-              ) : (
-                <Text className="font-display text-3xl font-semibold text-app-text">
+              : <Text className="font-display text-3xl font-semibold text-app-text">
                   {data.identity.initials}
                 </Text>
-              )}
+              }
             </View>
 
             <View className="gap-2">
@@ -38,7 +37,7 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
                 {data.identity.title}
               </Text>
               <Text className="font-display text-base text-app-muted">{data.identity.note}</Text>
-              <View className="flex-row flex-wrap gap-3 pt-1">
+              <View className="hidden sm:flex flex-row flex-wrap gap-3 pt-1">
                 {data.actions.map((action) => (
                   <SettingsActionButton
                     key={action.label}
@@ -47,6 +46,11 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
                   />
                 ))}
               </View>
+            </View>
+            <View className="flex-row flex-wrap gap-3 pt-1 sm:hidden">
+              {data.actions.map((action) => (
+                <SettingsActionButton key={action.label} label={action.label} tone={action.tone} />
+              ))}
             </View>
           </View>
         </View>
@@ -80,6 +84,9 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
 
             <SettingsInfoField data={data.fields[4]} multiline trailingIcon="" />
           </View>
+        </View>
+        <View className="items-stretch md:items-end">
+          <SettingsActionButton {...data.footerAction} />
         </View>
       </View>
     </SettingsSectionCard>

@@ -10,9 +10,7 @@ import { SETTINGS_OVERVIEW_PAGE } from "@/constants/settings";
 
 export default function SettingsOverviewScreen() {
   return (
-    <SettingsPageShell
-      footerAction={SETTINGS_OVERVIEW_PAGE.footerAction}
-      intro={SETTINGS_OVERVIEW_PAGE.intro}>
+    <SettingsPageShell intro={SETTINGS_OVERVIEW_PAGE.intro}>
       <SettingsProfileSection data={SETTINGS_OVERVIEW_PAGE.profile} />
 
       <View className="gap-4 xl:flex-row">

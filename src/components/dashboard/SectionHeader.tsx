@@ -22,15 +22,15 @@ export default function SectionHeader({
     <View className="mb-5 gap-4">
       <View className="flex-row items-start gap-4 justify-between">
         <View className="gap-1">
-          <Text className="font-display text-xl md:text-2xl font-semibold tracking-tight text-app-text">
+          <Text className="font-display text-2xl font-semibold tracking-tight text-app-text">
             {title}
           </Text>
-          {eyebrow ? (
+          {eyebrow ?
             <Text className="font-display text-base text-app-muted">{eyebrow}</Text>
-          ) : null}
+          : null}
         </View>
-        {action ? (
-          actionHref ? (
+        {action ?
+          actionHref ?
             <Pressable
               accessibilityHint="Opens this detail page"
               accessibilityRole="button"
@@ -39,12 +39,11 @@ export default function SectionHeader({
                 {action}
               </Text>
             </Pressable>
-          ) : (
-            <Text className="font-display text-sm font-semibold text-app-primary-strong">
+          : <Text className="font-display text-sm font-semibold text-app-primary-strong">
               {action}
             </Text>
-          )
-        ) : null}
+
+        : null}
       </View>
       {filterRanges && (
         <View className="flex-row flex-wrap gap-2">

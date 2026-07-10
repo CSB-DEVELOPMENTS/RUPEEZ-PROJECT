@@ -1,9 +1,6 @@
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
-import { Colors } from "@/constants/theme";
-import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { CryptoSummaryCardData } from "@/types/wealth";
 
 function toneClass(tone: CryptoSummaryCardData["tone"]) {
@@ -41,9 +38,6 @@ function chipLabel(data: CryptoSummaryCardData) {
 }
 
 export function CryptoSummaryCards({ items }: { items: CryptoSummaryCardData[] }) {
-  const { theme } = useAppTheme();
-  const colors = Colors[theme];
-
   return (
     <View className="gap-4 xl:flex-row">
       {items.map((item) => (
@@ -87,18 +81,6 @@ export function CryptoSummaryCards({ items }: { items: CryptoSummaryCardData[] }
                     {item.changeLabel}
                   </Text>
                 </View>
-              </View>
-            : null}
-
-            {item.type === "quickAction" ?
-              <View className="gap-5">
-                <Text className="font-display text-lg leading-7 text-app-muted">{item.detail}</Text>
-                <Pressable className="min-h-12 flex-row items-center justify-center gap-2 rounded-2xl border border-app-border bg-app-panel/20 px-4 py-3">
-                  <MaterialCommunityIcons name="swap-horizontal" size={18} color={colors.text} />
-                  <Text className="font-display text-lg font-semibold text-app-text">
-                    {item.actionLabel}
-                  </Text>
-                </Pressable>
               </View>
             : null}
           </View>

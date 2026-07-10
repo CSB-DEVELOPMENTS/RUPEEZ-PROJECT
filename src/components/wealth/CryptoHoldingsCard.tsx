@@ -30,12 +30,12 @@ function symbolChipClass(symbol: string) {
 export function CryptoHoldingsCard({ items, title }: { items: CryptoHolding[]; title: string }) {
   return (
     <DashboardCard className="overflow-hidden p-0">
-      <View className="px-5 pb-4 pt-5 md:px-6 md:pt-6">
+      <View className="px-2  pt-5 md:px-6 md:pt-6 ">
         <SectionHeader title={title} />
       </View>
 
-      <View className="border-y border-app-border px-5 py-4 md:px-6">
-        <View className="hidden md:flex-row md:items-center">
+      <View className="hidden md:flex border-y border-app-border px-5 py-4 md:px-6">
+        <View className="flex md:flex-row md:items-center">
           <Text className="font-display text-xs font-semibold uppercase text-app-muted md:w-[36%]">
             Asset
           </Text>
@@ -56,7 +56,7 @@ export function CryptoHoldingsCard({ items, title }: { items: CryptoHolding[]; t
 
       <View>
         {items.map((item) => (
-          <View key={item.symbol} className="border-b border-app-border px-5 py-4 md:px-6 md:py-5">
+          <View key={item.symbol} className="border-b border-app-border px-2 py-4 md:px-6 md:py-5">
             <View className="gap-4 md:flex-row md:items-center">
               <View className="md:w-[36%]">
                 <View className="flex-row items-center gap-3">

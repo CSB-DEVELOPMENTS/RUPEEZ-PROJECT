@@ -36,6 +36,7 @@ export const SETTINGS_OVERVIEW_PAGE: SettingsOverviewPageData = {
         value: "42 Wall Street, Suite 1200\nNew York, NY 10005\nUnited States",
       },
     ],
+    footerAction: { icon: "content-save-outline", label: "Update Profile", tone: "primary" },
   },
   shortcuts: [
     {
@@ -57,7 +58,7 @@ export const SETTINGS_OVERVIEW_PAGE: SettingsOverviewPageData = {
       tone: "brand",
     },
   ],
-  footerAction: { icon: "content-save-outline", label: "Update Profile", tone: "primary" },
+
   dangerZone: {
     action: { label: "Deactivate Mission Control", tone: "danger" },
     description:

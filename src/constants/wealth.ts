@@ -71,13 +71,6 @@ export const CRYPTO_PORTFOLIO_PAGE: CryptoPortfolioPageData = {
       tone: "positive",
       type: "performer",
     },
-    {
-      actionLabel: "Trade Now",
-      caption: "Quick Actions",
-      detail: "Solana (SOL) is approaching your target sell price of $150.",
-      tone: "neutral",
-      type: "quickAction",
-    },
   ],
   subtitle: "Real-time overview of your decentralized holdings.",
   title: "Crypto Assets",

@@ -1,8 +1,9 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { subscriptionToneClass } from "@/components/dashboard/DashboardSections";
+import { SubscriptionActionsMenu } from "@/components/subscriptions/SubscriptionActionsMenu";
 import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { ActiveSubscriptionItem } from "@/types/dashboard";
@@ -23,13 +24,33 @@ function footerToneClasses(isActive: boolean) {
       };
 }
 
-export function SubscriptionListCard({ data }: { data: ActiveSubscriptionItem }) {
+type SubscriptionListCardProps = {
+  data: ActiveSubscriptionItem;
+  isMenuOpen: boolean;
+  onDelete: (subscription: ActiveSubscriptionItem) => void;
+  onEdit: (subscription: ActiveSubscriptionItem) => void;
+  onMenuToggle: () => void;
+  onMenuClose: () => void;
+};
+
+export function SubscriptionListCard({
+  data,
+  isMenuOpen,
+  onDelete,
+  onEdit,
+  onMenuToggle,
+  onMenuClose,
+}: SubscriptionListCardProps) {
   const { theme } = useAppTheme();
   const colors = Colors[theme];
   const statusTone = footerToneClasses(data.isActive);
 
   return (
-    <DashboardCard className="overflow-hidden p-0">
+    <DashboardCard className={`relative overflow-visible p-0 ${isMenuOpen ? "z-50" : "z-0"}`}>
+      {isMenuOpen ?
+        <Pressable className="absolute inset-0 z-10" onPress={onMenuClose} />
+      : null}
+
       <View className="gap-6 px-5 py-5 md:px-6 md:py-6">
         <View className="flex-row items-start justify-between gap-4">
           <View className="min-w-0 flex-1 flex-row items-start gap-4">
@@ -88,11 +109,30 @@ export function SubscriptionListCard({ data }: { data: ActiveSubscriptionItem })
             </Text>
           </View>
 
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={20}
-            color={data.isActive ? colors.textMuted : colors.textSoft}
-          />
+          <View className="relative">
+            <Pressable
+              accessibilityLabel={`Open actions for ${data.name}`}
+              className="rounded-full p-2"
+              onPress={onMenuToggle}>
+              <MaterialCommunityIcons
+                name="dots-vertical"
+                size={20}
+                color={data.isActive ? colors.textMuted : colors.textSoft}
+              />
+            </Pressable>
+
+            <SubscriptionActionsMenu
+              visible={isMenuOpen}
+              onDelete={() => {
+                onMenuClose();
+                onDelete(data);
+              }}
+              onEdit={() => {
+                onMenuClose();
+                onEdit(data);
+              }}
+            />
+          </View>
         </View>
       </View>
     </DashboardCard>

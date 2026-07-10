@@ -7,10 +7,7 @@ export type SettingsFooterAction = {
   tone?: "danger" | "outline" | "primary" | "secondary";
 };
 
-export type SettingsPageIntro = {
-  description: string;
-  title: string;
-};
+export type SettingsPageIntro = { description: string; title: string };
 
 export type SettingsOptionField = { label: string; value: string };
 
@@ -37,6 +34,7 @@ export type SettingsProfileSectionData = {
   fields: SettingsProfileField[];
   identity: SettingsProfileIdentity;
   sectionTitle: string;
+  footerAction: SettingsFooterAction;
 };
 
 export type SettingsFeatureCardData = {
@@ -57,7 +55,7 @@ export type SettingsDangerZoneData = {
 
 export type SettingsOverviewPageData = {
   dangerZone: SettingsDangerZoneData;
-  footerAction: SettingsFooterAction;
+
   intro: SettingsPageIntro;
   profile: SettingsProfileSectionData;
   shortcuts: SettingsFeatureCardData[];
