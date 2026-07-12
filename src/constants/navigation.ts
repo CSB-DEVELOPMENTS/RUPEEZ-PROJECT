@@ -3,6 +3,14 @@ import type { BreadcrumbItem } from "@/types/navigation";
 const PROTECTED_ROUTE_BREADCRUMBS: Record<string, BreadcrumbItem[]> = {
   "/accounts": [{ href: "/accounts", label: "Accounts" }],
   "/analytics": [{ href: "/analytics", label: "Analytics" }],
+  "/analytics/financial-health": [
+    { href: "/analytics", label: "Analytics" },
+    { href: "/analytics/financial-health", label: "Financial Health" },
+  ],
+  "/analytics/report-export": [
+    { href: "/analytics", label: "Analytics" },
+    { href: "/analytics/report-export", label: "Reports & Export" },
+  ],
   "/calendar-heatmap": [{ href: "/calendar-heatmap", label: "Calendar" }],
   "/cash-flow": [{ href: "/cash-flow", label: "Flow" }],
   "/crypto-assets": [

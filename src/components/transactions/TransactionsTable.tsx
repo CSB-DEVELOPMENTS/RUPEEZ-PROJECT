@@ -83,7 +83,7 @@ function TransactionsTableRow({ item }: { item: DashboardTransaction }) {
         <Text className="font-display text-base text-app-muted md:w-[20%]">{item.account}</Text>
         <Text
           className={`font-display text-right text-xl font-semibold md:w-[20%] ${transactionToneClass(item.tone)}`}>
-          {formatTransactionAmount(item.tone, item.amount)}
+          {formatTransactionAmount(item.amount, item.tone)}
         </Text>
       </View>
     </View>

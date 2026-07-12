@@ -12,14 +12,14 @@ export function transactionToneClass(tone: DashboardTransactionTone) {
   }
 }
 
-export function formatTransactionAmount(type: string, amount: number) {
+export function formatTransactionAmount(amount: number, type?: string) {
   if (type === "income") {
     return `+LKR ${amount.toLocaleString()}`;
   }
   if (type === "transfer") {
     return `LKR ${Math.abs(amount).toLocaleString()}`;
   }
-  return `-LKR ${Math.abs(amount).toLocaleString()}`;
+  return `LKR ${Math.abs(amount).toLocaleString()}`;
 }
 
 export function TransactionCard({ item }: { item: DashboardTransaction }) {
@@ -35,18 +35,18 @@ export function TransactionCard({ item }: { item: DashboardTransaction }) {
       {/* <CashFlowEntryGlyph icon={item.icon} tone={tone} /> */}
       <View className={`flex-1 gap-1 ${isCompact ? "items-center" : ""}`}>
         <Text className="font-display text-lg font-semibold text-app-text">{item.title}</Text>
-        {metadata ? (
+        {metadata ?
           <Text className="font-display text-sm font-semibold uppercase tracking-[1.2px] text-app-muted">
             {metadata}
           </Text>
-        ) : null}
+        : null}
       </View>
 
       <Text
         className={`font-display text-lg font-semibold tracking-tight md:text-xl ${
           isCompact ? "self-center" : "text-right"
         } ${transactionToneClass(item.tone)}`}>
-        {formatTransactionAmount(item.tone, item.amount)}
+        {formatTransactionAmount(item.amount, item.tone)}
       </Text>
     </View>
   );
