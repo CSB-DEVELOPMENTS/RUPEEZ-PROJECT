@@ -29,7 +29,7 @@ export type TopCategoriesPageData = {
 
 export type SankeyFlowTone = "brand" | "danger" | "neutral" | "positive" | "teal";
 
-export type SankeyFlowTarget = { id: string; label: string; valueLabel: string };
+export type SankeyFlowTarget = { id: string; label: string; value: number };
 
 export type SankeyFlowGroup = {
   id: string;
@@ -37,7 +37,7 @@ export type SankeyFlowGroup = {
   shareLabel: string;
   targets: SankeyFlowTarget[];
   tone: SankeyFlowTone;
-  valueLabel: string;
+  value: number;
 };
 
 export type SankeySummaryCardData = {

@@ -23,7 +23,7 @@ export default function ProtectedLayout() {
     <View className="flex-1 flex-row bg-app-bg">
       <Sidebar />
       <View className="flex-1">
-        <View className="mx-auto w-full px-4 pt-6 md:px-8 md:pt-8 lg:px-10">
+        <View className="mx-auto w-full px-4 pt-6 pb-4 md:px-8 md:pt-8 lg:px-10">
           <Breadcrumbs items={getProtectedRouteBreadcrumbs(pathname)} />
         </View>
         <View className="flex-1">

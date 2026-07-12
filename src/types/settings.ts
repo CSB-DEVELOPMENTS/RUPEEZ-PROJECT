@@ -9,7 +9,11 @@ export type SettingsFooterAction = {
 
 export type SettingsPageIntro = { description: string; title: string };
 
-export type SettingsOptionField = { label: string; value: string };
+export type SettingsOptionField = {
+  label: string;
+  options: string[];
+  value: string;
+};
 
 export type SettingsToggleItem = { description?: string; enabled: boolean; label: string };
 

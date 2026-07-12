@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { ScrollView, Text, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
@@ -5,9 +6,10 @@ import { DashboardCard } from "@/components/dashboard/DashboardCard";
 import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { SankeyFlowGroup, SankeyFlowTarget, SankeyFlowTone } from "@/types/analytics";
+import { formatTransactionAmount } from "../cash-flow/TransactionCard";
 
 const FLOW_WIDTH = 980;
-const FLOW_HEIGHT = 560;
+const FLOW_HEIGHT = 600;
 const ROOT_CARD = { height: 92, width: 190, x: 70, y: 222 };
 const GROUP_CARD = { height: 84, width: 202, x: 410 };
 const TARGET_LABEL_X = 748;
@@ -29,15 +31,7 @@ function toneColorSet(colors: (typeof Colors)[keyof typeof Colors], tone: Sankey
   }
 }
 
-function parseMoneyValue(valueLabel: string) {
-  const parsedValue = Number.parseInt(valueLabel.replace(/[^0-9]/g, ""), 10);
-
-  return Number.isFinite(parsedValue) ? parsedValue : 0;
-}
-
-function flowWidth(valueLabel: string, maxWidth: number, minWidth: number) {
-  const value = parseMoneyValue(valueLabel);
-
+function flowWidth(value: number, maxWidth: number, minWidth: number) {
   return Math.max(minWidth, Math.min(maxWidth, value / 8000));
 }
 
@@ -77,12 +71,14 @@ function FlowNode({
 }) {
   return (
     <View
-      className="absolute rounded-[24px] border border-app-border bg-app-surface px-5 py-4 shadow-showcase-soft dark:shadow-showcase-soft-dark"
+      className="absolute rounded-[24px] border border-app-border bg-app-surface px-5 py-2 shadow-showcase-soft dark:shadow-showcase-soft-dark"
       style={{
-        height: eyebrow === "Income" ? ROOT_CARD.height : GROUP_CARD.height,
+        // height: eyebrow === "Income" ? ROOT_CARD.height : GROUP_CARD.height,
         left: x,
         top: y,
         width,
+        elevation: 3,
+        zIndex: 3,
       }}>
       <View
         className="absolute bottom-0 left-0 top-0 w-1 rounded-l-[24px]"
@@ -117,10 +113,10 @@ function TargetLabel({
   return (
     <View
       className="absolute flex-row items-center justify-between"
-      style={{ left: x, top: y - 16, width: 200 }}>
+      style={{ elevation: 3, left: x, top: y - 16, width: 200, zIndex: 3 }}>
       <Text className="font-display text-lg text-app-text">{target.label}</Text>
       <Text className="font-display text-lg font-semibold" style={{ color: accentColor }}>
-        {target.valueLabel}
+        {formatTransactionAmount(target.value)}
       </Text>
     </View>
   );
@@ -142,11 +138,16 @@ export function SankeyFlowCard({
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View
           className="relative bg-app-surface"
-          style={{ height: FLOW_HEIGHT, minWidth: FLOW_WIDTH }}>
+          style={{ height: FLOW_HEIGHT, width: FLOW_WIDTH }}>
           <View className="absolute -left-12 top-8 h-40 w-40 rounded-full bg-app-brand/10" />
           <View className="absolute -right-8 bottom-6 h-48 w-48 rounded-full bg-app-primary/10" />
 
-          <Svg className="absolute left-0 top-0" height={FLOW_HEIGHT} width={FLOW_WIDTH}>
+          <Svg
+            className="absolute left-0 top-0"
+            height={FLOW_HEIGHT}
+            pointerEvents="none"
+            style={{ elevation: 1, zIndex: 1 }}
+            width={FLOW_WIDTH}>
             {groups.map((group, index) => {
               const groupY =
                 GROUP_Y_POSITIONS[index] ?? GROUP_Y_POSITIONS[GROUP_Y_POSITIONS.length - 1];
@@ -166,7 +167,7 @@ export function SankeyFlowCard({
                   opacity={0.9}
                   stroke={palette.stroke}
                   strokeLinecap="round"
-                  strokeWidth={flowWidth(group.valueLabel, 28, 8)}
+                  strokeWidth={flowWidth(group.value, 28, 8)}
                 />
               );
             })}
@@ -194,53 +195,58 @@ export function SankeyFlowCard({
                     opacity={0.88}
                     stroke={palette.stroke}
                     strokeLinecap="round"
-                    strokeWidth={flowWidth(target.valueLabel, 20, 5)}
+                    strokeWidth={flowWidth(target.value, 20, 5)}
                   />
                 );
               });
             })}
           </Svg>
 
-          <FlowNode
-            accentColor={colors.chartIndigo}
-            eyebrow="Income"
-            valueLabel={totalIncomeLabel}
-            width={ROOT_CARD.width}
-            x={ROOT_CARD.x}
-            y={ROOT_CARD.y}
-          />
+          <View
+            className="absolute left-0 top-0"
+            pointerEvents="box-none"
+            style={{ elevation: 2, height: FLOW_HEIGHT, width: FLOW_WIDTH, zIndex: 2 }}>
+            <FlowNode
+              accentColor={colors.chartIndigo}
+              eyebrow="Income"
+              valueLabel={totalIncomeLabel}
+              width={ROOT_CARD.width}
+              x={ROOT_CARD.x}
+              y={ROOT_CARD.y}
+            />
 
-          {groups.map((group, index) => {
-            const groupY =
-              GROUP_Y_POSITIONS[index] ?? GROUP_Y_POSITIONS[GROUP_Y_POSITIONS.length - 1];
-            const groupCenterY = groupY + GROUP_CARD.height / 2;
-            const offsets = targetOffsets(group.targets.length);
-            const palette = toneColorSet(colors, group.tone);
+            {groups.map((group, index) => {
+              const groupY =
+                GROUP_Y_POSITIONS[index] ?? GROUP_Y_POSITIONS[GROUP_Y_POSITIONS.length - 1];
+              const groupCenterY = groupY + GROUP_CARD.height / 2;
+              const offsets = targetOffsets(group.targets.length);
+              const palette = toneColorSet(colors, group.tone);
 
-            return (
-              <View key={group.id}>
-                <FlowNode
-                  accentColor={palette.accent}
-                  eyebrow={group.label}
-                  shareLabel={group.shareLabel}
-                  valueLabel={group.valueLabel}
-                  width={GROUP_CARD.width}
-                  x={GROUP_CARD.x}
-                  y={groupY}
-                />
-
-                {group.targets.map((target, targetIndex) => (
-                  <TargetLabel
-                    key={target.id}
+              return (
+                <Fragment key={group.id}>
+                  <FlowNode
                     accentColor={palette.accent}
-                    target={target}
-                    x={TARGET_LABEL_X}
-                    y={groupCenterY + offsets[targetIndex]}
+                    eyebrow={group.label}
+                    shareLabel={group.shareLabel}
+                    valueLabel={formatTransactionAmount(group.value)}
+                    width={GROUP_CARD.width}
+                    x={GROUP_CARD.x}
+                    y={groupY}
                   />
-                ))}
-              </View>
-            );
-          })}
+
+                  {group.targets.map((target, targetIndex) => (
+                    <TargetLabel
+                      key={target.id}
+                      accentColor={palette.accent}
+                      target={target}
+                      x={TARGET_LABEL_X}
+                      y={groupCenterY + offsets[targetIndex]}
+                    />
+                  ))}
+                </Fragment>
+              );
+            })}
+          </View>
         </View>
       </ScrollView>
     </DashboardCard>

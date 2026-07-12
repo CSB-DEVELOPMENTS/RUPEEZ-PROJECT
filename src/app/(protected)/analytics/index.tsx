@@ -12,8 +12,8 @@ export default function Analytics() {
       <Pressable onPress={() => router.push("/analytics/report-export")}>
         <Text className="text-app-text">Reports</Text>
       </Pressable>
-      <Pressable onPress={() => router.push("/analytics/snakey-flow")}>
-        <Text className="text-app-text">Snakey flow</Text>
+      <Pressable onPress={() => router.push("/analytics/sankey-flow")}>
+        <Text className="text-app-text">Sankey Flow</Text>
       </Pressable>
     </View>
   );
