@@ -4,13 +4,15 @@ import {
   SettingsRegionalCard,
 } from "@/components/settings";
 import { SETTINGS_PREFERENCES_PAGE } from "@/constants/settings";
+import { View } from "react-native";
 
 export default function SettingsPreferencesScreen() {
   return (
-    <SettingsPageShell
-      footerAction={SETTINGS_PREFERENCES_PAGE.footerAction}
-      intro={SETTINGS_PREFERENCES_PAGE.intro}>
-      <SettingsRegionalCard data={SETTINGS_PREFERENCES_PAGE.regional} />
+    <SettingsPageShell intro={SETTINGS_PREFERENCES_PAGE.intro}>
+      <View className="z-20">
+        <SettingsRegionalCard data={SETTINGS_PREFERENCES_PAGE.regional} />
+      </View>
+
       <SettingsNotificationsCard data={SETTINGS_PREFERENCES_PAGE.notifications} />
     </SettingsPageShell>
   );

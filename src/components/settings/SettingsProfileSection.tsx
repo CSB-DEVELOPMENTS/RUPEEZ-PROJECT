@@ -1,18 +1,27 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Image } from "expo-image";
+import { useState } from "react";
 import { Text, View } from "react-native";
 
+import { InputField } from "@/components/common/InputField";
+import { Textarea } from "@/components/common/Textarea";
 import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { SettingsProfileSectionData } from "@/types/settings";
 
 import { SettingsActionButton } from "./SettingsActionButton";
-import { SettingsInfoField } from "./SettingsInfoField";
 import { SettingsSectionCard } from "./SettingsSectionCard";
 
 export function SettingsProfileSection({ data }: { data: SettingsProfileSectionData }) {
   const { theme } = useAppTheme();
   const colors = Colors[theme];
+  const [fieldValues, setFieldValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(data.fields.map((field) => [field.label, field.value])),
+  );
+
+  function updateFieldValue(label: string, value: string) {
+    setFieldValues((current) => ({ ...current, [label]: value }));
+  }
 
   return (
     <SettingsSectionCard>
@@ -66,23 +75,53 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
           <View className="gap-5">
             <View className="gap-5 lg:flex-row">
               <View className="lg:flex-1">
-                <SettingsInfoField data={data.fields[0]} trailingIcon="" />
+                <InputField
+                  disabled={data.fields[0].isLocked}
+                  helperText={data.fields[0].helperText}
+                  label={data.fields[0].label}
+                  onChangeText={(value) => updateFieldValue(data.fields[0].label, value)}
+                  value={fieldValues[data.fields[0].label] ?? data.fields[0].value}
+                />
               </View>
               <View className="lg:flex-1">
-                <SettingsInfoField data={data.fields[1]} />
+                <InputField
+                  disabled={data.fields[1].isLocked}
+                  helperText={data.fields[1].helperText}
+                  label={data.fields[1].label}
+                  onChangeText={(value) => updateFieldValue(data.fields[1].label, value)}
+                  value={fieldValues[data.fields[1].label] ?? data.fields[1].value}
+                />
               </View>
             </View>
 
             <View className="gap-5 lg:flex-row">
               <View className="lg:flex-1">
-                <SettingsInfoField data={data.fields[2]} trailingIcon="" />
+                <InputField
+                  disabled={data.fields[2].isLocked}
+                  helperText={data.fields[2].helperText}
+                  label={data.fields[2].label}
+                  onChangeText={(value) => updateFieldValue(data.fields[2].label, value)}
+                  value={fieldValues[data.fields[2].label] ?? data.fields[2].value}
+                />
               </View>
               <View className="lg:flex-1">
-                <SettingsInfoField data={data.fields[3]} trailingIcon="" />
+                <InputField
+                  disabled={data.fields[3].isLocked}
+                  helperText={data.fields[3].helperText}
+                  label={data.fields[3].label}
+                  onChangeText={(value) => updateFieldValue(data.fields[3].label, value)}
+                  value={fieldValues[data.fields[3].label] ?? data.fields[3].value}
+                />
               </View>
             </View>
 
-            <SettingsInfoField data={data.fields[4]} multiline trailingIcon="" />
+            <Textarea
+              disabled={data.fields[4].isLocked}
+              helperText={data.fields[4].helperText}
+              label={data.fields[4].label}
+              onChangeText={(value) => updateFieldValue(data.fields[4].label, value)}
+              value={fieldValues[data.fields[4].label] ?? data.fields[4].value}
+            />
           </View>
         </View>
         <View className="items-stretch md:items-end">

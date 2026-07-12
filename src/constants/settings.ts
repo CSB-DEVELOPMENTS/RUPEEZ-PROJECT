@@ -77,8 +77,21 @@ export const SETTINGS_PREFERENCES_PAGE: SettingsPreferencesPageData = {
     icon: "earth",
     title: "Currency & Regional",
     options: [
-      { label: "Default Currency", value: "USD ($) - US Dollar" },
-      { label: "Timezone", value: "UTC-5 (New York)" },
+      {
+        label: "Default Currency",
+        options: ["USD ($) - US Dollar", "LKR (Rs) - Sri Lankan Rupee", "EUR - Euro", "GBP - British Pound"],
+        value: "USD ($) - US Dollar",
+      },
+      {
+        label: "Timezone",
+        options: [
+          "UTC-5 (New York)",
+          "UTC+5:30 (Colombo)",
+          "UTC+0 (London)",
+          "UTC+1 (Berlin)",
+        ],
+        value: "UTC-5 (New York)",
+      },
     ],
   },
   notifications: {

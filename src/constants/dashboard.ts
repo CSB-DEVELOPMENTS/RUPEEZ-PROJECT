@@ -82,7 +82,7 @@ export const DASHBOARD_OVERVIEW_FULL: DashboardOverviewData = {
     { expense: 29, income: 61, label: "25" },
     { expense: 27, income: 54, label: "30" },
   ],
-  fileterRanges: ["1M", "3M", "6M", "YTD"],
+  fileterRanges: ["1M", "3M", "6M", "1Y"],
 };
 
 export const DASHBOARD_TRANSACTIONS: DashboardTransaction[] = [

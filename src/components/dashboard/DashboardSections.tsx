@@ -5,8 +5,8 @@ import type {
   DashboardCalendarDay,
   DashboardLegendTone,
   DashboardPortfolioAsset,
-  DashboardSubscriptionsOverviewData,
   DashboardSubscriptionAvatar,
+  DashboardSubscriptionsOverviewData,
   DashboardTransaction,
 } from "@/types/dashboard";
 
@@ -154,7 +154,7 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
             </View>
             <Text
               className={`shrink text-right font-display text-lg md:text-xl font-semibold sm:text-2xl ${transactionToneClass(item.tone)}`}>
-              {formatTransactionAmount(item.tone, item.amount)}
+              {formatTransactionAmount(item.amount, item.tone)}
             </Text>
           </View>
         ))}
