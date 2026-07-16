@@ -7,6 +7,7 @@ import { AuthDivider } from "@/components/auth/AuthDivider";
 import { AuthInput } from "@/components/auth/AuthInput";
 import { AuthMessage } from "@/components/auth/AuthMessage";
 import { AuthScreen } from "@/components/auth/AuthScreen";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { useAuth } from "@/hooks/auth/useAuth";
 
 type Feedback = { message: string; tone: "error" | "info" | "success" } | null;
@@ -48,7 +49,9 @@ export default function LoginScreen() {
       insightTitle="Weekly Insight"
       title={"Welcome back to\nyour money flow."}>
       <View className="gap-8">
-        {feedback ? <AuthMessage message={feedback.message} tone={feedback.tone} /> : null}
+        {feedback ?
+          <AuthMessage message={feedback.message} tone={feedback.tone} />
+        : null}
 
         <View className="gap-6 rounded-[32px] border border-app-border bg-app-surface p-6 md:p-8">
           <Text className="font-display text-5xl font-semibold tracking-tight text-app-text md:text-6xl">
@@ -85,16 +88,7 @@ export default function LoginScreen() {
 
           <AuthDivider label="Or continue with" />
 
-          <AuthActionButton
-            onPress={() =>
-              setFeedback({
-                tone: "info",
-                message: "Google sign-in is not yet wired up. Please use email/password for now.",
-              })
-            }
-            variant="secondary">
-            Continue with Google
-          </AuthActionButton>
+          <GoogleSignInButton onError={(msg) => setFeedback({ tone: "error", message: msg })} />
         </View>
 
         <View className="items-center gap-8 pt-2">

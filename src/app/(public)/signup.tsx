@@ -7,6 +7,7 @@ import { AuthDivider } from "@/components/auth/AuthDivider";
 import { AuthInput } from "@/components/auth/AuthInput";
 import { AuthMessage } from "@/components/auth/AuthMessage";
 import { AuthScreen } from "@/components/auth/AuthScreen";
+import { GoogleSignInButton } from "@/components/auth/GoogleSignInButton";
 import { useAuth } from "@/hooks/auth/useAuth";
 
 type Feedback = { message: string; tone: "error" | "info" | "success" } | null;
@@ -120,17 +121,9 @@ export default function SignupScreen() {
 
           <AuthDivider label="Or continue with" />
 
-          <AuthActionButton
-            onPress={() =>
-              setFeedback({
-                tone: "info",
-                message:
-                  "Google OAuth needs a redirect configuration before it can be enabled in Expo.",
-              })
-            }
-            variant="secondary">
-            Continue with Google
-          </AuthActionButton>
+          <GoogleSignInButton
+            onError={(msg) => setFeedback({ tone: "error", message: msg })}
+          />
         </View>
 
         <View className="flex-row flex-wrap items-center justify-center gap-2">

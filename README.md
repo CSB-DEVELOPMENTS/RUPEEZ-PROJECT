@@ -51,12 +51,15 @@ Create a local environment file named `.env.local` based on `.env.example`.
 ```env
 EXPO_PUBLIC_SUPABASE_URL=<your-supabase-url>
 EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=<your-supabase-publishable-key>
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID=<your-google-web-client-id>
 ```
 
 Notes:
 
 - `src/lib/supabase.ts` expects both values at runtime.
 - The publishable key is the public client key used by the Expo app.
+- `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` must be the Google OAuth `Web application` client ID, including for Android native sign-in.
+- For Android mobile builds, add the SHA-1 and SHA-256 fingerprints for every signing key you test with to the Google/Firebase app for package `com.csbd.rupeez`. A missing fingerprint commonly causes `DEVELOPER_ERROR` after the account picker appears.
 
 ### 3. Optional Android tooling
 
