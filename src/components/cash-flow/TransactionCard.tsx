@@ -33,7 +33,7 @@ export function TransactionCard({ item }: { item: DashboardTransaction }) {
         isCompact ? "gap-3" : "flex-row items-center gap-4"
       }`}>
       {/* <CashFlowEntryGlyph icon={item.icon} tone={tone} /> */}
-      <View className={`flex-1 gap-1 ${isCompact ? "items-center" : ""}`}>
+      <View className={`flex flex-1 gap-1 ${isCompact ? "items-center" : ""}`}>
         <Text className="font-display text-lg font-semibold text-app-text">{item.title}</Text>
         {metadata ?
           <Text className="font-display text-sm font-semibold uppercase tracking-[1.2px] text-app-muted">

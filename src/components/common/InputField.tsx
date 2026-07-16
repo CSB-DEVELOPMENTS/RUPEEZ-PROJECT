@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Text, TextInput, View } from "react-native";
 
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type InputFieldProps = {
@@ -10,6 +10,7 @@ type InputFieldProps = {
   label: string;
   onChangeText?: (value: string) => void;
   placeholder?: string;
+  secureTextEntry?: boolean;
   value: string;
 };
 
@@ -19,6 +20,7 @@ export function InputField({
   label,
   onChangeText,
   placeholder,
+  secureTextEntry,
   value,
 }: InputFieldProps) {
   const { theme } = useAppTheme();
@@ -38,7 +40,9 @@ export function InputField({
             placeholder={placeholder}
             placeholderTextColor={colors.textSoft}
             selectionColor={colors.primary}
+            secureTextEntry={secureTextEntry}
             value={value}
+            style={{ fontFamily: Fonts.sans }}
           />
           {disabled ?
             <MaterialCommunityIcons color={colors.textSoft} name={"lock" as never} size={18} />
