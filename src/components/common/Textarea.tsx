@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Text, TextInput, View } from "react-native";
 
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type TextareaProps = {
@@ -39,7 +39,7 @@ export function Textarea({
             placeholder={placeholder}
             placeholderTextColor={colors.textSoft}
             selectionColor={colors.primary}
-            style={{ minHeight: 84, textAlignVertical: "top" }}
+            style={{ minHeight: 84, textAlignVertical: "top", fontFamily: Fonts.sans }}
             value={value}
           />
           {disabled ?
