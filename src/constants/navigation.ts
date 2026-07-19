@@ -19,6 +19,10 @@ const PROTECTED_ROUTE_BREADCRUMBS: Record<string, BreadcrumbItem[]> = {
     { href: "/wealth", label: "Wealth" },
     { href: "/asset-portfolio", label: "Asset Portfolio" },
   ],
+  "/all-contexts": [
+    { href: "/dashboard", label: "Personal" },
+    { href: "/all-contexts", label: "All Contexts" },
+  ],
   "/calendar-heatmap": [{ href: "/calendar-heatmap", label: "Calendar" }],
   "/cash-flow": [{ href: "/cash-flow", label: "Flow" }],
   "/crypto-assets": [
