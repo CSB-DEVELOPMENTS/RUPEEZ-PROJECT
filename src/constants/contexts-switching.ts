@@ -57,6 +57,54 @@ export const ALL_CONTEXTS_PAGE: AllContextsPageData = {
     { expenses: 168, income: 305, label: "May 29", net: 66 },
     { expenses: 222, income: 365, label: "May 31", net: 98 },
   ],
+  popups: {
+    createForm: {
+      categories: ["Income", "Expenses", "Transportation", "Tools & Software", "Marketing"],
+      currencyLabel: "LKR - Sri Lankan Rupee",
+      name: "Side Hustle Project",
+      selectedTone: "brand",
+    },
+    createOptions: [
+      {
+        description: "For daily life & personal expenses",
+        icon: "account",
+        id: "personal",
+        label: "Personal",
+        tone: "primary",
+      },
+      {
+        description: "For business, income & expenses",
+        icon: "briefcase",
+        id: "business",
+        label: "Business / Freelancer",
+        tone: "danger",
+      },
+      {
+        description: "For studies & personal allowance",
+        icon: "school",
+        id: "student",
+        label: "Student",
+        tone: "danger",
+      },
+      {
+        description: "Create your own context",
+        icon: "tune-variant",
+        id: "custom",
+        label: "Custom",
+        tone: "primary",
+      },
+    ],
+    editForm: {
+      categories: ["Income", "Expenses", "Marketing", "Software", "Tax"],
+      currencyLabel: "LKR - Sri Lankan Rupee",
+      name: "Business / Freelancer",
+      selectedTone: "danger",
+    },
+    success: {
+      checks: ["Your data is 100% isolated", "Categories are set", "You can customize anytime"],
+      contextName: "Side Hustle Project",
+    },
+  },
   safeSpendCards: [
     { amount: 24680, contextId: "personal", label: "Personal", percent: 87, tone: "primary" },
     { amount: 146250, contextId: "business", label: "Business", percent: 72, tone: "brand" },
