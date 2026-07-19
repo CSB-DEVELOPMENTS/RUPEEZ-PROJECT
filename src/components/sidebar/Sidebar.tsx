@@ -88,7 +88,10 @@ function SidebarPanel({
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-1.5">
           {navigationItems.map((item) => {
-            const active = item.href === pathname;
+            const active =
+              item.href === pathname ||
+              (item.href === "/wealth" &&
+                (pathname === "/asset-portfolio" || pathname === "/add-asset"));
             const disabled = !item.href;
 
             return (
@@ -153,15 +156,34 @@ function SidebarPanel({
   );
 }
 
-export default function Sidebar() {
+type SidebarProps = {
+  mobileOpen?: boolean;
+  onMobileOpenChange?: (open: boolean) => void;
+  showMobileTrigger?: boolean;
+};
+
+export default function Sidebar({
+  mobileOpen,
+  onMobileOpenChange,
+  showMobileTrigger = true,
+}: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { signOut } = useAuth();
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [uncontrolledMobileOpen, setUncontrolledMobileOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const colors = Colors[theme];
+  const isMobileOpen = mobileOpen ?? uncontrolledMobileOpen;
+
+  const setMobileOpen = (open: boolean) => {
+    onMobileOpenChange?.(open);
+
+    if (mobileOpen === undefined) {
+      setUncontrolledMobileOpen(open);
+    }
+  };
 
   const handleNavigate = (href: Href) => {
     router.push(href);
@@ -206,14 +228,16 @@ export default function Sidebar() {
 
   return (
     <>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Open navigation menu"
-        onPress={() => setMobileOpen(true)}
-        style={{ top: insets.top + 16 }}
-        className="absolute left-4 z-10 h-11 w-11 items-center justify-center rounded-xl border border-app-border bg-app-surface shadow-sm active:bg-app-panel md:hidden">
-        <MaterialCommunityIcons name="menu" size={26} color={colors.primaryStrong} />
-      </Pressable>
+      {showMobileTrigger ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Open navigation menu"
+          onPress={() => setMobileOpen(true)}
+          style={{ top: insets.top + 16 }}
+          className="absolute left-4 z-10 h-11 w-11 items-center justify-center rounded-xl border border-app-border bg-app-surface shadow-sm active:bg-app-panel md:hidden">
+          <MaterialCommunityIcons name="menu" size={26} color={colors.primaryStrong} />
+        </Pressable>
+      ) : null}
 
       <SidebarPanel
         pathname={pathname}
@@ -223,12 +247,12 @@ export default function Sidebar() {
       />
 
       {Platform.OS === "web" ? (
-        mobileOpen ? mobileSidebar : null
+        isMobileOpen ? mobileSidebar : null
       ) : (
         <Modal
           animationType="fade"
           transparent
-          visible={mobileOpen}
+          visible={isMobileOpen}
           onRequestClose={() => setMobileOpen(false)}>
           {mobileSidebar}
         </Modal>
