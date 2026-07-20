@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 
+import { SocialFinanceGroupDetailView } from "@/components/social-finance/SocialFinanceGroupDetailView";
+import { SocialFinanceNewTransactionView } from "@/components/social-finance/SocialFinanceNewTransactionView";
+import { SocialFinanceOptimizedSettlementView } from "@/components/social-finance/SocialFinanceOptimizedSettlementView";
+import { SocialFinanceOverview } from "@/components/social-finance/SocialFinanceOverview";
+import { SocialFinancePageHeader } from "@/components/social-finance/SocialFinancePageHeader";
+import { SocialFinanceSettlementFormView } from "@/components/social-finance/SocialFinanceSettlementFormView";
 import {
   EXPENSE_GROUPS,
   GROUP_DETAILS,
@@ -9,12 +15,6 @@ import {
   SETTLEMENT_GUIDES,
   SOCIAL_METRICS,
 } from "@/constants/social-finance";
-import { SocialFinanceGroupDetailView } from "@/components/social-finance/SocialFinanceGroupDetailView";
-import { SocialFinanceNewTransactionView } from "@/components/social-finance/SocialFinanceNewTransactionView";
-import { SocialFinanceOptimizedSettlementView } from "@/components/social-finance/SocialFinanceOptimizedSettlementView";
-import { SocialFinanceOverview } from "@/components/social-finance/SocialFinanceOverview";
-import { SocialFinancePageHeader } from "@/components/social-finance/SocialFinancePageHeader";
-import { SocialFinanceSettlementFormView } from "@/components/social-finance/SocialFinanceSettlementFormView";
 import type { TransactionMode } from "@/types/social-finance";
 
 export function SocialFinanceScreen() {
@@ -25,13 +25,13 @@ export function SocialFinanceScreen() {
   const [transactionMode, setTransactionMode] = useState<TransactionMode>("expense");
   const [splitExpense, setSplitExpense] = useState(false);
 
-  const selectedGroup = selectedGroupId ? GROUP_DETAILS[selectedGroupId] ?? null : null;
-  const settlementForm = selectedGroupId ? SETTLEMENT_FORM[selectedGroupId] ?? null : null;
-  const settlementGuide = selectedGroupId ? SETTLEMENT_GUIDES[selectedGroupId] ?? null : null;
+  const selectedGroup = selectedGroupId ? (GROUP_DETAILS[selectedGroupId] ?? null) : null;
+  const settlementForm = selectedGroupId ? (SETTLEMENT_FORM[selectedGroupId] ?? null) : null;
+  const settlementGuide = selectedGroupId ? (SETTLEMENT_GUIDES[selectedGroupId] ?? null) : null;
 
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="mx-auto w-full px-4 py-6 md:px-8 md:py-8 lg:px-10">
+      <View className="mx-auto w-full px-4 md:px-8 lg:px-10">
         <View className="relative overflow-hidden p-4 md:p-6">
           <View className="absolute -left-10 top-16 h-40 w-40 rounded-full bg-app-primary/10" />
           <View className="absolute -right-10 top-10 h-48 w-48 rounded-full bg-app-brand/10" />
@@ -46,7 +46,7 @@ export function SocialFinanceScreen() {
               }}
             />
 
-            {showNewTransactionForm ? (
+            {showNewTransactionForm ?
               <SocialFinanceNewTransactionView
                 splitExpense={splitExpense}
                 transactionMode={transactionMode}
@@ -64,8 +64,8 @@ export function SocialFinanceScreen() {
                   }
                 }}
               />
-            ) : selectedGroup ? (
-              showOptimizedSettlement && settlementGuide ? (
+            : selectedGroup ?
+              showOptimizedSettlement && settlementGuide ?
                 <SocialFinanceOptimizedSettlementView
                   detail={selectedGroup}
                   guide={settlementGuide}
@@ -75,15 +75,14 @@ export function SocialFinanceScreen() {
                     setShowSettlementForm(true);
                   }}
                 />
-              ) : showSettlementForm && settlementForm ? (
+              : showSettlementForm && settlementForm ?
                 <SocialFinanceSettlementFormView
                   detail={selectedGroup}
                   form={settlementForm}
                   onBack={() => setShowSettlementForm(false)}
                   onCancel={() => setShowSettlementForm(false)}
                 />
-              ) : (
-                <SocialFinanceGroupDetailView
+              : <SocialFinanceGroupDetailView
                   detail={selectedGroup}
                   onBack={() => {
                     setSelectedGroupId(null);
@@ -99,9 +98,8 @@ export function SocialFinanceScreen() {
                     setShowOptimizedSettlement(false);
                   }}
                 />
-              )
-            ) : (
-              <SocialFinanceOverview
+
+            : <SocialFinanceOverview
                 activity={SETTLEMENT_ACTIVITY}
                 groups={EXPENSE_GROUPS}
                 metrics={SOCIAL_METRICS}
@@ -111,7 +109,7 @@ export function SocialFinanceScreen() {
                   setShowOptimizedSettlement(false);
                 }}
               />
-            )}
+            }
           </View>
         </View>
       </View>

@@ -21,7 +21,7 @@ export default function SafeToSpendScreen() {
 
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="mx-auto w-full px-4 py-8 md:px-8 lg:px-10">
+      <View className="mx-auto w-full px-4 md:px-8 lg:px-10">
         <View className="relative overflow-hidden p-4 md:p-6">
           <View className="absolute -left-14 top-20 h-36 w-36 rounded-full bg-app-primary/10" />
           <View className="absolute -right-12 top-10 h-48 w-48 rounded-full bg-app-brand/10" />
