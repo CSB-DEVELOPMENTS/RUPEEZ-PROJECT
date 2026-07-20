@@ -18,8 +18,15 @@ import { ContextsHeader } from "./ContextsHeader";
 
 type ActiveContextPopup = "create-form" | "create-type" | "delete" | "edit" | "manage" | "success";
 
-export function AllContextsSections({ data }: { data: AllContextsPageData }) {
-  const [activePopup, setActivePopup] = useState<ActiveContextPopup | null>(null);
+type AllContextsSectionsProps = {
+  data: AllContextsPageData;
+  initialAction?: "manage" | "new";
+};
+
+export function AllContextsSections({ data, initialAction }: AllContextsSectionsProps) {
+  const [activePopup, setActivePopup] = useState<ActiveContextPopup | null>(() =>
+    initialAction === "manage" ? "manage" : initialAction === "new" ? "create-type" : null,
+  );
   const [selectedContext, setSelectedContext] = useState<ContextSummary | null>(null);
   const [selectedCreateOption, setSelectedCreateOption] = useState(
     data.popups.createOptions[0]?.id ?? "",

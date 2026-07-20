@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -36,6 +37,7 @@ function initialsFromName(name?: string | null, email?: string | null) {
 type ContextDropdownProps = { compact?: boolean };
 
 function ContextDropdown({ compact = false }: ContextDropdownProps) {
+  const router = useRouter();
   const { theme } = useAppTheme();
   const colors = Colors[theme];
   const [open, setOpen] = useState(false);
@@ -88,6 +90,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
                 onPress={() => {
                   setSelectedContext(item.label);
                   setOpen(false);
+
+                  if (item.label === "All Contexts") {
+                    router.push("/all-contexts");
+                  }
                 }}
                 className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
                 <MaterialCommunityIcons
@@ -114,7 +120,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
 
           <Pressable
             accessibilityRole="menuitem"
-            onPress={() => setOpen(false)}
+            onPress={() => {
+              setOpen(false);
+              router.push({ pathname: "/all-contexts", params: { action: "new" } });
+            }}
             className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
             <MaterialCommunityIcons name="plus-circle-outline" size={17} color={colors.textMuted} />
             <Text className="flex-1 font-display text-sm text-app-text">New Context</Text>
@@ -122,7 +131,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
 
           <Pressable
             accessibilityRole="menuitem"
-            onPress={() => setOpen(false)}
+            onPress={() => {
+              setOpen(false);
+              router.push({ pathname: "/all-contexts", params: { action: "manage" } });
+            }}
             className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
             <MaterialCommunityIcons name="cog-outline" size={17} color={colors.textMuted} />
             <Text className="flex-1 font-display text-sm text-app-text">Manage Contexts</Text>
