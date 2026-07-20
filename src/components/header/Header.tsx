@@ -9,7 +9,27 @@ import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
-type HeaderProps = { onOpenMenu: () => void };
+export type HeaderAction = {
+  label: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+  onPress: () => void;
+};
+
+export function FloatingHeaderAction({ action }: { action: HeaderAction }) {
+  const { theme } = useAppTheme();
+  const colors = Colors[theme];
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={action.label}
+      onPress={action.onPress}
+      className="absolute bottom-6 right-5 h-14 w-14 items-center justify-center rounded-full bg-app-primary shadow-showcase-soft active:opacity-80 sm:hidden"
+      style={{ elevation: 6 }}>
+      <MaterialCommunityIcons name={action.icon} size={25} color={colors.primaryContrast} />
+    </Pressable>
+  );
+}
 
 type ContextOption = {
   label: string;
@@ -145,7 +165,9 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
   );
 }
 
-export default function Header({ onOpenMenu }: HeaderProps) {
+type HeaderProps = { onOpenMenu: () => void; action?: HeaderAction };
+
+export default function Header({ action, onOpenMenu }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const { theme } = useAppTheme();
@@ -179,6 +201,19 @@ export default function Header({ onOpenMenu }: HeaderProps) {
         </View>
 
         <View className="flex-row items-center gap-3">
+          {action ?
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={action.label}
+              onPress={action.onPress}
+              className="h-11 flex-row items-center gap-2 rounded-lg bg-app-primary px-3 active:opacity-80 md:px-4 hidden sm:flex">
+              <MaterialCommunityIcons name={action.icon} size={18} color={colors.primaryContrast} />
+              <Text className="hidden font-display text-sm font-semibold text-app-primary-contrast sm:flex">
+                {action.label}
+              </Text>
+            </Pressable>
+          : null}
+
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Notifications"
