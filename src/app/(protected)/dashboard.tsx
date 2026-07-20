@@ -1,6 +1,5 @@
 import { ScrollView, View } from "react-native";
 
-import { ThemeToggle } from "@/components/common/ThemeToggle";
 import {
   DashboardCalendarCard,
   DashboardCategoriesCard,
@@ -31,9 +30,6 @@ import {
 export default function Dashboard() {
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>
-      <View className="items-end">
-        <ThemeToggle />
-      </View>
       <View className="mx-auto w-full px-4 py-5 md:px-8 md:py-8 lg:px-10">
         <View className="relative overflow-hiddena p-4 md:p-6">
           <View className="absolute -left-14 top-20 h-36 w-36 rounded-full bg-app-primary/10" />

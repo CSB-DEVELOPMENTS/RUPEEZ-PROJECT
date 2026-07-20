@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import { DashboardOverviewData } from "@/types/dashboard";
 import { useState } from "react";
@@ -9,6 +10,7 @@ import SectionHeader from "./SectionHeader";
 
 export function DashboardOverviewCard({ data }: { data: DashboardOverviewData }) {
   const { theme } = useAppTheme();
+  const colors = Colors[theme];
   const [chartWidth, setChartWidth] = useState(0);
 
   return (
@@ -67,14 +69,14 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
             series={[
               {
                 area: true,
-                color: "#12B886",
+                color: colors.chartGreen,
                 curve: "monotone",
                 label: "Income",
                 strokeWidth: 4,
                 yKey: "income",
               },
               {
-                color: "#E03131",
+                color: colors.chartRed,
                 curve: "monotone",
                 label: "Expenses",
                 strokeDasharray: [8, 6],
