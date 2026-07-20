@@ -8,9 +8,7 @@ import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
-type HeaderProps = {
-  onOpenMenu: () => void;
-};
+type HeaderProps = { onOpenMenu: () => void };
 
 type ContextOption = {
   label: string;
@@ -35,9 +33,7 @@ function initialsFromName(name?: string | null, email?: string | null) {
   return source.slice(0, 2).toUpperCase();
 }
 
-type ContextDropdownProps = {
-  compact?: boolean;
-};
+type ContextDropdownProps = { compact?: boolean };
 
 function ContextDropdown({ compact = false }: ContextDropdownProps) {
   const { theme } = useAppTheme();
@@ -45,7 +41,8 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
   const [open, setOpen] = useState(false);
   const [selectedContext, setSelectedContext] = useState("Personal");
 
-  const selected = contextOptions.find((item) => item.label === selectedContext) ?? contextOptions[1];
+  const selected =
+    contextOptions.find((item) => item.label === selectedContext) ?? contextOptions[1];
 
   return (
     <View className="relative z-20">
@@ -55,20 +52,17 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
         accessibilityState={{ expanded: open }}
         onPress={() => setOpen((current) => !current)}
         className={
-          compact
-            ? "h-8 flex-row items-center gap-1.5 rounded-full bg-app-primary-muted px-3 active:opacity-80"
-            : "h-11 flex-row items-center gap-2 rounded-lg border border-app-primary px-4 active:bg-app-primary-muted"
+          compact ?
+            "h-8 flex-row items-center gap-1.5 rounded-full bg-app-primary-muted px-3 active:opacity-80"
+          : "h-11 flex-row items-center gap-2 rounded-lg border border-app-primary px-4 active:bg-app-primary-muted"
         }>
-        {!compact ? (
+        {!compact ?
           <MaterialCommunityIcons name={selected.icon} size={18} color={colors.primaryStrong} />
-        ) : null}
-        <Text
-          className={
-            compact
-              ? "font-display text-[10px] font-bold uppercase text-app-primary-strong"
-              : "font-display text-sm font-semibold text-app-primary-strong"
-          }>
-          {selected.label}
+        : null}
+        <Text className="font-display text-sm font-semibold text-app-primary-strong">
+          {compact ?
+            <MaterialCommunityIcons name={selected.icon} color={colors.primaryStrong} />
+          : selected.label}
         </Text>
         <MaterialCommunityIcons
           name={open ? "chevron-up" : "chevron-down"}
@@ -77,12 +71,12 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
         />
       </Pressable>
 
-      {open ? (
+      {open ?
         <View
           className={
-            compact
-              ? "absolute left-0 top-10 w-56 rounded-lg border border-app-border bg-app-surface p-2 shadow-showcase-soft"
-              : "absolute left-0 top-14 w-64 rounded-lg border border-app-border bg-app-surface p-2 shadow-showcase-soft"
+            compact ?
+              "absolute left-0 top-10 w-56 rounded-lg border border-app-border bg-app-surface p-2 shadow-showcase-soft"
+            : "absolute left-0 top-14 w-64 rounded-lg border border-app-border bg-app-surface p-2 shadow-showcase-soft"
           }>
           {contextOptions.map((item) => {
             const active = item.label === selectedContext;
@@ -103,15 +97,15 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
                 />
                 <Text
                   className={
-                    active
-                      ? "flex-1 font-display text-sm font-semibold text-app-primary-strong"
-                      : "flex-1 font-display text-sm text-app-text"
+                    active ?
+                      "flex-1 font-display text-sm font-semibold text-app-primary-strong"
+                    : "flex-1 font-display text-sm text-app-text"
                   }>
                   {item.label}
                 </Text>
-                {active ? (
+                {active ?
                   <MaterialCommunityIcons name="check" size={16} color={colors.primaryStrong} />
-                ) : null}
+                : null}
               </Pressable>
             );
           })}
@@ -134,7 +128,7 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
             <Text className="flex-1 font-display text-sm text-app-text">Manage Contexts</Text>
           </Pressable>
         </View>
-      ) : null}
+      : null}
     </View>
   );
 }
@@ -186,13 +180,12 @@ export default function Header({ onOpenMenu }: HeaderProps) {
             accessibilityRole="button"
             accessibilityLabel="Open profile menu"
             className="h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-app-border bg-app-panel active:opacity-80">
-            {avatarUrl ? (
+            {avatarUrl ?
               <Image source={{ uri: avatarUrl }} className="h-full w-full" resizeMode="cover" />
-            ) : (
-              <Text className="font-display text-sm font-bold text-app-primary-strong">
+            : <Text className="font-display text-sm font-bold text-app-primary-strong">
                 {initials}
               </Text>
-            )}
+            }
           </Pressable>
         </View>
       </View>
