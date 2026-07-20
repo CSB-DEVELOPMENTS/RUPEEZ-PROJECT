@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -8,7 +9,27 @@ import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
-type HeaderProps = { onOpenMenu: () => void };
+export type HeaderAction = {
+  label: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+  onPress: () => void;
+};
+
+export function FloatingHeaderAction({ action }: { action: HeaderAction }) {
+  const { theme } = useAppTheme();
+  const colors = Colors[theme];
+
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={action.label}
+      onPress={action.onPress}
+      className="absolute bottom-6 right-5 h-14 w-14 items-center justify-center rounded-full bg-app-primary shadow-showcase-soft active:opacity-80 sm:hidden"
+      style={{ elevation: 6 }}>
+      <MaterialCommunityIcons name={action.icon} size={25} color={colors.primaryContrast} />
+    </Pressable>
+  );
+}
 
 type ContextOption = {
   label: string;
@@ -36,6 +57,7 @@ function initialsFromName(name?: string | null, email?: string | null) {
 type ContextDropdownProps = { compact?: boolean };
 
 function ContextDropdown({ compact = false }: ContextDropdownProps) {
+  const router = useRouter();
   const { theme } = useAppTheme();
   const colors = Colors[theme];
   const [open, setOpen] = useState(false);
@@ -88,6 +110,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
                 onPress={() => {
                   setSelectedContext(item.label);
                   setOpen(false);
+
+                  if (item.label === "All Contexts") {
+                    router.push("/all-contexts");
+                  }
                 }}
                 className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
                 <MaterialCommunityIcons
@@ -114,7 +140,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
 
           <Pressable
             accessibilityRole="menuitem"
-            onPress={() => setOpen(false)}
+            onPress={() => {
+              setOpen(false);
+              router.push({ pathname: "/all-contexts", params: { action: "new" } });
+            }}
             className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
             <MaterialCommunityIcons name="plus-circle-outline" size={17} color={colors.textMuted} />
             <Text className="flex-1 font-display text-sm text-app-text">New Context</Text>
@@ -122,7 +151,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
 
           <Pressable
             accessibilityRole="menuitem"
-            onPress={() => setOpen(false)}
+            onPress={() => {
+              setOpen(false);
+              router.push({ pathname: "/all-contexts", params: { action: "manage" } });
+            }}
             className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
             <MaterialCommunityIcons name="cog-outline" size={17} color={colors.textMuted} />
             <Text className="flex-1 font-display text-sm text-app-text">Manage Contexts</Text>
@@ -133,7 +165,9 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
   );
 }
 
-export default function Header({ onOpenMenu }: HeaderProps) {
+type HeaderProps = { onOpenMenu: () => void; action?: HeaderAction };
+
+export default function Header({ action, onOpenMenu }: HeaderProps) {
   const insets = useSafeAreaInsets();
   const { user } = useAuth();
   const { theme } = useAppTheme();
@@ -167,6 +201,19 @@ export default function Header({ onOpenMenu }: HeaderProps) {
         </View>
 
         <View className="flex-row items-center gap-3">
+          {action ?
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={action.label}
+              onPress={action.onPress}
+              className="h-11 flex-row items-center gap-2 rounded-lg bg-app-primary px-3 active:opacity-80 md:px-4 hidden sm:flex">
+              <MaterialCommunityIcons name={action.icon} size={18} color={colors.primaryContrast} />
+              <Text className="hidden font-display text-sm font-semibold text-app-primary-contrast sm:flex">
+                {action.label}
+              </Text>
+            </Pressable>
+          : null}
+
           <Pressable
             accessibilityRole="button"
             accessibilityLabel="Notifications"
