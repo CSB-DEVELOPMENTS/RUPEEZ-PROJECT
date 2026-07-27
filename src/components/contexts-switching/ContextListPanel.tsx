@@ -13,7 +13,7 @@ export function ContextListPanel({ data }: { data: ContextSummary[] }) {
     <View className="gap-4 xl:w-[34%]">
       {data.map((item) => {
         const tone = contextToneClasses(item.tone);
-        const color = contextToneColor(theme, item.tone);
+        const color = item.primaryColor ?? contextToneColor(theme, item.tone);
 
         return (
           <View

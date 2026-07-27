@@ -5,9 +5,9 @@ import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { ContextSummary } from "@/types/contexts-switching";
 
-import { contextToneClasses, contextToneColor } from "../contexts-switching/contextTone";
 import { ContextPopupButton } from "./ContextPopupButtons";
 import { ContextPopupShell } from "./ContextPopupShell";
+import { contextToneClasses, contextToneColor } from "./contextTone";
 
 type ContextManagePopupProps = {
   data: ContextSummary[];
@@ -35,21 +35,26 @@ export function ContextManagePopup({
         <View className="flex-row items-start justify-between gap-4">
           <View className="gap-5">
             <Text className="font-display text-2xl font-semibold tracking-tight text-app-text">
-              Manage Contexts
+              Manage Profiles
             </Text>
             <Text className="font-display text-base leading-6 text-app-muted">
-              Reorder or delete your contexts.
+              Reorder or delete your profiles.
             </Text>
           </View>
 
-          <MaterialCommunityIcons name="close" size={24} color={colors.textMuted} onPress={onClose} />
+          <MaterialCommunityIcons
+            name="close"
+            size={24}
+            color={colors.textMuted}
+            onPress={onClose}
+          />
         </View>
 
         <ScrollView className="max-h-[460px]" showsVerticalScrollIndicator={false}>
           <View className="gap-3">
             {data.map((context) => {
               const tone = contextToneClasses(context.tone);
-              const color = contextToneColor(theme, context.tone);
+              const color = context.primaryColor ?? contextToneColor(theme, context.tone);
 
               return (
                 <View
@@ -82,7 +87,7 @@ export function ContextManagePopup({
       </View>
 
       <View className="border-t border-app-border bg-app-surface px-6 py-5 md:px-7">
-        <ContextPopupButton label="New Context" icon="plus" onPress={onCreate} />
+        <ContextPopupButton label="New Profile" icon="plus" onPress={onCreate} />
       </View>
     </ContextPopupShell>
   );

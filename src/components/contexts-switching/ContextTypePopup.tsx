@@ -5,9 +5,9 @@ import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { ContextCreateOption } from "@/types/contexts-switching";
 
-import { contextToneClasses, contextToneColor } from "../contexts-switching/contextTone";
 import { ContextPopupButton } from "./ContextPopupButtons";
 import { ContextPopupShell } from "./ContextPopupShell";
+import { contextToneClasses, contextToneColor } from "./contextTone";
 
 type ContextTypePopupProps = {
   data: ContextCreateOption[];
@@ -35,10 +35,15 @@ export function ContextTypePopup({
     <ContextPopupShell visible={visible} onClose={onClose} maxWidthClassName="max-w-lg">
       <View className="border-b border-app-border px-6 py-5">
         <View className="flex-row items-center justify-between">
-          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.text} onPress={onBack} />
+          <MaterialCommunityIcons
+            name="arrow-left"
+            size={24}
+            color={colors.text}
+            onPress={onBack}
+          />
           <View className="items-center">
             <Text className="font-display text-2xl font-semibold tracking-tight text-app-text">
-              New Context
+              New Profile
             </Text>
             <Text className="font-display text-xs font-semibold uppercase tracking-[1.4px] text-app-muted">
               Step 1 of 2
@@ -50,7 +55,7 @@ export function ContextTypePopup({
 
       <View className="gap-6 p-6">
         <Text className="font-display text-2xl font-semibold tracking-tight text-app-primary">
-          What type of context?
+          What type of profile?
         </Text>
 
         <View className="gap-4">
@@ -63,7 +68,9 @@ export function ContextTypePopup({
               <Pressable
                 key={option.id}
                 className={`min-h-20 flex-row items-center gap-4 rounded-2xl border px-4 py-3 ${
-                  isSelected ? "border-app-primary bg-app-primary/10" : "border-app-border bg-app-panel/45"
+                  isSelected ?
+                    "border-app-primary bg-app-primary/10"
+                  : "border-app-border bg-app-panel/45"
                 }`}
                 onPress={() => onSelect(option.id)}>
                 <View className={`h-12 w-12 items-center justify-center rounded-xl ${tone.bg}`}>

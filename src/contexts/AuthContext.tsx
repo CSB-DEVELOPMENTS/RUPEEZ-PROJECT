@@ -2,13 +2,24 @@ import { supabase } from "@/lib/supabase";
 import { AuthError, Session, User } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
 import { createContext, useCallback, useEffect, useState, type ReactNode } from "react";
+import type { Tables, TablesInsert } from "../../database.types";
+
+type Profile = Tables<"profiles">;
+type ProfileInsert = TablesInsert<"profiles">;
 
 export interface AuthContextValue {
   session: Session | null;
   user: User | null;
-  //   profile: PublicUser | null;
+  profile: Profile | null;
+  profiles: Profile[];
   loading: boolean;
-  // profileLoading: boolean;
+  profileLoading: boolean;
+  createProfile: (
+    input: Pick<ProfileInsert, "profile_name">
+      & Partial<Pick<ProfileInsert, "base_currency" | "profile_type" | "primary_color">>,
+  ) => Promise<{ data: Profile | null; error: Error | null }>;
+  setActiveProfile: (profileId: string) => void;
+  refreshProfiles: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signUpWithEmail: (
     email: string,
@@ -26,16 +37,93 @@ const getRedirectUrl = (path: string = "") => {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Add profile and profileLoading state if you want to fetch the user's profile from your database
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [profileLoading, setProfileLoading] = useState(false);
 
-  const handleAuthStateChange = useCallback((currentSession: Session | null) => {
-    setSession(currentSession);
-    setUser(currentSession?.user ?? null);
-    setLoading(false);
+  const fetchProfiles = useCallback(async (currentUser: User | null) => {
+    if (!currentUser) {
+      setProfile(null);
+      setProfiles([]);
+      setProfileLoading(false);
+      return;
+    }
+
+    setProfileLoading(true);
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("user_id", currentUser.id)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Failed to fetch profiles", error);
+      setProfile(null);
+      setProfiles([]);
+    } else {
+      const nextProfiles = data ?? [];
+      setProfiles(nextProfiles);
+      setProfile(nextProfiles[0] ?? null);
+    }
+
+    setProfileLoading(false);
   }, []);
+
+  const refreshProfiles = useCallback(async () => {
+    await fetchProfiles(user);
+  }, [fetchProfiles, user]);
+
+  const createProfile = useCallback(
+    async ({
+      base_currency = "LKR",
+      profile_name,
+      profile_type = "personal",
+      primary_color = "#22C55E",
+    }: Pick<ProfileInsert, "profile_name">
+      & Partial<Pick<ProfileInsert, "base_currency" | "profile_type" | "primary_color">>) => {
+      if (!user) {
+        return { data: null, error: new Error("You must be signed in to create a profile.") };
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .insert({ base_currency, profile_name, profile_type, primary_color, user_id: user.id })
+        .select("*")
+        .single();
+
+      if (!error && data) {
+        setProfiles((currentProfiles) => [...currentProfiles, data]);
+        setProfile((currentProfile) => currentProfile ?? data);
+      }
+
+      return { data, error };
+    },
+    [user],
+  );
+
+  const setActiveProfile = useCallback(
+    (profileId: string) => {
+      setProfile(
+        (currentProfile) =>
+          profiles.find((item) => item.profile_id === profileId) ?? currentProfile,
+      );
+    },
+    [profiles],
+  );
+
+  const handleAuthStateChange = useCallback(
+    (currentSession: Session | null) => {
+      const currentUser = currentSession?.user ?? null;
+      setSession(currentSession);
+      setUser(currentUser);
+      setLoading(false);
+      void fetchProfiles(currentUser);
+    },
+    [fetchProfiles],
+  );
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -52,10 +140,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [handleAuthStateChange]);
 
   const signInWithEmail = useCallback(async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error };
   }, []);
 
@@ -64,12 +149,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            full_name: fullName ?? "",
-          },
-          emailRedirectTo: getRedirectUrl(),
-        },
+        options: { data: { full_name: fullName ?? "" }, emailRedirectTo: getRedirectUrl() },
       });
       return { error };
     },
@@ -93,9 +173,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         session,
         user,
-        // profile,
+        profile,
+        profiles,
         loading,
-        // profileLoading,
+        profileLoading,
+        createProfile,
+        setActiveProfile,
+        refreshProfiles,
         signInWithEmail,
         signUpWithEmail,
         signOut,

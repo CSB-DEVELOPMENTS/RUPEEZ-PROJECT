@@ -30,7 +30,12 @@ export function ContextSuccessPopup({
     <ContextPopupShell visible={visible} onClose={onClose} maxWidthClassName="max-w-md">
       <View className="p-6">
         <View className="flex-row items-center justify-between">
-          <MaterialCommunityIcons name="arrow-left" size={24} color={colors.text} onPress={onBack} />
+          <MaterialCommunityIcons
+            name="arrow-left"
+            size={24}
+            color={colors.text}
+            onPress={onBack}
+          />
           <View className="items-center">
             <Text className="font-display text-lg font-semibold tracking-tight text-app-text">
               New Context
