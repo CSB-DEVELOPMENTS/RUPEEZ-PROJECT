@@ -433,7 +433,7 @@ FOR SELECT
 TO authenticated
 USING (is_profile_owner(profile_id));
 
-DROP POLICY IF EXISTS "User can modify own profile" ON public.profiles;
+DROP POLICY IF EXISTS "Users can modify own profiles" ON public.profiles;
 CREATE POLICY "Users can modify own profiles"
 ON public.profiles
 FOR UPDATE
