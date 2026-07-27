@@ -15,7 +15,12 @@ type ContextDeletePopupProps = {
   visible: boolean;
 };
 
-export function ContextDeletePopup({ data, onCancel, onConfirm, visible }: ContextDeletePopupProps) {
+export function ContextDeletePopup({
+  data,
+  onCancel,
+  onConfirm,
+  visible,
+}: ContextDeletePopupProps) {
   const { theme } = useAppTheme();
   const colors = Colors[theme];
 

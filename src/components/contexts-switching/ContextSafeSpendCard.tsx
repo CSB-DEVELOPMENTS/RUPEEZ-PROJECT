@@ -17,7 +17,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 export function ContextSafeSpendCard({ data }: { data: ContextSafeSpendCardData }) {
   const { theme } = useAppTheme();
   const tone = contextToneClasses(data.tone);
-  const color = contextToneColor(theme, data.tone);
+  const color = data.primaryColor ?? contextToneColor(theme, data.tone);
   const progressLength = (Math.min(100, Math.max(0, data.percent)) / 100) * CIRCUMFERENCE;
 
   return (

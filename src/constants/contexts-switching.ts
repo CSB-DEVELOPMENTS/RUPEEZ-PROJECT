@@ -59,7 +59,6 @@ export const ALL_CONTEXTS_PAGE: AllContextsPageData = {
   ],
   popups: {
     createForm: {
-      categories: ["Income", "Expenses", "Transportation", "Tools & Software", "Marketing"],
       currencyLabel: "LKR - Sri Lankan Rupee",
       name: "Side Hustle Project",
       selectedTone: "brand",
@@ -95,13 +94,12 @@ export const ALL_CONTEXTS_PAGE: AllContextsPageData = {
       },
     ],
     editForm: {
-      categories: ["Income", "Expenses", "Marketing", "Software", "Tax"],
       currencyLabel: "LKR - Sri Lankan Rupee",
       name: "Business / Freelancer",
       selectedTone: "danger",
     },
     success: {
-      checks: ["Your data is 100% isolated", "Categories are set", "You can customize anytime"],
+      checks: ["Your data is 100% isolated", "Profile type is set", "You can customize anytime"],
       contextName: "Side Hustle Project",
     },
   },

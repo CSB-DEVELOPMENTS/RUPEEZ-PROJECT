@@ -423,18 +423,21 @@ DROP POLICY IF EXISTS "User can view own user record" ON public.users;
 CREATE POLICY "User can view own user record"
 ON public.users
 FOR SELECT
+TO authenticated
 USING (user_id = auth.uid());
 
 DROP POLICY IF EXISTS "Users can view own profiles" ON public.profiles;
 CREATE POLICY "Users can view own profiles"
 ON public.profiles
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can modify own profile" ON public.profiles;
 CREATE POLICY "Users can modify own profiles"
 ON public.profiles
 FOR UPDATE
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 
@@ -470,30 +473,35 @@ DROP POLICY IF EXISTS "User can view own wallets" ON public.wallets;
 CREATE POLICY "Users can view own wallets"
 ON public.wallets
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can modify own wallets" ON public.wallets;
 CREATE POLICY "Users can modify own wallets"
 ON public.wallets
 FOR UPDATE
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "Users can view own archivements" ON public.batch_archivements;
 CREATE POLICY "Users can view own archivements"
 ON public.batch_archivements
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "Users can view own transactions" ON public.transactions;
 CREATE POLICY "User cant view own transactions"
 ON public.transactions
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can see a goal if they are a participant" ON public.shared_goals;
 CREATE POLICY "User can see a goal if they are a participant"
 ON shared_goals
 FOR SELECT
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -508,6 +516,7 @@ DROP POLICY IF EXISTS "User can modify a goal if they are a creator" ON public.s
 CREATE POLICY "User can modify a goal if they are a creator"
 ON shared_goals
 FOR UPDATE
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -523,6 +532,7 @@ DROP POLICY IF EXISTS "User can view goal participants if they are a participant
 CREATE POLICY "User can view goal participants if they are a participant"
 ON goal_participants
 FOR SELECT
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -537,6 +547,7 @@ DROP POLICY IF EXISTS "User can create goal participants when creating a goal" O
 CREATE POLICY "User can create goal participants when creating a goal"
 ON goal_participants
 FOR INSERT
+TO authenticated
 WITH CHECK (
   EXISTS (
     SELECT 1
@@ -552,18 +563,21 @@ DROP POLICY IF EXISTS "User can create goal contributions" ON public.goal_contri
 CREATE POLICY "User can create goal contributions"
 ON goal_contributions
 FOR INSERT
+TO authenticated
 WITH CHECK (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can see own goal contributions" ON public.goal_contributions;
 CREATE POLICY "User can see own goal contributions"
 ON goal_contributions
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can see a shared expense if they are a participant" ON public.shared_expeneses;
 CREATE POLICY "User can see a shared expense if they are a participant"
 ON shared_expeneses
 FOR SELECT
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -578,6 +592,7 @@ DROP POLICY IF EXISTS "User can modify a shared expense if they are a creator" O
 CREATE POLICY "User can modify a shared expense if they are a creator"
 ON shared_expeneses
 FOR UPDATE
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -593,6 +608,7 @@ DROP POLICY IF EXISTS "User can view shared expense participants if they are a p
 CREATE POLICY "User can view shared expense participants if they are a participant"
 ON shared_expenes_participants
 FOR SELECT
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -607,36 +623,42 @@ DROP POLICY IF EXISTS "User can see own shared expense contributions" ON public.
 CREATE POLICY "User can see own shared expense contributions"
 ON shared_expences_contributions
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(from_profile_id) OR is_profile_owner(to_profile_id));
 
 DROP POLICY IF EXISTS "User can create shared expense contributions" ON public.shared_expences_contributions;
 CREATE POLICY "User can create shared expense contributions"
 ON shared_expences_contributions
 FOR INSERT
+TO authenticated
 WITH CHECK (is_profile_owner(from_profile_id));
 
 DROP POLICY IF EXISTS "User can create milionaire box" ON public.milionaire_box;
 CREATE POLICY "User can create milionaire box"
 ON public.milionaire_box
 FOR INSERT
+TO authenticated
 WITH CHECK (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can view own milionaire box" ON public.milionaire_box;
 CREATE POLICY "User can view own milionaire box"
 ON public.milionaire_box
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can modify own milionaire box" ON public.milionaire_box;
 CREATE POLICY "User can modify own milionaire box"
 ON public.milionaire_box
 FOR UPDATE
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can view own milionaire box transactions" ON public.milionaire_box_transacions;
 CREATE POLICY "User can view own milionaire box transactions"
 ON public.milionaire_box_transacions
 FOR SELECT
+TO authenticated
 USING (
   EXISTS (
     SELECT 1
@@ -652,24 +674,28 @@ DROP POLICY IF EXISTS "User can create loans" ON public.loans;
 CREATE POLICY "User can create loans"
 ON public.loans
 FOR INSERT
+TO authenticated
 WITH CHECK (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can view own loans" ON public.loans;
 CREATE POLICY "User can view own loans"
 ON public.loans
 FOR SELECT
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can modify own loans" ON public.loans;
 CREATE POLICY "User can modify own loans"
 ON public.loans
 FOR UPDATE
+TO authenticated
 USING (is_profile_owner(profile_id));
 
 DROP POLICY IF EXISTS "User can view own loan transactions" ON public.loan_transacions;
 CREATE POLICY "User can view own loan transactions"
 ON public.loan_transacions
 FOR SELECT
+TO authenticated
 USING (
   EXISTS (
     SELECT 1

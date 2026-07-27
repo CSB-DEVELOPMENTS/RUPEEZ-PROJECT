@@ -5,6 +5,7 @@ import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type ContextPopupButtonProps = {
+  disabled?: boolean;
   icon?: string;
   label: string;
   onPress?: () => void;
@@ -12,6 +13,7 @@ type ContextPopupButtonProps = {
 };
 
 export function ContextPopupButton({
+  disabled = false,
   icon,
   label,
   onPress,
@@ -39,7 +41,10 @@ export function ContextPopupButton({
 
   return (
     <Pressable
-      className={`min-h-12 flex-row items-center justify-center gap-2 rounded-2xl border px-5 py-3 ${containerClass}`}
+      className={`min-h-12 flex-row items-center justify-center gap-2 rounded-2xl border px-5 py-3 ${containerClass} ${
+        disabled ? "opacity-60" : ""
+      }`}
+      disabled={disabled}
       onPress={onPress}>
       <Text className={`font-display text-base font-semibold ${textClass}`}>{label}</Text>
       {icon ? <MaterialCommunityIcons name={icon as never} size={20} color={iconColor} /> : null}

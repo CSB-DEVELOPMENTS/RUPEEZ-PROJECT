@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/common/ThemeToggle";
 import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
+import { profileIcon, profileLabel } from "@/utils/profile";
 
 export type HeaderAction = {
   label: string;
@@ -32,16 +33,10 @@ export function FloatingHeaderAction({ action }: { action: HeaderAction }) {
 }
 
 type ContextOption = {
+  id: string;
   label: string;
   icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
 };
-
-const contextOptions: ContextOption[] = [
-  { label: "All Contexts", icon: "asterisk" },
-  { label: "Personal", icon: "account-circle-outline" },
-  { label: "Business", icon: "briefcase-outline" },
-  { label: "Student", icon: "school-outline" },
-];
 
 function initialsFromName(name?: string | null, email?: string | null) {
   const source = name?.trim() || email?.split("@")[0] || "User";
@@ -60,11 +55,20 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
   const router = useRouter();
   const { theme } = useAppTheme();
   const colors = Colors[theme];
+  const { profile, profiles, setActiveProfile } = useAuth();
   const [open, setOpen] = useState(false);
-  const [selectedContext, setSelectedContext] = useState("Personal");
+  const [selectedContext, setSelectedContext] = useState(profile?.profile_id ?? "all");
+  const contextOptions: ContextOption[] = [
+    { id: "all", label: "All Profiles", icon: "asterisk" },
+    ...profiles.map((item) => ({
+      id: item.profile_id,
+      label: profileLabel(item),
+      icon: profileIcon(item.profile_type),
+    })),
+  ];
 
   const selected =
-    contextOptions.find((item) => item.label === selectedContext) ?? contextOptions[1];
+    contextOptions.find((item) => item.id === selectedContext) ?? contextOptions[0];
 
   return (
     <View className="relative z-20">
@@ -101,17 +105,18 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
             : "absolute left-0 top-14 w-64 rounded-lg border border-app-border bg-app-surface p-2 shadow-showcase-soft"
           }>
           {contextOptions.map((item) => {
-            const active = item.label === selectedContext;
+            const active = item.id === selectedContext;
 
             return (
               <Pressable
-                key={item.label}
+                key={item.id}
                 accessibilityRole="menuitem"
                 onPress={() => {
-                  setSelectedContext(item.label);
+                  setSelectedContext(item.id);
+                  if (item.id !== "all") setActiveProfile(item.id);
                   setOpen(false);
 
-                  if (item.label === "All Contexts") {
+                  if (item.id === "all") {
                     router.push("/all-contexts");
                   }
                 }}
@@ -146,7 +151,7 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
             }}
             className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
             <MaterialCommunityIcons name="plus-circle-outline" size={17} color={colors.textMuted} />
-            <Text className="flex-1 font-display text-sm text-app-text">New Context</Text>
+            <Text className="flex-1 font-display text-sm text-app-text">New Profile</Text>
           </Pressable>
 
           <Pressable
@@ -157,7 +162,7 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
             }}
             className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
             <MaterialCommunityIcons name="cog-outline" size={17} color={colors.textMuted} />
-            <Text className="flex-1 font-display text-sm text-app-text">Manage Contexts</Text>
+            <Text className="flex-1 font-display text-sm text-app-text">Manage Profiles</Text>
           </Pressable>
         </View>
       : null}
