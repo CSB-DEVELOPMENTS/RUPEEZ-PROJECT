@@ -10,32 +10,37 @@ import { getProtectedRouteBreadcrumbs } from "@/constants/navigation";
 import { useAuth } from "@/hooks/auth/useAuth";
 
 export default function ProtectedLayout() {
-  const { loading, user } = useAuth();
+  const { loading, profileLoading, profiles, user } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const headerAction: HeaderAction | undefined =
-    pathname === "/all-contexts" ?
-      {
+  let headerAction: HeaderAction | undefined;
+
+  switch (pathname) {
+    case "/all-contexts":
+      headerAction = {
         icon: "plus",
         label: "New Context",
         onPress: () => router.push({ pathname: "/all-contexts", params: { action: "new" } }),
-      }
-    : pathname === "/wealth" || pathname === "/asset-portfolio" ?
-      {
-        icon: "plus",
-        label: "Add Asset",
-        onPress: () => router.push("/add-asset"),
-      }
-    : undefined;
+      };
+      break;
+    case "/wealth":
+    case "/asset-portfolio":
+      headerAction = { icon: "plus", label: "Add Asset", onPress: () => router.push("/add-asset") };
+      break;
+  }
 
-  if (loading) {
+  if (loading || (user && profileLoading)) {
     return <AuthGateFallback />;
   }
 
   if (!user) {
     return <Redirect href="/login" />;
+  }
+
+  if (profiles.length === 0 && pathname !== "/all-contexts") {
+    return <Redirect href="/all-contexts" />;
   }
 
   return (
@@ -52,7 +57,9 @@ export default function ProtectedLayout() {
         </View>
         <View className="relative flex-1">
           <Slot />
-          {headerAction ? <FloatingHeaderAction action={headerAction} /> : null}
+          {headerAction ?
+            <FloatingHeaderAction action={headerAction} />
+          : null}
         </View>
       </View>
     </View>

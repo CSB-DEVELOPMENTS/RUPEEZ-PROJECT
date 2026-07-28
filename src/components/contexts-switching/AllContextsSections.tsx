@@ -8,29 +8,20 @@ import type {
   ContextSummary,
   ContextTone,
 } from "@/types/contexts-switching";
-import { profileLabel } from "@/utils/profile";
-import {
-  ContextDeletePopup,
-  ContextFormPopup,
-  ContextManagePopup,
-  ContextSuccessPopup,
-  ContextTypePopup,
-} from "./";
-
+import { profileIcon, profileLabel } from "@/utils/profile";
+import { ContextDeletePopup } from "./ContextDeletePopup";
+import { ContextFormPopup } from "./ContextFormPopup";
 import { ContextInsightBanner } from "./ContextInsightBanner";
 import { ContextListPanel } from "./ContextListPanel";
+import { ContextManagePopup } from "./ContextManagePopup";
 import { ContextPerformanceCard } from "./ContextPerformanceCard";
 import { ContextSafeSpendCard } from "./ContextSafeSpendCard";
 import { ContextsHeader } from "./ContextsHeader";
+import { ContextSuccessPopup } from "./ContextSuccessPopup";
+import { ContextTypePopup } from "./ContextTypePopup";
 
 const PROFILE_TONES: ContextTone[] = ["primary", "brand", "teal", "orange", "danger"];
-const PROFILE_ICONS: ContextSummary["icon"][] = [
-  "account-outline",
-  "briefcase-outline",
-  "school-outline",
-  "rocket-launch-outline",
-  "home-outline",
-];
+
 const PROFILE_PRIMARY_COLORS: Record<ContextTone, string> = {
   primary: "#22C55E",
   brand: "#3B82F6",
@@ -43,7 +34,7 @@ type AllContextsSectionsProps = { data: AllContextsPageData; initialAction?: "ma
 
 export function AllContextsSections({ data, initialAction }: AllContextsSectionsProps) {
   const { createProfile, profiles } = useAuth();
-  const requiresProfile = false; //need to add this logic: profiles.length === 0;
+  const requiresProfile = profiles.length === 0;
   const [activePopup, setActivePopup] = useState<ActiveContextPopup | null>(() =>
     requiresProfile || initialAction === "new" ? "create-type"
     : initialAction === "manage" ? "manage"
@@ -61,7 +52,7 @@ export function AllContextsSections({ data, initialAction }: AllContextsSections
     () =>
       profiles.map((profile, index) => ({
         id: profile.profile_id,
-        icon: PROFILE_ICONS[index % PROFILE_ICONS.length],
+        icon: profileIcon(profile.profile_type),
         label: profileLabel(profile),
         percent: 0,
         profileName: profile.profile_name?.trim() || "Untitled Profile",
