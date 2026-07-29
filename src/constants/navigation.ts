@@ -26,6 +26,22 @@ const PROTECTED_ROUTE_BREADCRUMBS: Record<string, BreadcrumbItem[]> = {
     { href: "/crypto-assets", label: "Crypto Assets" },
   ],
   "/dashboard": [{ href: "/dashboard", label: "Dashboard" }],
+  "/goals": [{ href: "/goals" as BreadcrumbItem["href"], label: "Goals" }],
+  "/goals/add": [
+    { href: "/goals" as BreadcrumbItem["href"], label: "Goals" },
+    { href: "/goals" as BreadcrumbItem["href"], label: "Create New Goal" },
+  ],
+  "/millionaire-box": [
+    { href: "/millionaire-box" as BreadcrumbItem["href"], label: "Millionaire Box" },
+  ],
+  "/millionaire-box/activity": [
+    { href: "/millionaire-box" as BreadcrumbItem["href"], label: "Millionaire Box" },
+    { href: "/millionaire-box/activity" as BreadcrumbItem["href"], label: "Activity" },
+  ],
+  "/millionaire-box/allocate": [
+    { href: "/millionaire-box" as BreadcrumbItem["href"], label: "Millionaire Box" },
+    { href: "/millionaire-box/allocate" as BreadcrumbItem["href"], label: "Allocate Funds" },
+  ],
   "/recent-transactions": [
     { href: "/dashboard", label: "Dashboard" },
     { href: "/recent-transactions", label: "Recent Transactions" },
@@ -60,6 +76,27 @@ function formatSegmentLabel(segment: string) {
     .join(" ");
 }
 
+function getGoalRouteBreadcrumbs(segments: string[]) {
+  if (segments[0] !== "goals" || !segments[1] || segments[1] === "add") {
+    return null;
+  }
+
+  const goalHref = `/goals/${segments[1]}` as BreadcrumbItem["href"];
+  const breadcrumbs: BreadcrumbItem[] = [
+    { href: "/goals" as BreadcrumbItem["href"], label: "Goals" },
+    { href: goalHref, label: formatSegmentLabel(segments[1]) },
+  ];
+
+  if (segments[2] === "contribute") {
+    breadcrumbs.push({
+      href: `${goalHref}/contribute` as BreadcrumbItem["href"],
+      label: "Add Contribution",
+    });
+  }
+
+  return breadcrumbs;
+}
+
 export function getProtectedRouteBreadcrumbs(pathname: string) {
   const configuredBreadcrumbs = PROTECTED_ROUTE_BREADCRUMBS[pathname];
 
@@ -68,6 +105,11 @@ export function getProtectedRouteBreadcrumbs(pathname: string) {
   }
 
   const segments = pathname.split("/").filter(Boolean);
+  const goalRouteBreadcrumbs = getGoalRouteBreadcrumbs(segments);
+
+  if (goalRouteBreadcrumbs) {
+    return goalRouteBreadcrumbs;
+  }
 
   return segments.map((segment, index) => ({
     href: `/${segments.slice(0, index + 1).join("/")}` as BreadcrumbItem["href"],

@@ -20,6 +20,8 @@ const navigationItems: SidebarItem[] = [
   { label: "Accounts", icon: "cash-multiple", href: "/accounts" },
   { label: "Social Finance", icon: "account-group-outline", href: "/social-finance" },
   { label: "Wealth", icon: "piggy-bank-outline", href: "/wealth" },
+  { label: "Millionaire Box", icon: "water-outline", href: "/millionaire-box" as Href },
+  { label: "Goals", icon: "bullseye-arrow", href: "/goals" as Href },
   { label: "Analytics", icon: "chart-box-outline", href: "/analytics" },
   { label: "Subscriptions", icon: "credit-card-clock-outline", href: "/subscriptions" },
   { label: "Settings", icon: "cog-outline", href: "/settings" },
@@ -88,8 +90,11 @@ function SidebarPanel({
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="gap-1.5">
           {navigationItems.map((item) => {
+            const itemHref = item.href?.toString();
             const active =
               item.href === pathname ||
+              (itemHref === "/millionaire-box" && pathname.startsWith("/millionaire-box/")) ||
+              (item.href === "/goals" && pathname.startsWith("/goals/")) ||
               (item.href === "/wealth" &&
                 (pathname === "/asset-portfolio" || pathname === "/add-asset"));
             const disabled = !item.href;
