@@ -22,7 +22,7 @@ export function ContextPopupShell({
       <Pressable className={`${theme} flex-1 bg-black/65 px-5 py-8`} onPress={onClose}>
         <View className="flex-1 justify-center">
           <Pressable
-            className={`mx-auto max-h-full w-full overflow-hidden rounded-[24px] border border-app-border bg-app-surface shadow-showcase-soft dark:shadow-showcase-soft-dark ${maxWidthClassName}`}
+            className={`mx-auto max-h-full w-full overflow-visible rounded-[24px] border border-app-border bg-app-surface shadow-showcase-soft dark:shadow-showcase-soft-dark hover:cursor-default ${maxWidthClassName}`}
             onPress={() => {}}>
             {children}
           </Pressable>

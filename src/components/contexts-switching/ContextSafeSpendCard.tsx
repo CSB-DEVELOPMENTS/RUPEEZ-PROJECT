@@ -22,7 +22,7 @@ export function ContextSafeSpendCard({ data }: { data: ContextSafeSpendCardData 
 
   return (
     <View
-      className={`min-h-[260px] flex-1 items-center justify-between rounded-[24px] border bg-app-surface p-5 ${data.tone === "orange" ? tone.border : "border-app-border"}`}>
+      className={`flex-1 items-center justify-between rounded-[24px] border bg-app-surface p-5 ${data.tone === "orange" ? tone.border : "border-app-border"}`}>
       <View className="relative h-[104px] w-[104px] items-center justify-center">
         <Svg height={CHART_SIZE} width={CHART_SIZE}>
           <G transform={`rotate(-90 ${CHART_SIZE / 2} ${CHART_SIZE / 2})`}>

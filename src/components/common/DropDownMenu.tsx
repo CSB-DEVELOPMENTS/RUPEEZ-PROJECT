@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 export function DropDownMenu({
   isOpen,
@@ -43,27 +43,29 @@ export function DropDownMenu({
 
       {isOpen ?
         <View className="absolute left-0 right-0 top-full z-20 mt-2 rounded-[20px] border border-app-border bg-app-surface p-2 shadow-showcase-soft dark:shadow-showcase-soft-dark">
-          {options.map((option) => {
-            const isSelected = option === value;
+          <ScrollView
+            className="max-h-64"
+            keyboardShouldPersistTaps="handled"
+            nestedScrollEnabled
+            showsVerticalScrollIndicator>
+            {options.map((option) => {
+              const isSelected = option === value;
 
-            return (
-              <Pressable
-                key={option}
-                className={`rounded-2xl px-3 py-3 ${isSelected ? "bg-app-primary/10" : ""}`}
-                onPress={() => onSelect(option)}>
-                <View className="flex-row items-center gap-3">
-                  <Text className="flex-1 font-display text-base text-app-text">{option}</Text>
-                  {isSelected ?
-                    <MaterialCommunityIcons
-                      color={colors.primary}
-                      name={"check" as never}
-                      size={18}
-                    />
-                  : null}
-                </View>
-              </Pressable>
-            );
-          })}
+              return (
+                <Pressable
+                  key={option}
+                  className={`rounded-2xl px-3 py-3 ${isSelected ? "bg-app-primary/10" : ""}`}
+                  onPress={() => onSelect(option)}>
+                  <View className="flex-row items-center gap-3">
+                    <Text className="flex-1 font-display text-base text-app-text">{option}</Text>
+                    {isSelected ?
+                      <MaterialCommunityIcons color={colors.primary} name="check" size={18} />
+                    : null}
+                  </View>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
         </View>
       : null}
     </View>

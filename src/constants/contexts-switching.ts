@@ -59,6 +59,7 @@ export const ALL_CONTEXTS_PAGE: AllContextsPageData = {
   ],
   popups: {
     createForm: {
+      currencyCode: "LKR",
       currencyLabel: "LKR - Sri Lankan Rupee",
       name: "Side Hustle Project",
       selectedTone: "brand",
@@ -94,6 +95,7 @@ export const ALL_CONTEXTS_PAGE: AllContextsPageData = {
       },
     ],
     editForm: {
+      currencyCode: "LKR",
       currencyLabel: "LKR - Sri Lankan Rupee",
       name: "Business / Freelancer",
       selectedTone: "danger",

@@ -126,7 +126,7 @@ export function AllContextsSections({ data, initialAction }: AllContextsSections
     setCreatingProfile(true);
 
     const { data: profile, error } = await createProfile({
-      base_currency: "LKR",
+      base_currency: form.currencyCode,
       profile_name: profileName,
       primary_color: PROFILE_PRIMARY_COLORS[form.selectedTone],
       profile_type: selectedCreateOption,
@@ -204,7 +204,7 @@ export function AllContextsSections({ data, initialAction }: AllContextsSections
         mode="edit"
         onBack={openManagePopup}
         onClose={closePopup}
-        onSubmit={openManagePopup}
+        onSubmit={handleCreateSubmit}
         visible={activePopup === "edit"}
       />
 

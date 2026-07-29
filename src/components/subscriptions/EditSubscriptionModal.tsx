@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Modal, Pressable, ScrollView, Switch, Text, TextInput, View } from "react-native";
 
-import { Fonts } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
+import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { ActiveSubscriptionItem } from "@/types/dashboard";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type EditSubscriptionModalProps = {
   subscription: ActiveSubscriptionItem | null;
@@ -61,6 +63,8 @@ export function EditSubscriptionModal({
   onClose,
   onSave,
 }: EditSubscriptionModalProps) {
+  const { theme } = useAppTheme();
+  const colors = Colors[theme];
   const [formState, setFormState] = useState<SubscriptionFormState>(emptyFormState);
 
   useEffect(() => {
@@ -84,10 +88,10 @@ export function EditSubscriptionModal({
 
   return (
     <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
-      <Pressable className="flex-1 bg-black/45 px-5 py-8" onPress={onClose}>
+      <Pressable className={`${theme} flex-1 bg-black/45 px-5 py-8`} onPress={onClose}>
         <View className="flex-1 justify-center">
           <Pressable
-            className="mx-auto max-h-full w-full max-w-2xl rounded-[32px] border border-app-border bg-app-surface p-5 shadow-showcase-soft md:p-6"
+            className="mx-auto max-h-full w-full max-w-2xl rounded-[32px] border border-app-border bg-app-bg p-5 shadow-showcase-soft md:p-6 hover:cursor-default"
             onPress={() => {}}>
             <ScrollView showsVerticalScrollIndicator={false} className="bg-app-bg">
               <View className="gap-6 bg-app-bg">
@@ -102,9 +106,7 @@ export function EditSubscriptionModal({
                   </View>
 
                   <Pressable className="rounded-full p-2" onPress={onClose}>
-                    <Text className="font-display text-sm font-semibold text-app-primary">
-                      Close
-                    </Text>
+                    <MaterialCommunityIcons name="close" size={20} color={colors.text} />
                   </Pressable>
                 </View>
 
