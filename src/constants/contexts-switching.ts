@@ -1,6 +1,14 @@
 import { ContextCreateOption, ContextTone } from "@/types/contexts-switching";
 
-export const PROFILE_TONES: ContextTone[] = ["primary", "brand", "teal", "orange", "danger"];
+export const COLOR_OPTIONS = [
+  "primary",
+  "brand",
+  "teal",
+  "orange",
+  "danger",
+] as const satisfies readonly ContextTone[];
+
+export const PROFILE_TONES: ContextTone[] = [...COLOR_OPTIONS];
 
 export const PROFILE_PRIMARY_COLORS: Record<ContextTone, string> = {
   primary: "#22C55E",
