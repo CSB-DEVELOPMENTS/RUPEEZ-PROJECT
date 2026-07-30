@@ -18,7 +18,13 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   );
 }
 
-export function ContextPerformanceCard({ data }: { data: ContextPerformancePoint[] }) {
+export function ContextPerformanceCard({
+  contextCount,
+  data,
+}: {
+  contextCount: number;
+  data: ContextPerformancePoint[];
+}) {
   const { theme } = useAppTheme();
   const [chartWidth, setChartWidth] = useState(0);
   const colors = Colors[theme];
@@ -31,7 +37,7 @@ export function ContextPerformanceCard({ data }: { data: ContextPerformancePoint
             Performance This Month
           </Text>
           <Text className="font-display text-base leading-6 text-app-muted">
-            Aggregated view across 5 contexts
+            Aggregated view across {contextCount} {contextCount === 1 ? "context" : "contexts"}
           </Text>
         </View>
 
@@ -45,7 +51,7 @@ export function ContextPerformanceCard({ data }: { data: ContextPerformancePoint
       <View
         className="mt-7 flex-1 overflow-hidden rounded-[24px] bg-app-panel/15 px-2 py-4"
         onLayout={(event) => setChartWidth(Math.floor(event.nativeEvent.layout.width))}>
-        {chartWidth > 0 ?
+        {chartWidth > 0 && data.length > 0 ?
           <LineChart
             axisLabelAnimation={false}
             crosshair={false}
@@ -91,7 +97,13 @@ export function ContextPerformanceCard({ data }: { data: ContextPerformancePoint
               },
             ]}
           />
-        : null}
+        :
+          <View className="flex-1 items-center justify-center">
+            <Text className="font-display text-base text-app-muted">
+              No transactions recorded this month.
+            </Text>
+          </View>
+        }
       </View>
     </DashboardCard>
   );

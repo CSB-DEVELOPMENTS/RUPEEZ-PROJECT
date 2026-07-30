@@ -20,6 +20,7 @@ export type ContextSummary = {
   icon: ComponentProps<typeof MaterialCommunityIcons>["name"];
   profileName?: string;
   profileType?: string;
+  currencyCode?: string;
   primaryColor?: string;
 };
 

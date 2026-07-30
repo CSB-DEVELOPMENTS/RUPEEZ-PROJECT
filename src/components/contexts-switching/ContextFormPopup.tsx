@@ -158,7 +158,7 @@ export function ContextFormPopup({
           <ContextPopupButton
             disabled={submitting}
             label={
-              submitting ? "Creating..."
+              submitting ? mode === "edit" ? "Saving..." : "Creating..."
               : mode === "edit" ?
                 "Save Changes"
               : "Create Profile"
