@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import type { TextInputProps } from "react-native";
 import { Text, TextInput, View } from "react-native";
 
 import { Colors, Fonts } from "@/constants/theme";
@@ -8,20 +9,24 @@ type InputFieldProps = {
   disabled?: boolean;
   helperText?: string;
   label: string;
+  onBlur?: TextInputProps["onBlur"];
   onChangeText?: (value: string) => void;
   placeholder?: string;
   secureTextEntry?: boolean;
   value: string;
+  error?: string;
 };
 
 export function InputField({
   disabled = false,
   helperText,
   label,
+  onBlur,
   onChangeText,
   placeholder,
   secureTextEntry,
   value,
+  error,
 }: InputFieldProps) {
   const { theme } = useAppTheme();
   const colors = Colors[theme];
@@ -37,6 +42,7 @@ export function InputField({
             className={`flex-1 font-display text-lg leading-7 focus:outline-none ${disabled ? "text-app-muted" : "text-app-text"}`}
             editable={!disabled}
             onChangeText={onChangeText}
+            onBlur={onBlur}
             placeholder={placeholder}
             placeholderTextColor={colors.textSoft}
             selectionColor={colors.primary}
@@ -51,6 +57,9 @@ export function InputField({
       </View>
       {helperText ?
         <Text className="font-display text-sm leading-5 text-app-muted">{helperText}</Text>
+      : null}
+      {error ?
+        <Text className="font-display text-sm leading-5 text-app-danger">{error}</Text>
       : null}
     </View>
   );

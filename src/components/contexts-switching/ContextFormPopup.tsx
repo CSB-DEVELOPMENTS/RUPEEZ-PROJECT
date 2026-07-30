@@ -1,21 +1,34 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { data as currencyData } from "currency-codes";
-import { useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { z } from "zod";
 
-import { Colors, Fonts } from "@/constants/theme";
+import { InputField } from "@/components/common/InputField";
+import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
-import type { ContextFormData, ContextTone } from "@/types/contexts-switching";
+import type { ContextFormData } from "@/types/contexts-switching";
 
+import { COLOR_OPTIONS } from "@/constants/contexts-switching";
 import { DropDownMenu } from "../common/DropDownMenu";
 import { ContextPopupButton } from "./ContextPopupButtons";
 import { ContextPopupShell } from "./ContextPopupShell";
 import { contextToneColor } from "./contextTone";
 
-const COLOR_OPTIONS: ContextTone[] = ["primary", "brand", "teal", "orange", "danger"];
 const CURRENCY_OPTIONS = currencyData
   .map(({ code, currency }) => ({ code, label: `${code} - ${currency}` }))
   .sort((left, right) => left.label.localeCompare(right.label));
+
+const contextFormSchema = z.object({
+  currencyCode: z.string().min(1, "Currency is required."),
+  currencyLabel: z.string().min(1, "Currency is required."),
+  name: z.string().trim().min(1, "Profile name is required."),
+  selectedTone: z.enum(COLOR_OPTIONS, {
+    errorMap: () => ({ message: "Primary color is required." }),
+  }),
+});
 
 type ContextFormPopupProps = {
   data: ContextFormData;
@@ -48,11 +61,21 @@ export function ContextFormPopup({
 }: ContextFormPopupProps) {
   const { theme } = useAppTheme();
   const colors = Colors[theme];
-  const [form, setForm] = useState(data);
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
-  const currencyValue =
-    CURRENCY_OPTIONS.find((option) => option.code === form.currencyCode)?.label
-    ?? form.currencyLabel;
+  const {
+    control,
+    formState: { errors, isDirty },
+    handleSubmit,
+    reset,
+  } = useForm<ContextFormData>({
+    defaultValues: data,
+    mode: "onBlur",
+    resolver: zodResolver(contextFormSchema),
+  });
+
+  useEffect(() => {
+    reset(data);
+  }, [data, reset]);
 
   return (
     <ContextPopupShell visible={visible} onClose={onClose} maxWidthClassName="max-w-2xl">
@@ -84,87 +107,116 @@ export function ContextFormPopup({
         className={isCurrencyOpen ? "z-30 overflow-visible" : "z-0"}
         showsVerticalScrollIndicator={false}>
         <View className="gap-7 p-6 z-30">
-          <View className="gap-3">
-            <FormLabel>Profile Name</FormLabel>
-            <View className="min-h-14 flex-row items-center gap-3 rounded-xl border border-app-border bg-app-bg px-4">
-              <TextInput
-                className="flex-1 font-display text-lg text-app-text focus:outline-none"
-                onChangeText={(value) => setForm((current) => ({ ...current, name: value }))}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onBlur, onChange, value } }) => (
+              <InputField
+                error={errors.name?.message}
+                label="Profile Name"
+                onBlur={onBlur}
+                onChangeText={onChange}
                 placeholder="Profile name"
-                placeholderTextColor={colors.textSoft}
-                selectionColor={colors.primary}
-                style={{ fontFamily: Fonts.sans }}
-                value={form.name}
+                value={value}
               />
-              {mode === "edit" ?
-                <MaterialCommunityIcons name="pencil-outline" size={18} color={colors.textSoft} />
-              : null}
-            </View>
-          </View>
+            )}
+          />
 
-          <View className="gap-3">
-            <DropDownMenu
-              isOpen={isCurrencyOpen}
-              label="Currency"
-              onSelect={(nextValue) => {
-                const selectedCurrency = CURRENCY_OPTIONS.find(
-                  (option) => option.label === nextValue,
-                );
+          <Controller
+            control={control}
+            name="currencyCode"
+            render={({ field: { onChange, value } }) => (
+              <Controller
+                control={control}
+                name="currencyLabel"
+                render={({ field: { onChange: onLabelChange } }) => (
+                  <View className="gap-3">
+                    <DropDownMenu
+                      isOpen={isCurrencyOpen}
+                      label="Currency"
+                      onSelect={(nextValue) => {
+                        const selectedCurrency = CURRENCY_OPTIONS.find(
+                          (option) => option.label === nextValue,
+                        );
 
-                if (!selectedCurrency) return;
+                        if (!selectedCurrency) return;
 
-                setForm((current) => ({
-                  ...current,
-                  currencyCode: selectedCurrency.code,
-                  currencyLabel: selectedCurrency.label,
-                }));
-                setIsCurrencyOpen(false);
-              }}
-              onToggle={() => setIsCurrencyOpen((current) => !current)}
-              options={CURRENCY_OPTIONS.map((option) => option.label)}
-              value={currencyValue}
-            />
-          </View>
+                        onChange(selectedCurrency.code);
+                        onLabelChange(selectedCurrency.label);
+                        setIsCurrencyOpen(false);
+                      }}
+                      onToggle={() => setIsCurrencyOpen((current) => !current)}
+                      options={CURRENCY_OPTIONS.map((option) => option.label)}
+                      value={
+                        CURRENCY_OPTIONS.find((option) => option.code === value)?.label
+                        ?? data.currencyLabel
+                      }
+                    />
+                    {errors.currencyCode || errors.currencyLabel ?
+                      <Text className="font-display text-sm text-app-danger">
+                        {errors.currencyCode?.message ?? errors.currencyLabel?.message}
+                      </Text>
+                    : null}
+                  </View>
+                )}
+              />
+            )}
+          />
 
           <View className="gap-4">
             <FormLabel>Primary Color</FormLabel>
             <View className="flex-row flex-wrap gap-4">
-              {COLOR_OPTIONS.map((tone) => {
-                const color = contextToneColor(theme, tone);
-                const isSelected = form.selectedTone === tone;
+              <Controller
+                control={control}
+                name="selectedTone"
+                render={({ field: { onChange, value } }) => (
+                  <>
+                    {COLOR_OPTIONS.map((tone) => {
+                      const color = contextToneColor(theme, tone);
+                      const isSelected = value === tone;
 
-                return (
-                  <Pressable
-                    key={tone}
-                    className={`h-10 w-10 items-center justify-center rounded-full ${
-                      isSelected ? "border-2 border-app-primary" : "border border-transparent"
-                    }`}
-                    onPress={() => setForm((current) => ({ ...current, selectedTone: tone }))}>
-                    <View className="h-8 w-8 rounded-full" style={{ backgroundColor: color }} />
-                  </Pressable>
-                );
-              })}
+                      return (
+                        <Pressable
+                          key={tone}
+                          className={`h-10 w-10 items-center justify-center rounded-full ${
+                            isSelected ? "border-2 border-app-primary" : "border border-transparent"
+                          }`}
+                          onPress={() => onChange(tone)}>
+                          <View
+                            className="h-8 w-8 rounded-full"
+                            style={{ backgroundColor: color }}
+                          />
+                        </Pressable>
+                      );
+                    })}
+                  </>
+                )}
+              />
             </View>
+            {errors.selectedTone ?
+              <Text className="font-display text-sm text-app-danger">
+                {errors.selectedTone.message}
+              </Text>
+            : null}
           </View>
         </View>
       </ScrollView>
 
-      <View className="gap-3 border-t border-app-border px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-        {errorMessage ?
-          <Text className="font-display text-sm text-app-danger sm:flex-1">{errorMessage}</Text>
-        : null}
-        <ContextPopupButton label="Cancel" tone="ghost" onPress={onClose} />
+      <View className="gap-3 border-t border-app-border px-6 py-5 sm:flex-row sm:items-center sm:justify-end">
         <View className="sm:min-w-48">
           <ContextPopupButton
-            disabled={submitting}
+            disabled={submitting || isDirty === false}
             label={
-              submitting ? mode === "edit" ? "Saving..." : "Creating..."
+              submitting ?
+                mode === "edit" ?
+                  "Saving..."
+                : "Creating..."
               : mode === "edit" ?
                 "Save Changes"
               : "Create Profile"
             }
             icon={mode === "edit" ? "check-circle-outline" : undefined}
-            onPress={() => onSubmit(form)}
+            onPress={handleSubmit(onSubmit)}
           />
         </View>
       </View>

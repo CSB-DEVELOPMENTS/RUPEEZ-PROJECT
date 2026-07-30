@@ -6,9 +6,11 @@ import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
 type SettingsActionButtonProps = {
+  disabled?: boolean;
   href?: Href;
   icon?: string;
   label: string;
+  onPress?: () => void;
   tone?: "danger" | "outline" | "primary" | "secondary";
 };
 
@@ -38,9 +40,11 @@ function buttonToneClass(tone: NonNullable<SettingsActionButtonProps["tone"]>) {
 }
 
 export function SettingsActionButton({
+  disabled = false,
   href,
   icon,
   label,
+  onPress,
   tone = "primary",
 }: SettingsActionButtonProps) {
   const router = useRouter();
@@ -55,8 +59,9 @@ export function SettingsActionButton({
 
   return (
     <Pressable
-      className={`min-h-12 flex-row items-center justify-center gap-2 rounded-2xl border px-5 py-3 ${toneClasses.container}`}
-      onPress={href ? () => router.push(href) : undefined}>
+      className={`min-h-12 flex-row items-center justify-center gap-2 rounded-2xl border px-5 py-3 ${toneClasses.container} ${disabled ? "opacity-50" : ""}`}
+      disabled={disabled}
+      onPress={onPress ?? (href ? () => router.push(href) : undefined)}>
       {icon ? <MaterialCommunityIcons color={iconColor} name={icon as never} size={18} /> : null}
       <Text className={`font-display text-base font-semibold ${toneClasses.text}`}>{label}</Text>
       {tone === "secondary" ? (

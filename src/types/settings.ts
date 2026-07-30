@@ -35,7 +35,6 @@ export type SettingsProfileField = {
 
 export type SettingsProfileSectionData = {
   actions: SettingsProfileAction[];
-  fields: SettingsProfileField[];
   identity: SettingsProfileIdentity;
   sectionTitle: string;
   footerAction: SettingsFooterAction;
