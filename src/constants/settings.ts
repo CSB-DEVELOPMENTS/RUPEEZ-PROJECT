@@ -21,21 +21,6 @@ export const SETTINGS_OVERVIEW_PAGE: SettingsOverviewPageData = {
       { label: "Remove", tone: "outline" },
     ],
     sectionTitle: "Personal Information",
-    fields: [
-      { label: "Full Name", value: "Marcus Sterling" },
-      {
-        helperText: "Primary login email cannot be changed without verification.",
-        isLocked: true,
-        label: "Email Address",
-        value: "m.sterling@mission-control.io",
-      },
-      { label: "Phone Number", value: "+1 (555) 892-0431" },
-      { label: "Primary Investment Entity", value: "Sterling Global Ventures LLC" },
-      {
-        label: "Mailing Address",
-        value: "42 Wall Street, Suite 1200\nNew York, NY 10005\nUnited States",
-      },
-    ],
     footerAction: { icon: "content-save-outline", label: "Update Profile", tone: "primary" },
   },
   shortcuts: [
