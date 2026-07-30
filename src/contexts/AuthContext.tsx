@@ -18,6 +18,10 @@ export interface AuthContextValue {
     input: Pick<ProfileInsert, "profile_name">
       & Partial<Pick<ProfileInsert, "base_currency" | "profile_type" | "primary_color">>,
   ) => Promise<{ data: Profile | null; error: Error | null }>;
+  updateProfile: (
+    profileId: string,
+    input: Pick<ProfileInsert, "profile_name" | "base_currency" | "primary_color">,
+  ) => Promise<{ data: Profile | null; error: Error | null }>;
   setActiveProfile: (profileId: string) => void;
   refreshProfiles: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<{ error: AuthError | null }>;
@@ -104,6 +108,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user],
   );
 
+  const updateProfile = useCallback(
+    async (
+      profileId: string,
+      input: Pick<ProfileInsert, "profile_name" | "base_currency" | "primary_color">,
+    ) => {
+      if (!user) {
+        return { data: null, error: new Error("You must be signed in to update a profile.") };
+      }
+
+      const { data, error } = await supabase
+        .from("profiles")
+        .update(input)
+        .eq("profile_id", profileId)
+        .eq("user_id", user.id)
+        .select("*")
+        .single();
+
+      if (!error && data) {
+        setProfiles((currentProfiles) =>
+          currentProfiles.map((currentProfile) =>
+            currentProfile.profile_id === profileId ? data : currentProfile,
+          ),
+        );
+        setProfile((currentProfile) =>
+          currentProfile?.profile_id === profileId ? data : currentProfile,
+        );
+      }
+
+      return { data, error };
+    },
+    [user],
+  );
+
   const setActiveProfile = useCallback(
     (profileId: string) => {
       setProfile(
@@ -178,6 +215,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         profileLoading,
         createProfile,
+        updateProfile,
         setActiveProfile,
         refreshProfiles,
         signInWithEmail,

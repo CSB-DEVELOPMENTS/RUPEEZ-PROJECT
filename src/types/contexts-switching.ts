@@ -20,6 +20,7 @@ export type ContextSummary = {
   icon: ComponentProps<typeof MaterialCommunityIcons>["name"];
   profileName?: string;
   profileType?: string;
+  currencyCode?: string;
   primaryColor?: string;
 };
 
@@ -49,7 +50,12 @@ export type ContextCreateOption = {
   tone: ContextTone;
 };
 
-export type ContextFormData = { currencyLabel: string; name: string; selectedTone: ContextTone };
+export type ContextFormData = {
+  currencyCode: string;
+  currencyLabel: string;
+  name: string;
+  selectedTone: ContextTone;
+};
 
 export type ContextSuccessData = { checks: string[]; contextName: string };
 

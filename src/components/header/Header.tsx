@@ -67,8 +67,7 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
     })),
   ];
 
-  const selected =
-    contextOptions.find((item) => item.id === selectedContext) ?? contextOptions[0];
+  const selected = contextOptions.find((item) => item.id === selectedContext) ?? contextOptions[0];
 
   return (
     <View className="relative z-20">
@@ -118,6 +117,8 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
 
                   if (item.id === "all") {
                     router.push("/all-contexts");
+                  } else if (selectedContext !== item.id) {
+                    router.push("/dashboard");
                   }
                 }}
                 className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">

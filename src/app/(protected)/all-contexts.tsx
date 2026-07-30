@@ -2,7 +2,6 @@ import { ScrollView, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 
 import { AllContextsSections } from "@/components/contexts-switching";
-import { ALL_CONTEXTS_PAGE } from "@/constants/contexts-switching";
 
 export default function AllContexts() {
   const { action } = useLocalSearchParams<{ action?: string }>();
@@ -16,7 +15,6 @@ export default function AllContexts() {
           <View className="absolute -right-10 top-8 h-52 w-52 rounded-full bg-app-brand/10" />
           <AllContextsSections
             key={initialAction ?? "default"}
-            data={ALL_CONTEXTS_PAGE}
             initialAction={initialAction}
           />
         </View>

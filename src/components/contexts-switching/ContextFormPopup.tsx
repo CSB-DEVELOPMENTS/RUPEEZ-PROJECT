@@ -1,4 +1,5 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { data as currencyData } from "currency-codes";
 import { useState } from "react";
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 
@@ -6,11 +7,15 @@ import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import type { ContextFormData, ContextTone } from "@/types/contexts-switching";
 
+import { DropDownMenu } from "../common/DropDownMenu";
 import { ContextPopupButton } from "./ContextPopupButtons";
 import { ContextPopupShell } from "./ContextPopupShell";
 import { contextToneColor } from "./contextTone";
 
 const COLOR_OPTIONS: ContextTone[] = ["primary", "brand", "teal", "orange", "danger"];
+const CURRENCY_OPTIONS = currencyData
+  .map(({ code, currency }) => ({ code, label: `${code} - ${currency}` }))
+  .sort((left, right) => left.label.localeCompare(right.label));
 
 type ContextFormPopupProps = {
   data: ContextFormData;
@@ -44,6 +49,11 @@ export function ContextFormPopup({
   const { theme } = useAppTheme();
   const colors = Colors[theme];
   const [form, setForm] = useState(data);
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
+  const currencyValue =
+    CURRENCY_OPTIONS.find((option) => option.code === form.currencyCode)?.label
+    ?? form.currencyLabel;
+
   return (
     <ContextPopupShell visible={visible} onClose={onClose} maxWidthClassName="max-w-2xl">
       <View className="border-b border-app-border px-6 py-5">
@@ -70,8 +80,10 @@ export function ContextFormPopup({
         </View>
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View className="gap-7 p-6">
+      <ScrollView
+        className={isCurrencyOpen ? "z-30 overflow-visible" : "z-0"}
+        showsVerticalScrollIndicator={false}>
+        <View className="gap-7 p-6 z-30">
           <View className="gap-3">
             <FormLabel>Profile Name</FormLabel>
             <View className="min-h-14 flex-row items-center gap-3 rounded-xl border border-app-border bg-app-bg px-4">
@@ -91,13 +103,27 @@ export function ContextFormPopup({
           </View>
 
           <View className="gap-3">
-            <FormLabel>Currency</FormLabel>
-            <View className="min-h-14 flex-row items-center rounded-xl border border-app-border bg-app-bg px-4">
-              <Text className="flex-1 font-display text-lg font-semibold text-app-text">
-                {form.currencyLabel}
-              </Text>
-              <MaterialCommunityIcons name="chevron-down" size={24} color={colors.textSoft} />
-            </View>
+            <DropDownMenu
+              isOpen={isCurrencyOpen}
+              label="Currency"
+              onSelect={(nextValue) => {
+                const selectedCurrency = CURRENCY_OPTIONS.find(
+                  (option) => option.label === nextValue,
+                );
+
+                if (!selectedCurrency) return;
+
+                setForm((current) => ({
+                  ...current,
+                  currencyCode: selectedCurrency.code,
+                  currencyLabel: selectedCurrency.label,
+                }));
+                setIsCurrencyOpen(false);
+              }}
+              onToggle={() => setIsCurrencyOpen((current) => !current)}
+              options={CURRENCY_OPTIONS.map((option) => option.label)}
+              value={currencyValue}
+            />
           </View>
 
           <View className="gap-4">
@@ -132,7 +158,7 @@ export function ContextFormPopup({
           <ContextPopupButton
             disabled={submitting}
             label={
-              submitting ? "Creating..."
+              submitting ? mode === "edit" ? "Saving..." : "Creating..."
               : mode === "edit" ?
                 "Save Changes"
               : "Create Profile"
