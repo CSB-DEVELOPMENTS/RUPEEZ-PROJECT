@@ -6,8 +6,10 @@ import { useAppTheme } from "@/hooks/theme/useAppTheme";
 type AuthInputProps = {
   autoCapitalize?: "none" | "sentences" | "words";
   autoComplete?: "email" | "name" | "password" | "off";
+  error?: string;
   keyboardType?: "default" | "email-address";
   label: string;
+  onBlur?: () => void;
   onChangeText: (value: string) => void;
   placeholder: string;
   secureTextEntry?: boolean;
@@ -19,8 +21,10 @@ type AuthInputProps = {
 export function AuthInput({
   autoCapitalize = "none",
   autoComplete = "off",
+  error,
   keyboardType = "default",
   label,
+  onBlur,
   onChangeText,
   placeholder,
   secureTextEntry,
@@ -48,8 +52,11 @@ export function AuthInput({
       <TextInput
         autoCapitalize={autoCapitalize}
         autoComplete={autoComplete}
-        className="min-h-16 rounded-2xl border border-app-border bg-app-panel px-5 text-xl text-app-text"
+        className={`min-h-16 rounded-2xl border bg-app-panel px-5 text-xl text-app-text ${
+          error ? "border-app-danger" : "border-app-border"
+        }`}
         keyboardType={keyboardType}
+        onBlur={onBlur}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={Colors[theme].textSoft}
@@ -57,6 +64,9 @@ export function AuthInput({
         style={{ fontFamily: Fonts.sans }}
         value={value}
       />
+      {error ? (
+        <Text className="font-display text-sm leading-5 text-app-danger">{error}</Text>
+      ) : null}
     </View>
   );
 }

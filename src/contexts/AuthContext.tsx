@@ -32,6 +32,10 @@ export interface AuthContextValue {
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<{ error: AuthError | null }>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
+  updatePassword: (
+    currentPassword: string,
+    newPassword: string,
+  ) => Promise<{ error: AuthError | null }>;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -205,6 +209,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   }, []);
 
+  const updatePassword = useCallback(
+    async (currentPassword: string, newPassword: string) => {
+      const { error } = await supabase.auth.updateUser({
+        current_password: currentPassword,
+        password: newPassword,
+      });
+      return { error };
+    },
+    [],
+  );
+
   return (
     <AuthContext.Provider
       value={{
@@ -222,6 +237,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signUpWithEmail,
         signOut,
         resetPassword,
+        updatePassword,
       }}>
       {children}
     </AuthContext.Provider>

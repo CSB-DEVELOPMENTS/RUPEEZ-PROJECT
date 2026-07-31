@@ -8,7 +8,7 @@ import { useAppTheme } from "@/hooks/theme/useAppTheme";
 type SettingsActionButtonProps = {
   disabled?: boolean;
   href?: Href;
-  icon?: string;
+  icon?: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   label: string;
   onPress?: () => void;
   tone?: "danger" | "outline" | "primary" | "secondary";
@@ -17,25 +17,13 @@ type SettingsActionButtonProps = {
 function buttonToneClass(tone: NonNullable<SettingsActionButtonProps["tone"]>) {
   switch (tone) {
     case "danger":
-      return {
-        container: "border-app-danger/50 bg-app-danger/5",
-        text: "text-app-danger",
-      };
+      return { container: "border-app-danger/50 bg-app-danger/5", text: "text-app-danger" };
     case "outline":
-      return {
-        container: "border-app-border bg-transparent",
-        text: "text-app-text",
-      };
+      return { container: "border-app-border bg-transparent", text: "text-app-text" };
     case "secondary":
-      return {
-        container: "border-transparent bg-transparent px-0 py-0",
-        text: "text-app-primary",
-      };
+      return { container: "border-transparent bg-transparent px-0 py-0", text: "text-app-primary" };
     default:
-      return {
-        container: "border-app-primary bg-app-primary",
-        text: "text-app-primary-contrast",
-      };
+      return { container: "border-app-primary bg-app-primary", text: "text-app-primary-contrast" };
   }
 }
 
@@ -62,11 +50,13 @@ export function SettingsActionButton({
       className={`min-h-12 flex-row items-center justify-center gap-2 rounded-2xl border px-5 py-3 ${toneClasses.container} ${disabled ? "opacity-50" : ""}`}
       disabled={disabled}
       onPress={onPress ?? (href ? () => router.push(href) : undefined)}>
-      {icon ? <MaterialCommunityIcons color={iconColor} name={icon as never} size={18} /> : null}
+      {icon ?
+        <MaterialCommunityIcons color={iconColor} name={icon} size={18} />
+      : null}
       <Text className={`font-display text-base font-semibold ${toneClasses.text}`}>{label}</Text>
-      {tone === "secondary" ? (
+      {tone === "secondary" ?
         <MaterialCommunityIcons color={iconColor} name="chevron-right" size={18} />
-      ) : null}
+      : null}
     </Pressable>
   );
 }
