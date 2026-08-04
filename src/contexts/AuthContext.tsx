@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
-import { AuthError, Session, User } from "@supabase/supabase-js";
+import { AuthChangeEvent, AuthError, Session, User } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
-import { createContext, useCallback, useEffect, useState, type ReactNode } from "react";
+import { createContext, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { Tables, TablesInsert } from "../../database.types";
 
 type Profile = Tables<"profiles">;
@@ -155,26 +155,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [profiles],
   );
 
+  const currentUserIdRef = useRef<string | null | undefined>(undefined);
+
   const handleAuthStateChange = useCallback(
-    (currentSession: Session | null) => {
+    (event: AuthChangeEvent, currentSession: Session | null) => {
+      // TOKEN_REFRESHED fires every time the user returns to the browser tab.
+      // We only want to re-fetch profiles when the user identity actually changes,
+      // not on background token refreshes — which would flash the UI and may
+      // trigger an unexpected navigation in Expo Router.
+      const skipProfileFetch =
+        event === "TOKEN_REFRESHED" ||
+        (event === "SIGNED_IN" &&
+          currentSession?.user?.id === currentUserIdRef.current);
+
       const currentUser = currentSession?.user ?? null;
+      currentUserIdRef.current = currentUser?.id ?? null;
+
       setSession(currentSession);
       setUser(currentUser);
       setLoading(false);
-      void fetchProfiles(currentUser);
+
+      if (!skipProfileFetch) {
+        void fetchProfiles(currentUser);
+      }
     },
     [fetchProfiles],
   );
 
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      handleAuthStateChange(session);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      handleAuthStateChange("INITIAL_SESSION", session);
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      handleAuthStateChange(session);
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      handleAuthStateChange(event, session);
     });
 
     return () => subscription.unsubscribe();
