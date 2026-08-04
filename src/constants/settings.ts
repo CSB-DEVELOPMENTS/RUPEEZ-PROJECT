@@ -64,17 +64,17 @@ export const SETTINGS_PREFERENCES_PAGE: SettingsPreferencesPageData = {
     options: [
       {
         label: "Default Currency",
-        options: ["USD ($) - US Dollar", "LKR (Rs) - Sri Lankan Rupee", "EUR - Euro", "GBP - British Pound"],
+        options: [
+          "USD ($) - US Dollar",
+          "LKR (Rs) - Sri Lankan Rupee",
+          "EUR - Euro",
+          "GBP - British Pound",
+        ],
         value: "USD ($) - US Dollar",
       },
       {
         label: "Timezone",
-        options: [
-          "UTC-5 (New York)",
-          "UTC+5:30 (Colombo)",
-          "UTC+0 (London)",
-          "UTC+1 (Berlin)",
-        ],
+        options: ["UTC-5 (New York)", "UTC+5:30 (Colombo)", "UTC+0 (London)", "UTC+1 (Berlin)"],
         value: "UTC-5 (New York)",
       },
     ],
@@ -114,7 +114,7 @@ export const SETTINGS_SECURITY_PAGE: SettingsSecurityPageData = {
     title: "Security Settings",
   },
   password: {
-    action: { label: "Change Password", tone: "outline" },
+    action: { label: "Change Password" },
     fields: [
       { label: "Current Password", value: "••••••••" },
       { label: "New Password", value: "••••••••" },
@@ -124,7 +124,7 @@ export const SETTINGS_SECURITY_PAGE: SettingsSecurityPageData = {
     title: "Password",
   },
   twoFactor: {
-    action: { label: "Configure 2FA", tone: "primary" },
+    action: { label: "Configure 2FA" },
     description: "Add an extra layer of security to your account using biometric or SMS codes.",
     icon: "shield-check-outline",
     status: "Currently Enabled",

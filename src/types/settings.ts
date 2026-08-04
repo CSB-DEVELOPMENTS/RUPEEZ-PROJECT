@@ -1,19 +1,16 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import type { Href } from "expo-router";
 
 export type SettingsFooterAction = {
   href?: Href;
-  icon?: string;
+  icon?: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   label: string;
   tone?: "danger" | "outline" | "primary" | "secondary";
 };
 
 export type SettingsPageIntro = { description: string; title: string };
 
-export type SettingsOptionField = {
-  label: string;
-  options: string[];
-  value: string;
-};
+export type SettingsOptionField = { label: string; options: string[]; value: string };
 
 export type SettingsToggleItem = { description?: string; enabled: boolean; label: string };
 
@@ -44,7 +41,7 @@ export type SettingsFeatureCardData = {
   badge?: string;
   cta: SettingsFooterAction;
   description: string;
-  icon: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   meta?: string;
   title: string;
   tone?: "brand" | "primary";
@@ -58,14 +55,13 @@ export type SettingsDangerZoneData = {
 
 export type SettingsOverviewPageData = {
   dangerZone: SettingsDangerZoneData;
-
   intro: SettingsPageIntro;
   profile: SettingsProfileSectionData;
   shortcuts: SettingsFeatureCardData[];
 };
 
 export type SettingsRegionalSectionData = {
-  icon: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   options: SettingsOptionField[];
   title: string;
 };
@@ -73,7 +69,7 @@ export type SettingsRegionalSectionData = {
 export type SettingsNotificationSectionData = {
   alertCategories: SettingsToggleItem[];
   channels: SettingsToggleItem[];
-  icon: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   title: string;
 };
 
@@ -89,14 +85,14 @@ export type SettingsPasswordField = { label: string; value: string };
 export type SettingsPasswordSectionData = {
   action: SettingsFooterAction;
   fields: SettingsPasswordField[];
-  icon: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   title: string;
 };
 
 export type SettingsSecurityPanelData = {
   action: SettingsFooterAction;
   description: string;
-  icon: string;
+  icon: React.ComponentProps<typeof MaterialCommunityIcons>["name"];
   status: string;
   title: string;
 };
