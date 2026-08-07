@@ -41,7 +41,10 @@ export function DashboardCalendarCard({
               day.totalLabel ?? (day.activityCount === 0 ? "No activities recorded" : undefined);
 
             return (
-              <View key={day.date} className="items-center" style={{ width: "14.2857%" }}>
+              <View
+                key={day.date}
+                className={`items-center ${isSelected ? "z-10" : ""}`}
+                style={{ width: "14.2857%" }}>
                 <Pressable
                   className={`h-9 w-9 items-center justify-center rounded-2xl border sm:h-10 sm:w-10 ${dayStyles.bg} ${
                     isSelected ? "border-app-primary" : ""

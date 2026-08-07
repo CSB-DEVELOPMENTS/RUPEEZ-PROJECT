@@ -130,7 +130,7 @@ export function ContextFormPopup({
                 control={control}
                 name="currencyLabel"
                 render={({ field: { onChange: onLabelChange } }) => (
-                  <View className="gap-3">
+                  <View className={`relative gap-3 ${isCurrencyOpen ? "z-50" : "z-0"}`}>
                     <DropDownMenu
                       isOpen={isCurrencyOpen}
                       label="Currency"
@@ -151,6 +151,7 @@ export function ContextFormPopup({
                         CURRENCY_OPTIONS.find((option) => option.code === value)?.label
                         ?? data.currencyLabel
                       }
+                      enableSearch
                     />
                     {errors.currencyCode || errors.currencyLabel ?
                       <Text className="font-display text-sm text-app-danger">
@@ -163,7 +164,7 @@ export function ContextFormPopup({
             )}
           />
 
-          <View className="gap-4">
+          <View className="relative z-0 gap-4">
             <FormLabel>Primary Color</FormLabel>
             <View className="flex-row flex-wrap gap-4">
               <Controller
