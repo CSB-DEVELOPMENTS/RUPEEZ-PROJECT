@@ -1,35 +1,21 @@
-import { Redirect, Slot, usePathname, useRouter } from "expo-router";
+import { Redirect, Slot, usePathname } from "expo-router";
 import { useState } from "react";
 import { View } from "react-native";
 
 import { AuthGateFallback } from "@/components/auth/AuthGateFallback";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
-import Header, { FloatingHeaderAction, type HeaderAction } from "@/components/header/Header";
+import Header, { FloatingHeaderAction } from "@/components/header/Header";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { getProtectedRouteBreadcrumbs } from "@/constants/navigation";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useHeaderAction } from "@/utils/header-actions";
 
 export default function ProtectedLayout() {
   const { loading, profileLoading, profiles, user } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  let headerAction: HeaderAction | undefined;
-
-  switch (pathname) {
-    case "/all-contexts":
-      headerAction = {
-        icon: "plus",
-        label: "New Context",
-        onPress: () => router.push({ pathname: "/all-contexts", params: { action: "new" } }),
-      };
-      break;
-    case "/wealth":
-    case "/asset-portfolio":
-      headerAction = { icon: "plus", label: "Add Asset", onPress: () => router.push("/add-asset") };
-      break;
-  }
+  const headerAction = useHeaderAction();
 
   if (loading || (user && profileLoading)) {
     return <AuthGateFallback />;

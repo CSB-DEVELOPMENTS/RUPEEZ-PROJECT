@@ -59,7 +59,6 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
   const [open, setOpen] = useState(false);
   const [selectedContext, setSelectedContext] = useState(profile?.profile_id ?? "all");
   const contextOptions: ContextOption[] = [
-    { id: "all", label: "All Profiles", icon: "asterisk" },
     ...profiles.map((item) => ({
       id: item.profile_id,
       label: profileLabel(item),
@@ -112,14 +111,10 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
                 accessibilityRole="menuitem"
                 onPress={() => {
                   setSelectedContext(item.id);
-                  if (item.id !== "all") setActiveProfile(item.id);
+                  setActiveProfile(item.id);
                   setOpen(false);
 
-                  if (item.id === "all") {
-                    router.push("/all-contexts");
-                  } else if (selectedContext !== item.id) {
-                    router.push("/dashboard");
-                  }
+                  router.push("/dashboard");
                 }}
                 className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
                 <MaterialCommunityIcons
@@ -143,6 +138,17 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
           })}
 
           <View className="my-1 h-px bg-app-border" />
+
+          <Pressable
+            accessibilityRole="menuitem"
+            onPress={() => {
+              setOpen(false);
+              router.push("/all-contexts");
+            }}
+            className="min-h-10 flex-row items-center gap-3 rounded-md px-3 active:bg-app-panel">
+            <MaterialCommunityIcons name="asterisk" size={17} color={colors.textMuted} />
+            <Text className="flex-1 font-display text-sm text-app-text">All Contexts</Text>
+          </Pressable>
 
           <Pressable
             accessibilityRole="menuitem"
