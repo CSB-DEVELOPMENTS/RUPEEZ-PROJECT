@@ -2,21 +2,15 @@ import { ScrollView, View } from "react-native";
 
 import {
   DashboardCalendarCard,
-  DashboardCategoriesCard,
   DashboardOverviewCard,
   DashboardPortfolioCard,
 } from "@/components/dashboard";
 import { DashboardHero } from "@/components/dashboard/DashboardHero";
-import {
-  DashboardInsightsCard,
-  DashboardSubscriptionsCard,
-  DashboardTransactionsCard,
-} from "@/components/dashboard/DashboardSections";
+import { DashboardSubscriptionsCard, DashboardTransactionsCard } from "@/components/dashboard/DashboardSections";
 import { DashboardStatCard } from "@/components/dashboard/DashboardStatCard";
 import {
   DASHBOARD_CALENDAR_DAYS,
   DASHBOARD_CALENDAR_MONTH_LABEL,
-  DASHBOARD_CATEGORIES,
   DASHBOARD_DATE_RANGE,
   DASHBOARD_GREETING,
   DASHBOARD_OVERVIEW,
@@ -73,18 +67,10 @@ export default function Dashboard() {
                   items={DASHBOARD_CALENDAR_DAYS}
                   monthLabel={DASHBOARD_CALENDAR_MONTH_LABEL}
                 />
-                <DashboardCategoriesCard total={23459} items={DASHBOARD_CATEGORIES} />
               </View>
             </View>
 
-            <View className="gap-4 lg:flex-row">
-              <View className="lg:flex-1">
-                <DashboardTransactionsCard items={DASHBOARD_TRANSACTIONS} />
-              </View>
-              <View className="lg:w-[30%]">
-                <DashboardInsightsCard />
-              </View>
-            </View>
+            <DashboardTransactionsCard items={DASHBOARD_TRANSACTIONS} />
           </View>
         </View>
       </View>

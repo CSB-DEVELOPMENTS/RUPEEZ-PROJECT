@@ -1,5 +1,8 @@
 export { AnalyticsFlowHero } from "./AnalyticsFlowHero";
+export { AnalyticsInsightsCard } from "./AnalyticsInsightsCard";
 export { AnalyticsPlaceholderCard } from "./AnalyticsPlaceholderCard";
+export { AnalyticsShortcutCard } from "./AnalyticsShortcutCard";
+export { AnalyticsTopCategoriesCard } from "./AnalyticsTopCategoriesCard";
 export { CategoryBreakdownCard } from "./CategoryBreakdownCard";
 export { CategoryDistributionCard } from "./CategoryDistributionCard";
 export { CategoryInsightCard } from "./CategoryInsightCard";

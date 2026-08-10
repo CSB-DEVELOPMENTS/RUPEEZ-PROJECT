@@ -22,15 +22,6 @@ export const DASHBOARD_DATE_RANGE = "May 12 - May 18, 2025";
 
 export const DASHBOARD_STATS: DashboardStat[] = [
   {
-    caption: "Safe to spend",
-    detail: "After bills this month",
-    href: "/safe-to-spend",
-    title: "LKR 48,750.00",
-    tone: "positive",
-    trend: "72%",
-    variant: "progress",
-  },
-  {
     caption: "Total balance",
     detail: "Across 5 accounts",
     title: "LKR 268,750.00",

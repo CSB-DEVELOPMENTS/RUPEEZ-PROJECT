@@ -7,6 +7,8 @@ export type CategoryDistributionItem = {
   varianceLabel: string;
 };
 
+export type AnalyticsHomeCategory = { label: string; value: string };
+
 export type CategoryInsightCardData = {
   caption: string;
   detail: string;
