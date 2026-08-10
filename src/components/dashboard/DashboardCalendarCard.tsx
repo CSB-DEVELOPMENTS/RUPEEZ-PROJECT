@@ -18,7 +18,7 @@ export function DashboardCalendarCard({
 
   return (
     <>
-      <DashboardCard className="relative overflow-visible z-10">
+      <DashboardCard className="relative z-10 h-full overflow-visible">
         <SectionHeader
           title="Calendar Heatmap"
           action={monthLabel}

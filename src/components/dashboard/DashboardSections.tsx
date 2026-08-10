@@ -104,7 +104,7 @@ export function chartPaletteColor(theme: "light" | "dark", index: number) {
 
 export function DashboardSubscriptionsCard({ data }: { data: DashboardSubscriptionsOverviewData }) {
   return (
-    <DashboardCard className="min-h-[280px]">
+    <DashboardCard className="h-full min-h-[280px]">
       <SectionHeader
         title="Subscriptions"
         action={data.detailHref ? "See all" : undefined}
@@ -141,7 +141,7 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
         {items.map((item) => (
           <View
             key={item.id}
-            className="gap-2 flex-row sm:items-center sm:justify-between sm:gap-4">
+            className="gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <View className="min-w-0 flex-1 flex-row items-center gap-4">
               <View className="flex-1">
                 <Text className="font-display text-lg md:text-xl font-semibold text-app-text">
@@ -153,7 +153,7 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
               </View>
             </View>
             <Text
-              className={`shrink text-right font-display text-lg md:text-xl font-semibold sm:text-2xl ${transactionToneClass(item.tone)}`}>
+              className={`self-start text-right font-display text-lg font-semibold sm:self-auto sm:text-2xl ${transactionToneClass(item.tone)}`}>
               {formatTransactionAmount(item.amount, item.tone)}
             </Text>
           </View>

@@ -14,7 +14,7 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
   const [chartWidth, setChartWidth] = useState(0);
 
   return (
-    <DashboardCard>
+    <DashboardCard className="h-full">
       <SectionHeader
         action={data.detailHref ? "See more" : undefined}
         actionHref={data.detailHref}
@@ -62,7 +62,7 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
             showVerticalGridLines={false}
             theme={theme}
             tooltip
-            width={Math.max(chartWidth - 24, 220)}
+            width={Math.max(chartWidth - 24, 1)}
             xKey="label"
             yAxisLabelWidth={28}
             yDomain={[0, 70]}
