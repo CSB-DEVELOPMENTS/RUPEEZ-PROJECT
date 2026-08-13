@@ -3,14 +3,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { z } from "zod";
 
 import { InputField } from "@/components/common/InputField";
 import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useToast } from "@/hooks/toast/useToast";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 import { getUser, updateUser, type UserRecord } from "@/services/userService";
+import { getErrorMessage } from "@/utils/error-message";
 import type { SettingsProfileSectionData } from "@/types/settings";
 
 import { SettingsActionButton } from "./SettingsActionButton";
@@ -34,6 +36,7 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function SettingsProfileSection({ data }: { data: SettingsProfileSectionData }) {
   const { user } = useAuth();
+  const { error: showError, success } = useToast();
   const { theme } = useAppTheme();
   const colors = Colors[theme];
   const [userData, setUserData] = useState<UserRecord | null>(null);
@@ -65,7 +68,7 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
       const { data: nextUser, error } = await getUser(user.id);
       if (!active) return;
       if (error) {
-        Alert.alert("Unable to load profile", error.message);
+        showError("Unable to load profile", getErrorMessage(error, "Please try again shortly."));
       } else if (nextUser) {
         setUserData(nextUser);
         reset({ firstName: nextUser.first_name ?? "", lastName: nextUser.last_name ?? "" });
@@ -76,7 +79,7 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
     return () => {
       active = false;
     };
-  }, [reset, user]);
+  }, [reset, showError, user]);
 
   async function onSubmit(values: ProfileFormValues) {
     if (!user) return;
@@ -85,14 +88,14 @@ export function SettingsProfileSection({ data }: { data: SettingsProfileSectionD
       last_name: values.lastName.trim() || null,
     });
     if (error) {
-      Alert.alert("Unable to update profile", error.message);
+      showError("Unable to update profile", getErrorMessage(error, "Please try again shortly."));
       return;
     }
     if (updatedUser) {
       setUserData(updatedUser);
       reset({ firstName: updatedUser.first_name ?? "", lastName: updatedUser.last_name ?? "" });
     }
-    Alert.alert("Profile updated", "Your personal information has been saved.");
+    success("Profile updated", "Your personal information has been saved.");
   }
 
   return (

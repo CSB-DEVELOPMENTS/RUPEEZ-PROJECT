@@ -6,7 +6,7 @@ import SectionHeader from "./SectionHeader";
 
 export function DashboardPortfolioCard({ items }: { items: DashboardPortfolioAsset[] }) {
   return (
-    <DashboardCard className="h-full min-h-[280px]">
+    <DashboardCard className="min-h-[280px]">
       <SectionHeader title="Crypto Portfolio" action="See all" actionHref="/crypto-assets" />
 
       {items.length === 0 && (

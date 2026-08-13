@@ -23,9 +23,7 @@ export function CashFlowListCard({
         <Text className={`font-display text-2xl font-semibold ${transactionToneClass(tone)}`}>
           {listDirectionLabel(tone)}
         </Text>
-        <Text className="font-display text-2xl font-semibold text-app-text md:text-3xl">
-          {title}
-        </Text>
+        <Text className="text-2xl font-semibold text-app-text md:text-3xl">{title}</Text>
       </View>
 
       <View className="flex flex-col gap-3">

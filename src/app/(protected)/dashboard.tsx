@@ -19,14 +19,17 @@ import {
   DASHBOARD_SUBSCRIPTIONS_CARD,
 } from "@/constants/dashboard";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useToast } from "@/hooks/toast/useToast";
 import {
   getTransactionsByDateRange,
   type DashboardTransactionRecord,
 } from "@/services/transactionService";
 import { DASHBOARD_DAYS_TO_SHOW, dashboardData } from "@/utils/dashboard";
+import { getErrorMessage } from "@/utils/error-message";
 
 export default function Dashboard() {
   const { profile } = useAuth();
+  const { error: showError } = useToast();
   const [transactions, setTransactions] = useState<DashboardTransactionRecord[]>([]);
   const endDate = useMemo(() => new Date(), []);
   const dashboard = useMemo(
@@ -47,7 +50,12 @@ export default function Dashboard() {
     void getTransactionsByDateRange(profile.profile_id, startDate, rangeEnd).then(
       ({ data, error }) => {
         if (!isMounted) return;
-        if (error) console.error("Failed to fetch dashboard transactions", error);
+        if (error) {
+          showError(
+            "Unable to load dashboard transactions",
+            getErrorMessage(error, "Please try again shortly."),
+          );
+        }
         setTransactions(data);
       },
     );
@@ -55,7 +63,7 @@ export default function Dashboard() {
     return () => {
       isMounted = false;
     };
-  }, [endDate, profile?.profile_id]);
+  }, [endDate, profile?.profile_id, showError]);
 
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>

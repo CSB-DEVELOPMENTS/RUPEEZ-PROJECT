@@ -14,7 +14,7 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
   const [chartWidth, setChartWidth] = useState(0);
 
   return (
-    <DashboardCard className="h-full">
+    <DashboardCard>
       <SectionHeader
         action={data.detailHref ? "See more" : undefined}
         actionHref={data.detailHref}
