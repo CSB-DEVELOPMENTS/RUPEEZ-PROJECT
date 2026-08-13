@@ -6,6 +6,36 @@ export type ContextTransaction = Pick<
   "amount" | "profile_id" | "transaction_date" | "transaction_type"
 >;
 
+export type DashboardTransactionRecord = Pick<
+  Tables<"transactions">,
+  | "amount"
+  | "category"
+  | "created_at"
+  | "description"
+  | "profile_id"
+  | "transaction_date"
+  | "transaction_id"
+  | "transaction_type"
+>;
+
+export async function getTransactionsByDateRange(
+  profileId: string,
+  startDate: Date,
+  endDate: Date,
+) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select(
+      "amount, category, created_at, description, profile_id, transaction_date, transaction_id, transaction_type",
+    )
+    .eq("profile_id", profileId)
+    .gte("transaction_date", startDate.toISOString())
+    .lte("transaction_date", endDate.toISOString())
+    .order("transaction_date", { ascending: false });
+
+  return { data: (data ?? []) as DashboardTransactionRecord[], error };
+}
+
 export async function getCurrentMonthTransactions(
   profileIds: string[],
   monthStart: Date,

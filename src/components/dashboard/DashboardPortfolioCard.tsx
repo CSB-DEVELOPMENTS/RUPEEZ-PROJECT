@@ -9,6 +9,10 @@ export function DashboardPortfolioCard({ items }: { items: DashboardPortfolioAss
     <DashboardCard className="h-full min-h-[280px]">
       <SectionHeader title="Crypto Portfolio" action="See all" actionHref="/crypto-assets" />
 
+      {items.length === 0 && (
+        <Text className="mt-4 font-display text-base text-app-muted">No crypto assets found.</Text>
+      )}
+
       <View className="gap-5">
         {items.map((asset) => (
           <View

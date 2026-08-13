@@ -137,6 +137,12 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
         actionHref="/recent-transactions"
       />
 
+      {items.length === 0 && (
+        <Text className="mt-4 font-display text-base text-app-muted">
+          No recent transactions found.
+        </Text>
+      )}
+
       <View className="gap-5">
         {items.map((item) => (
           <View

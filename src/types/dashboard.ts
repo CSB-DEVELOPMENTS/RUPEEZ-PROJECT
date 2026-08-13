@@ -14,7 +14,7 @@ export type DashboardStat = {
   variant?: "progress" | "trend";
 };
 
-export type DashboardTransactionTone = "expense" | "income" | "transfer";
+export type DashboardTransactionTone = "expense" | "income";
 
 export type CashFlowEntryIcon =
   | "briefcase"

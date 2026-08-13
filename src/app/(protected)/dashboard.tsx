@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import {
@@ -12,19 +13,50 @@ import {
 } from "@/components/dashboard/DashboardSections";
 import { DashboardStatCard } from "@/components/dashboard/DashboardStatCard";
 import {
-  DASHBOARD_CALENDAR_DAYS,
-  DASHBOARD_CALENDAR_MONTH_LABEL,
-  DASHBOARD_DATE_RANGE,
   DASHBOARD_GREETING,
-  DASHBOARD_OVERVIEW,
   DASHBOARD_OVERVIEW_COPY,
   DASHBOARD_PORTFOLIO,
-  DASHBOARD_STATS,
   DASHBOARD_SUBSCRIPTIONS_CARD,
-  DASHBOARD_TRANSACTIONS,
 } from "@/constants/dashboard";
+import { useAuth } from "@/hooks/auth/useAuth";
+import {
+  getTransactionsByDateRange,
+  type DashboardTransactionRecord,
+} from "@/services/transactionService";
+import { DASHBOARD_DAYS_TO_SHOW, dashboardData } from "@/utils/dashboard";
 
 export default function Dashboard() {
+  const { profile } = useAuth();
+  const [transactions, setTransactions] = useState<DashboardTransactionRecord[]>([]);
+  const endDate = useMemo(() => new Date(), []);
+  const dashboard = useMemo(
+    () => dashboardData(profile ? transactions : [], endDate),
+    [endDate, profile, transactions],
+  );
+
+  useEffect(() => {
+    if (!profile?.profile_id) return;
+
+    const startDate = new Date(endDate);
+    startDate.setDate(startDate.getDate() - (DASHBOARD_DAYS_TO_SHOW - 1));
+    startDate.setHours(0, 0, 0, 0);
+    const rangeEnd = new Date(endDate);
+    rangeEnd.setHours(23, 59, 59, 999);
+    let isMounted = true;
+
+    void getTransactionsByDateRange(profile.profile_id, startDate, rangeEnd).then(
+      ({ data, error }) => {
+        if (!isMounted) return;
+        if (error) console.error("Failed to fetch dashboard transactions", error);
+        setTransactions(data);
+      },
+    );
+
+    return () => {
+      isMounted = false;
+    };
+  }, [endDate, profile?.profile_id]);
+
   return (
     <ScrollView className="flex-1 bg-app-bg" contentContainerStyle={{ flexGrow: 1 }}>
       <View className="mx-auto w-full max-w-[1600px] px-4 md:px-8 lg:px-10">
@@ -34,13 +66,13 @@ export default function Dashboard() {
 
           <View className="gap-5">
             <DashboardHero
-              dateRange={DASHBOARD_DATE_RANGE}
+              dateRange={dashboard.dateRange}
               greeting={DASHBOARD_GREETING}
               overview={DASHBOARD_OVERVIEW_COPY}
             />
 
             <View className="mx-[-8px] flex-row flex-wrap">
-              {DASHBOARD_STATS.map((item) => (
+              {dashboard.stats.map((item) => (
                 <View key={item.caption} className="flex-auto p-2">
                   <DashboardStatCard {...item} />
                 </View>
@@ -49,13 +81,13 @@ export default function Dashboard() {
 
             <View className="gap-4 lg:flex-row lg:items-stretch">
               <View className="min-w-0 lg:flex-1">
-                <DashboardOverviewCard data={DASHBOARD_OVERVIEW} />
+                <DashboardOverviewCard data={dashboard.overview} />
               </View>
 
               <View className="min-w-0 lg:flex-1">
                 <DashboardCalendarCard
-                  items={DASHBOARD_CALENDAR_DAYS}
-                  monthLabel={DASHBOARD_CALENDAR_MONTH_LABEL}
+                  items={dashboard.calendarDays}
+                  monthLabel={dashboard.monthLabel}
                 />
               </View>
             </View>
@@ -69,7 +101,7 @@ export default function Dashboard() {
               </View>
             </View>
 
-            <DashboardTransactionsCard items={DASHBOARD_TRANSACTIONS} />
+            <DashboardTransactionsCard items={dashboard.recentTransactions} />
           </View>
         </View>
       </View>
