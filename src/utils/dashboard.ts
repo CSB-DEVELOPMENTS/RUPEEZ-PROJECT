@@ -1,8 +1,9 @@
-import { DASHBOARD_STATS } from "@/constants/dashboard";
 import type { DashboardTransactionRecord } from "@/services/transactionService";
+import { WalletBalance } from "@/services/walletService";
 import type {
   DashboardCalendarDay,
   DashboardOverviewData,
+  DashboardStat,
   DashboardStatTone,
   DashboardTransaction,
 } from "@/types/dashboard";
@@ -98,7 +99,11 @@ function createCalendarDays(
   return cells;
 }
 
-export function dashboardData(transactions: DashboardTransactionRecord[], endDate: Date) {
+export function dashboardData(
+  transactions: DashboardTransactionRecord[],
+  walletBalances: WalletBalance[],
+  endDate: Date,
+) {
   const startDate = new Date(endDate);
   startDate.setDate(startDate.getDate() - (DASHBOARD_DAYS_TO_SHOW - 1));
   startDate.setHours(0, 0, 0, 0);
@@ -106,15 +111,17 @@ export function dashboardData(transactions: DashboardTransactionRecord[], endDat
     const date = transactionDate(transaction);
     if (!date) return [];
 
-    return [{
-      amount: Math.abs(transaction.amount),
-      category: transaction.category ?? "Uncategorized",
-      date: dateKey(date),
-      id: transaction.transaction_id,
-      note: date.toLocaleDateString("en-US", { day: "numeric", month: "short" }),
-      title: transaction.description ?? transaction.category ?? "Transaction",
-      tone: transactionTone(transaction),
-    }];
+    return [
+      {
+        amount: Math.abs(transaction.amount),
+        category: transaction.category ?? "Uncategorized",
+        date: dateKey(date),
+        id: transaction.transaction_id,
+        note: date.toLocaleDateString("en-US", { day: "numeric", month: "short" }),
+        title: transaction.description ?? transaction.category ?? "Transaction",
+        tone: transactionTone(transaction),
+      },
+    ];
   });
   const transactionsByDate = dashboardTransactions.reduce<Record<string, DashboardTransaction[]>>(
     (result, transaction) => {
@@ -153,17 +160,40 @@ export function dashboardData(transactions: DashboardTransactionRecord[], endDat
     periodLabel: "Last 30 days",
     points,
   };
-  const stats = DASHBOARD_STATS.map((stat) => {
-    if (stat.caption === "Monthly income") {
-      return { ...stat, detail: "Last 30 days", title: formatCurrency(income), trend: undefined };
-    }
 
-    if (stat.caption === "Monthly expenses") {
-      return { ...stat, detail: "Last 30 days", title: formatCurrency(expenses), trend: undefined };
-    }
+  const totalBalance = walletBalances.reduce(
+    (total, wallet) => total + (wallet.current_balance || 0),
+    0,
+  );
 
-    return stat;
-  });
+  const totalIncome = dashboardTransactions
+    .filter((transaction) => transaction.tone === "income")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const totalExpenses = dashboardTransactions
+    .filter((transaction) => transaction.tone === "expense")
+    .reduce((total, transaction) => total + transaction.amount, 0);
+
+  const stats: DashboardStat[] = [
+    {
+      caption: "Total balance",
+      detail: `Across ${walletBalances.length} account${walletBalances.length === 1 ? "" : "s"}`,
+      title: formatCurrency(totalBalance),
+      tone: "neutral",
+    },
+    {
+      caption: "Total income",
+      detail: "Last 30 days",
+      title: formatCurrency(totalIncome),
+      tone: "positive",
+    },
+    {
+      caption: "Total expenses",
+      detail: "Last 30 days",
+      title: formatCurrency(totalExpenses),
+      tone: "negative",
+    },
+  ];
 
   return {
     calendarDays: createCalendarDays(endDate, transactionsByDate),

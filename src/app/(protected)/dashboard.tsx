@@ -12,29 +12,27 @@ import {
   DashboardTransactionsCard,
 } from "@/components/dashboard/DashboardSections";
 import { DashboardStatCard } from "@/components/dashboard/DashboardStatCard";
-import {
-  DASHBOARD_GREETING,
-  DASHBOARD_OVERVIEW_COPY,
-  DASHBOARD_PORTFOLIO,
-  DASHBOARD_SUBSCRIPTIONS_CARD,
-} from "@/constants/dashboard";
+import { DASHBOARD_PORTFOLIO, DASHBOARD_SUBSCRIPTIONS_CARD } from "@/constants/dashboard";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useToast } from "@/hooks/toast/useToast";
 import {
   getTransactionsByDateRange,
   type DashboardTransactionRecord,
 } from "@/services/transactionService";
+import { getWalletBalances, WalletBalance } from "@/services/walletService";
 import { DASHBOARD_DAYS_TO_SHOW, dashboardData } from "@/utils/dashboard";
 import { getErrorMessage } from "@/utils/error-message";
 
 export default function Dashboard() {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
+  const fullName = (user?.user_metadata?.full_name as string) || "User";
   const { error: showError } = useToast();
   const [transactions, setTransactions] = useState<DashboardTransactionRecord[]>([]);
+  const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
   const endDate = useMemo(() => new Date(), []);
   const dashboard = useMemo(
-    () => dashboardData(profile ? transactions : [], endDate),
-    [endDate, profile, transactions],
+    () => dashboardData(profile ? transactions : [], walletBalances, endDate),
+    [endDate, profile, transactions, walletBalances],
   );
 
   useEffect(() => {
@@ -60,6 +58,17 @@ export default function Dashboard() {
       },
     );
 
+    void getWalletBalances([profile.profile_id]).then(({ data, error }) => {
+      if (!isMounted) return;
+      if (error) {
+        showError(
+          "Unable to load wallet balances",
+          getErrorMessage(error, "Please try again shortly."),
+        );
+      }
+      setWalletBalances(data);
+    });
+
     return () => {
       isMounted = false;
     };
@@ -73,11 +82,7 @@ export default function Dashboard() {
           <View className="absolute -right-12 top-10 h-48 w-48 rounded-full bg-app-brand/10" />
 
           <View className="gap-5">
-            <DashboardHero
-              dateRange={dashboard.dateRange}
-              greeting={DASHBOARD_GREETING}
-              overview={DASHBOARD_OVERVIEW_COPY}
-            />
+            <DashboardHero dateRange={dashboard.dateRange} userName={fullName || "User"} />
 
             <View className="mx-[-8px] flex-row flex-wrap">
               {dashboard.stats.map((item) => (

@@ -1,25 +1,23 @@
 import { supabase } from "@/lib/supabase";
+import { Tables } from "../../database.types";
 
-export async function getWalletBalances(profileIds: string[]) {
+export type WalletBalance = Pick<Tables<"wallets">, "profile_id" | "wallet_id" | "current_balance">;
+
+export async function getWalletBalances(
+  profileIds: string[],
+): Promise<{ data: WalletBalance[]; error: unknown }> {
   if (profileIds.length === 0) {
-    return { data: {}, error: null };
+    return { data: [], error: null };
   }
 
   const { data: wallets, error } = await supabase
     .from("wallets")
-    .select("profile_id, current_balance")
+    .select("profile_id, wallet_id, current_balance")
     .in("profile_id", profileIds);
 
   if (error) {
-    return { data: {}, error };
+    return { data: [], error };
   }
 
-  const balances = (wallets ?? []).reduce<Record<string, number>>((result, wallet) => {
-    if (wallet.profile_id) {
-      result[wallet.profile_id] = (result[wallet.profile_id] ?? 0) + (wallet.current_balance ?? 0);
-    }
-    return result;
-  }, {});
-
-  return { data: balances, error: null };
+  return { data: wallets, error: null };
 }

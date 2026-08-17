@@ -36,12 +36,9 @@ export async function getTransactionsByDateRange(
   return { data: (data ?? []) as DashboardTransactionRecord[], error };
 }
 
-export async function getCurrentMonthTransactions(
-  profileIds: string[],
-  monthStart: Date,
-) {
+export async function getCurrentMonthTransactions(profileIds: string[], monthStart: Date) {
   if (profileIds.length === 0) {
-    return { data: [] as ContextTransaction[], error: null };
+    return { data: [], error: null };
   }
 
   const { data, error } = await supabase

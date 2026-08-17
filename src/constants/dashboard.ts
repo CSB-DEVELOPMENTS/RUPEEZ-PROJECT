@@ -16,17 +16,12 @@ import type {
   TransactionsPageData,
 } from "@/types/dashboard";
 
-export const DASHBOARD_GREETING = "Good morning, Tharindu";
-export const DASHBOARD_OVERVIEW_COPY = "Here's your financial overview for the week.";
-export const DASHBOARD_DATE_RANGE = "May 12 - May 18, 2025";
-
 export const DASHBOARD_STATS: DashboardStat[] = [
   {
     caption: "Total balance",
     detail: "Across 5 accounts",
     title: "LKR 268,750.00",
     tone: "neutral",
-    variant: "trend",
   },
   {
     caption: "Monthly income",
@@ -34,7 +29,6 @@ export const DASHBOARD_STATS: DashboardStat[] = [
     title: "LKR 180,000.00",
     tone: "positive",
     trend: "+12%",
-    variant: "trend",
   },
   {
     caption: "Monthly expenses",
@@ -42,7 +36,6 @@ export const DASHBOARD_STATS: DashboardStat[] = [
     title: "LKR 96,250.00",
     tone: "negative",
     trend: "-8%",
-    variant: "trend",
   },
 ];
 

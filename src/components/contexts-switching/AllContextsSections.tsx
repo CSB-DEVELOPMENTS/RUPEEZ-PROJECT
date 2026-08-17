@@ -19,8 +19,8 @@ import type {
   ContextSummary,
   ContextTone,
 } from "@/types/contexts-switching";
-import { profileIcon, profileLabel } from "@/utils/profile";
 import { getErrorMessage } from "@/utils/error-message";
+import { profileIcon, profileLabel } from "@/utils/profile";
 import { ContextDeletePopup } from "./ContextDeletePopup";
 import { ContextFormPopup } from "./ContextFormPopup";
 import { ContextInsightBanner } from "./ContextInsightBanner";
@@ -102,7 +102,7 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
       monthStart.setHours(0, 0, 0, 0);
 
       const [
-        { data: balances, error: walletsError },
+        { data: walletBalances, error: walletsError },
         { data: transactions, error: transactionsError },
       ] = await Promise.all([
         getWalletBalances(profileIds),
@@ -110,10 +110,16 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
       ]);
 
       if (walletsError) {
-        showError("Unable to load context wallets", getErrorMessage(walletsError, "Please try again shortly."));
+        showError(
+          "Unable to load context wallets",
+          getErrorMessage(walletsError, "Please try again shortly."),
+        );
       }
       if (transactionsError) {
-        showError("Unable to load context transactions", getErrorMessage(transactionsError, "Please try again shortly."));
+        showError(
+          "Unable to load context transactions",
+          getErrorMessage(transactionsError, "Please try again shortly."),
+        );
       }
       if (cancelled) return;
 
@@ -135,6 +141,18 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
         }),
         { expenses: 0, income: 0 },
       );
+
+      let balances = {};
+
+      if (walletBalances) {
+        balances = (walletBalances ?? []).reduce<Record<string, number>>((result, wallet) => {
+          if (wallet.profile_id) {
+            result[wallet.profile_id] =
+              (result[wallet.profile_id] ?? 0) + (wallet.current_balance ?? 0);
+          }
+          return result;
+        }, {});
+      }
 
       setWalletBalances(balances);
       setMonthlyTotals(totals);

@@ -1,21 +1,17 @@
 import { Text, View } from "react-native";
 
-type DashboardHeroProps = {
-  dateRange: string;
-  greeting: string;
-  overview: string;
-};
+type DashboardHeroProps = { dateRange: string; userName: string };
 
-export function DashboardHero({ dateRange, greeting, overview }: DashboardHeroProps) {
+export function DashboardHero({ dateRange, userName }: DashboardHeroProps) {
   return (
     <View className="gap-5">
       <View className="gap-4 lg:flex-row lg:items-start lg:justify-between">
         <View className="max-w-2xl gap-2">
           <Text className="font-display text-4xl font-semibold tracking-tight text-app-text md:text-5xl">
-            {greeting}
+            Good morning, {userName}!
           </Text>
           <Text className="font-display text-lg leading-7 text-app-muted md:text-xl">
-            {overview}
+            {`Here's your financial overview for the last 30 days.`}
           </Text>
         </View>
 
