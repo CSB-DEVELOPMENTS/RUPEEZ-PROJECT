@@ -137,11 +137,17 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
         actionHref="/recent-transactions"
       />
 
+      {items.length === 0 && (
+        <Text className="mt-4 font-display text-base text-app-muted">
+          No recent transactions found.
+        </Text>
+      )}
+
       <View className="gap-5">
         {items.map((item) => (
           <View
             key={item.id}
-            className="gap-2 flex-row sm:items-center sm:justify-between sm:gap-4">
+            className="gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <View className="min-w-0 flex-1 flex-row items-center gap-4">
               <View className="flex-1">
                 <Text className="font-display text-lg md:text-xl font-semibold text-app-text">
@@ -153,7 +159,7 @@ export function DashboardTransactionsCard({ items }: { items: DashboardTransacti
               </View>
             </View>
             <Text
-              className={`shrink text-right font-display text-lg md:text-xl font-semibold sm:text-2xl ${transactionToneClass(item.tone)}`}>
+              className={`self-start text-right font-display text-lg font-semibold sm:self-auto sm:text-2xl ${transactionToneClass(item.tone)}`}>
               {formatTransactionAmount(item.amount, item.tone)}
             </Text>
           </View>

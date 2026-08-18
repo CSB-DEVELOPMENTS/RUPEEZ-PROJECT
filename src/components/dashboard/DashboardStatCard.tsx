@@ -36,11 +36,11 @@ export function DashboardStatCard({ caption, detail, href, title, tone, trend }:
         <Text className="font-display text-sm font-semibold uppercase tracking-[1.4px] text-app-muted">
           {caption}
         </Text>
-        {trend ? (
+        {trend ?
           <Text className={`font-display text-sm font-semibold ${trendToneClass(tone)}`}>
             {trend}
           </Text>
-        ) : null}
+        : null}
       </View>
 
       <Text className={`font-display text-2xl font-semibold tracking-tight ${cardToneClass(tone)}`}>
@@ -55,7 +55,7 @@ export function DashboardStatCard({ caption, detail, href, title, tone, trend }:
 
   return (
     <DashboardCard>
-      {href ? (
+      {href ?
         <Pressable
           accessibilityHint="Opens this dashboard detail page"
           accessibilityRole="button"
@@ -63,9 +63,7 @@ export function DashboardStatCard({ caption, detail, href, title, tone, trend }:
           onPress={() => router.push(href)}>
           {content}
         </Pressable>
-      ) : (
-        content
-      )}
+      : content}
     </DashboardCard>
   );
 }

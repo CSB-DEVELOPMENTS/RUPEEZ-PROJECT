@@ -62,7 +62,7 @@ export function DashboardOverviewCard({ data }: { data: DashboardOverviewData })
             showVerticalGridLines={false}
             theme={theme}
             tooltip
-            width={Math.max(chartWidth - 24, 220)}
+            width={Math.max(chartWidth - 24, 1)}
             xKey="label"
             yAxisLabelWidth={28}
             yDomain={[0, 70]}

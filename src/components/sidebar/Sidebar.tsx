@@ -1,11 +1,13 @@
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { type Href, usePathname, useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/theme";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
+import { useToast } from "@/hooks/toast/useToast";
+import { getErrorMessage } from "@/utils/error-message";
 
 type SidebarItem = {
   label: string;
@@ -171,6 +173,7 @@ export default function Sidebar({
   const router = useRouter();
   const { signOut } = useAuth();
   const { theme } = useAppTheme();
+  const { error: showError } = useToast();
   const insets = useSafeAreaInsets();
   const [uncontrolledMobileOpen, setUncontrolledMobileOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -200,7 +203,7 @@ export default function Sidebar({
 
     if (error) {
       setSigningOut(false);
-      Alert.alert("Unable to log out", error.message);
+      showError("Unable to log out", getErrorMessage(error, "Please try again shortly."));
       return;
     }
 

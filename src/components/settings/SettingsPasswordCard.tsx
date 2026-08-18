@@ -1,11 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { Alert, View } from "react-native";
+import { View } from "react-native";
 import { z } from "zod";
 
 import { InputField } from "@/components/common/InputField";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useToast } from "@/hooks/toast/useToast";
 import type { SettingsPasswordSectionData } from "@/types/settings";
+import { getErrorMessage } from "@/utils/error-message";
 
 import { SettingsActionButton } from "./SettingsActionButton";
 import { SettingsSectionCard } from "./SettingsSectionCard";
@@ -34,6 +36,7 @@ type PasswordFormValues = z.infer<typeof passwordFormSchema>;
 
 export function SettingsPasswordCard({ data }: { data: SettingsPasswordSectionData }) {
   const { updatePassword } = useAuth();
+  const { error: showError, success } = useToast();
   const {
     control,
     formState: { errors, isDirty, isSubmitting },
@@ -49,12 +52,12 @@ export function SettingsPasswordCard({ data }: { data: SettingsPasswordSectionDa
     const { error: updateError } = await updatePassword(values.currentPassword, values.newPassword);
 
     if (updateError) {
-      Alert.alert("Unable to update password", updateError.message);
+      showError("Unable to update password", getErrorMessage(updateError, "Please try again shortly."));
       return;
     }
 
     reset();
-    Alert.alert("Password updated", "Your password has been changed successfully.");
+    success("Password updated", "Your password has been changed successfully.");
   }
 
   return (

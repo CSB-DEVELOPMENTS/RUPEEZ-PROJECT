@@ -8,6 +8,7 @@ import {
   PROFILE_TONES,
 } from "@/constants/contexts-switching";
 import { useAuth } from "@/hooks/auth/useAuth";
+import { useToast } from "@/hooks/toast/useToast";
 import { getCurrentMonthTransactions } from "@/services/transactionService";
 import { getWalletBalances } from "@/services/walletService";
 import type {
@@ -18,6 +19,7 @@ import type {
   ContextSummary,
   ContextTone,
 } from "@/types/contexts-switching";
+import { getErrorMessage } from "@/utils/error-message";
 import { profileIcon, profileLabel } from "@/utils/profile";
 import { ContextDeletePopup } from "./ContextDeletePopup";
 import { ContextFormPopup } from "./ContextFormPopup";
@@ -52,6 +54,7 @@ type AllContextsSectionsProps = { initialAction?: "manage" | "new" };
 
 export function AllContextsSections({ initialAction }: AllContextsSectionsProps) {
   const { createProfile, profiles, updateProfile, user } = useAuth();
+  const { error: showError, success } = useToast();
   const requiresProfile = profiles.length === 0;
   const [activePopup, setActivePopup] = useState<ActiveContextPopup | null>(() =>
     requiresProfile || initialAction === "new" ? "create-type"
@@ -99,16 +102,25 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
       monthStart.setHours(0, 0, 0, 0);
 
       const [
-        { data: balances, error: walletsError },
+        { data: walletBalances, error: walletsError },
         { data: transactions, error: transactionsError },
       ] = await Promise.all([
         getWalletBalances(profileIds),
         getCurrentMonthTransactions(profileIds, monthStart),
       ]);
 
-      if (walletsError) console.error("Failed to fetch context wallets", walletsError);
-      if (transactionsError)
-        console.error("Failed to fetch context transactions", transactionsError);
+      if (walletsError) {
+        showError(
+          "Unable to load context wallets",
+          getErrorMessage(walletsError, "Please try again shortly."),
+        );
+      }
+      if (transactionsError) {
+        showError(
+          "Unable to load context transactions",
+          getErrorMessage(transactionsError, "Please try again shortly."),
+        );
+      }
       if (cancelled) return;
 
       const dailyTotals = (transactions ?? []).reduce<
@@ -130,6 +142,18 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
         { expenses: 0, income: 0 },
       );
 
+      let balances = {};
+
+      if (walletBalances) {
+        balances = (walletBalances ?? []).reduce<Record<string, number>>((result, wallet) => {
+          if (wallet.profile_id) {
+            result[wallet.profile_id] =
+              (result[wallet.profile_id] ?? 0) + (wallet.current_balance ?? 0);
+          }
+          return result;
+        }, {});
+      }
+
       setWalletBalances(balances);
       setMonthlyTotals(totals);
       setPerformancePoints(
@@ -146,7 +170,7 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
     return () => {
       cancelled = true;
     };
-  }, [profiles, user]);
+  }, [profiles, showError, user]);
 
   const profileContexts = useMemo(() => {
     const totalBalance = profiles.reduce(
@@ -255,7 +279,9 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
       return;
     }
 
-    setCreatedContextName(profile?.profile_name ?? profileName);
+    const createdProfileName = profile?.profile_name ?? profileName;
+    setCreatedContextName(createdProfileName);
+    success("Context created", `${createdProfileName} is ready to use.`);
     setActivePopup("success");
   }
 
@@ -285,6 +311,7 @@ export function AllContextsSections({ initialAction }: AllContextsSectionsProps)
       return;
     }
 
+    success("Context updated", `${profileName} has been saved.`);
     setActivePopup("manage");
     setSelectedContext(null);
   }

@@ -1,4 +1,6 @@
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/toast/useToast";
+import { getErrorMessage } from "@/utils/error-message";
 import { AuthChangeEvent, AuthError, Session, User } from "@supabase/supabase-js";
 import * as Linking from "expo-linking";
 import { createContext, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
@@ -45,6 +47,7 @@ const getRedirectUrl = (path: string = "") => {
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const { error: showError } = useToast();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -68,7 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .order("created_at", { ascending: true });
 
     if (error) {
-      console.error("Failed to fetch profiles", error);
+      showError("Unable to load profiles", getErrorMessage(error, "Please try again shortly."));
       setProfile(null);
       setProfiles([]);
     } else {
@@ -78,7 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     setProfileLoading(false);
-  }, []);
+  }, [showError]);
 
   const refreshProfiles = useCallback(async () => {
     await fetchProfiles(user);

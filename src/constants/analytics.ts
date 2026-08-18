@@ -1,9 +1,19 @@
 import type {
+  AnalyticsHomeCategory,
   FinancialHealthPageData,
   ReportsExportPageData,
   SankeyFlowPageData,
   TopCategoriesPageData,
 } from "@/types/analytics";
+
+export const ANALYTICS_HOME_TOP_CATEGORIES: AnalyticsHomeCategory[] = [
+  { label: "Food & Groceries", value: "34%" },
+  { label: "Transport", value: "18%" },
+  { label: "Shopping", value: "14%" },
+  { label: "Bills & Utilities", value: "12%" },
+];
+
+export const ANALYTICS_HOME_CATEGORIES_TOTAL = 23459;
 
 export const TOP_CATEGORIES_PAGE: TopCategoriesPageData = {
   dateRange: "May 12 - May 18, 2025",

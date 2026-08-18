@@ -11,7 +11,6 @@ export type DashboardStat = {
   title: string;
   tone: DashboardStatTone;
   trend?: string;
-  variant?: "progress" | "trend";
 };
 
 export type DashboardTransactionTone = "expense" | "income" | "transfer";
