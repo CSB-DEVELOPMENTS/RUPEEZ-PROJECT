@@ -86,14 +86,15 @@ export type DashboardCalendarDay = {
 };
 
 export type DashboardPortfolioAsset = {
+  id: string;
   change: string;
-  chipTone: "brand" | "primary";
-  subtitle: string;
-  symbol: string;
+  chipTone: "brand" | "neutral" | "negative" | "positive";
+  title: string;
   value: string;
 };
 
 export type DashboardSubscriptionAvatar = {
+  key: string;
   label: string;
   tone: "brand" | "neutral" | "negative" | "positive";
 };
