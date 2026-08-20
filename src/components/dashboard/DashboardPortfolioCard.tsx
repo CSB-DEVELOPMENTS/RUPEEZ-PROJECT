@@ -16,20 +16,19 @@ export function DashboardPortfolioCard({ items }: { items: DashboardPortfolioAss
       <View className="gap-5">
         {items.map((asset) => (
           <View
-            key={asset.symbol}
+            key={asset.id}
             className="flex-row items-center justify-between gap-4 rounded-[22px] border border-app-border bg-app-panel/30 p-4">
             <View className="flex-row items-center gap-4">
               <View
                 className={`h-12 w-12 items-center justify-center rounded-full ${portfolioChipToneClass(asset.chipTone)}`}>
                 <Text className="font-display text-base font-semibold text-app-primary-contrast">
-                  {asset.symbol[0]}
+                  {asset.title[0]}
                 </Text>
               </View>
               <View>
                 <Text className="font-display text-lg md:text-xl font-semibold text-app-text">
-                  {asset.symbol}
+                  {asset.title}
                 </Text>
-                <Text className="font-display text-sm text-app-muted">{asset.subtitle}</Text>
               </View>
             </View>
             <View className="items-end">

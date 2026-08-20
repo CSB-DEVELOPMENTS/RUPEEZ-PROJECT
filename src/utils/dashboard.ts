@@ -1,10 +1,14 @@
+import type { SummarySubscriptionRecord } from "@/services/sharedExpenseService";
 import type { DashboardTransactionRecord } from "@/services/transactionService";
-import { WalletBalance } from "@/services/walletService";
+import type { CryptoWallet, WalletBalance } from "@/services/walletService";
 import type {
   DashboardCalendarDay,
   DashboardOverviewData,
+  DashboardPortfolioAsset,
   DashboardStat,
   DashboardStatTone,
+  DashboardSubscriptionAvatar,
+  DashboardSubscriptionsOverviewData,
   DashboardTransaction,
 } from "@/types/dashboard";
 
@@ -29,8 +33,8 @@ function transactionTone(transaction: DashboardTransactionRecord): DashboardTran
   return transaction.transaction_type?.toLowerCase() === "income" ? "income" : "expense";
 }
 
-function formatCurrency(value: number) {
-  return `LKR ${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+function formatCurrency(value: number, currencyCode: string) {
+  return `${currencyCode} ${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
 }
 
 function calendarTone(activities: DashboardTransaction[]): DashboardStatTone | undefined {
@@ -99,10 +103,60 @@ function createCalendarDays(
   return cells;
 }
 
+const SUBSCRIPTION_TONES: DashboardSubscriptionAvatar["tone"][] = [
+  "negative",
+  "positive",
+  "brand",
+  "neutral",
+];
+
+const PORTFOLIO_CHIP_TONES: DashboardPortfolioAsset["chipTone"][] = [
+  "brand",
+  "neutral",
+  "negative",
+  "positive",
+];
+
+function formatSubscriptionsCardData(
+  subscriptions: SummarySubscriptionRecord[],
+  currencyCode: string,
+): DashboardSubscriptionsOverviewData {
+  const totalAmount = subscriptions.reduce((sum, s) => sum + (s.shared_expeneses.amount ?? 0), 0);
+  const items: DashboardSubscriptionAvatar[] = subscriptions
+    .slice(0, 3)
+    .map((s, i) => ({
+      key: s.shared_expeneses.shared_expense_id,
+      label: (s.shared_expeneses.name ?? "?")[0].toUpperCase(),
+      tone: SUBSCRIPTION_TONES[i % SUBSCRIPTION_TONES.length],
+    }));
+  if (subscriptions.length > 3) {
+    items.push({ key: "extra", label: `+${subscriptions.length - 3}`, tone: "neutral" });
+  }
+  return {
+    activeCountLabel: `${subscriptions.length} active subscription${subscriptions.length === 1 ? "" : "s"}`,
+    detailHref: "/subscriptions",
+    items,
+    summaryValue: formatCurrency(totalAmount, currencyCode),
+  };
+}
+
+function formatPortfolioItems(cryptoWallets: CryptoWallet[], currencyCode: string): DashboardPortfolioAsset[] {
+  return cryptoWallets.map((wallet, i) => ({
+    id: wallet.wallet_id,
+    change: "",
+    chipTone: PORTFOLIO_CHIP_TONES[i % PORTFOLIO_CHIP_TONES.length],
+    title: wallet.wallet_name,
+    value: formatCurrency(wallet.current_balance ?? 0, currencyCode),
+  }));
+}
+
 export function dashboardData(
   transactions: DashboardTransactionRecord[],
   walletBalances: WalletBalance[],
   endDate: Date,
+  subscriptions: SummarySubscriptionRecord[] = [],
+  cryptoWallets: CryptoWallet[] = [],
+  currencyCode: string = "LKR",
 ) {
   const startDate = new Date(endDate);
   startDate.setDate(startDate.getDate() - (DASHBOARD_DAYS_TO_SHOW - 1));
@@ -155,8 +209,8 @@ export function dashboardData(
     .reduce((total, transaction) => total + transaction.amount, 0);
   const overview: DashboardOverviewData = {
     detailHref: "/cash-flow",
-    expenseTotal: formatCurrency(expenses),
-    incomeTotal: formatCurrency(income),
+    expenseTotal: formatCurrency(expenses, currencyCode),
+    incomeTotal: formatCurrency(income, currencyCode),
     periodLabel: "Last 30 days",
     points,
   };
@@ -178,19 +232,19 @@ export function dashboardData(
     {
       caption: "Total balance",
       detail: `Across ${walletBalances.length} account${walletBalances.length === 1 ? "" : "s"}`,
-      title: formatCurrency(totalBalance),
+      title: formatCurrency(totalBalance, currencyCode),
       tone: "neutral",
     },
     {
       caption: "Total income",
       detail: "Last 30 days",
-      title: formatCurrency(totalIncome),
+      title: formatCurrency(totalIncome, currencyCode),
       tone: "positive",
     },
     {
       caption: "Total expenses",
       detail: "Last 30 days",
-      title: formatCurrency(totalExpenses),
+      title: formatCurrency(totalExpenses, currencyCode),
       tone: "negative",
     },
   ];
@@ -200,7 +254,9 @@ export function dashboardData(
     dateRange: `${startDate.toLocaleDateString("en-US", { day: "numeric", month: "short" })} - ${endDate.toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })}`,
     monthLabel: endDate.toLocaleDateString("en-US", { month: "long", year: "numeric" }),
     overview,
+    portfolioItems: formatPortfolioItems(cryptoWallets, currencyCode),
     recentTransactions: dashboardTransactions.slice(0, 5),
     stats,
+    subscriptionsCardData: formatSubscriptionsCardData(subscriptions, currencyCode),
   };
 }

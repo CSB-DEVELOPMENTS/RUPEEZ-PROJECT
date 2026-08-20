@@ -12,14 +12,17 @@ import {
   DashboardTransactionsCard,
 } from "@/components/dashboard/DashboardSections";
 import { DashboardStatCard } from "@/components/dashboard/DashboardStatCard";
-import { DASHBOARD_PORTFOLIO, DASHBOARD_SUBSCRIPTIONS_CARD } from "@/constants/dashboard";
 import { useAuth } from "@/hooks/auth/useAuth";
 import { useToast } from "@/hooks/toast/useToast";
+import {
+  getSummarySubscriptionsForProfile,
+  SummarySubscriptionRecord,
+} from "@/services/sharedExpenseService";
 import {
   getTransactionsByDateRange,
   type DashboardTransactionRecord,
 } from "@/services/transactionService";
-import { getWalletBalances, WalletBalance } from "@/services/walletService";
+import { getWalletBalances, WalletBalance, type CryptoWallet } from "@/services/walletService";
 import { DASHBOARD_DAYS_TO_SHOW, dashboardData } from "@/utils/dashboard";
 import { getErrorMessage } from "@/utils/error-message";
 
@@ -29,10 +32,20 @@ export default function Dashboard() {
   const { error: showError } = useToast();
   const [transactions, setTransactions] = useState<DashboardTransactionRecord[]>([]);
   const [walletBalances, setWalletBalances] = useState<WalletBalance[]>([]);
+  const [subscriptions, setSubscriptions] = useState<SummarySubscriptionRecord[]>([]);
+  const [cryptoWallets, setCryptoWallets] = useState<CryptoWallet[]>([]);
   const endDate = useMemo(() => new Date(), []);
   const dashboard = useMemo(
-    () => dashboardData(profile ? transactions : [], walletBalances, endDate),
-    [endDate, profile, transactions, walletBalances],
+    () =>
+      dashboardData(
+        profile ? transactions : [],
+        walletBalances,
+        endDate,
+        subscriptions,
+        cryptoWallets,
+        profile?.base_currency ?? "LKR",
+      ),
+    [endDate, profile, transactions, walletBalances, subscriptions, cryptoWallets],
   );
 
   useEffect(() => {
@@ -67,6 +80,28 @@ export default function Dashboard() {
         );
       }
       setWalletBalances(data);
+    });
+
+    void getSummarySubscriptionsForProfile(profile.profile_id).then(({ data, error }) => {
+      if (!isMounted) return;
+      if (error) {
+        showError(
+          "Unable to load subscriptions",
+          getErrorMessage(error, "Please try again shortly."),
+        );
+      }
+      setSubscriptions(data);
+    });
+
+    void getWalletBalances([profile.profile_id], "crypto").then(({ data, error }) => {
+      if (!isMounted) return;
+      if (error) {
+        showError(
+          "Unable to load crypto portfolio",
+          getErrorMessage(error, "Please try again shortly."),
+        );
+      }
+      setCryptoWallets(data);
     });
 
     return () => {
@@ -107,10 +142,10 @@ export default function Dashboard() {
 
             <View className="gap-4 lg:flex-row lg:items-stretch">
               <View className="min-w-0 lg:flex-1">
-                <DashboardSubscriptionsCard data={DASHBOARD_SUBSCRIPTIONS_CARD} />
+                <DashboardSubscriptionsCard data={dashboard.subscriptionsCardData} />
               </View>
               <View className="min-w-0 lg:flex-1">
-                <DashboardPortfolioCard items={DASHBOARD_PORTFOLIO} />
+                <DashboardPortfolioCard items={dashboard.portfolioItems} />
               </View>
             </View>
 
