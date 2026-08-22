@@ -3,6 +3,7 @@ import type { Href } from "expo-router";
 import { useRouter } from "expo-router";
 import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 
+import { TablePagination } from "@/components/common/TablePagination";
 import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
 
@@ -54,33 +55,7 @@ const transactions = [
   },
 ];
 
-function Pagination() {
-  const { theme } = useAppTheme();
-  const colors = Colors[theme];
-
-  return (
-    <View className="flex-row items-center justify-end gap-3 px-6 py-4">
-      <MaterialCommunityIcons name="chevron-left" size={19} color={colors.textMuted} />
-      {[1, 2, 3].map((page) => (
-        <Pressable
-          key={page}
-          className={`h-9 w-9 items-center justify-center rounded-[8px] border ${
-            page === 1 ? "border-app-primary bg-app-primary" : "border-app-border"
-          }`}>
-          <Text
-            className={`font-display text-sm ${
-              page === 1 ? "font-bold text-app-primary-contrast" : "text-app-text-muted"
-            }`}>
-            {page}
-          </Text>
-        </Pressable>
-      ))}
-      <Text className="px-2 font-display text-sm text-app-muted">...</Text>
-      <Text className="font-display text-sm text-app-muted md:flex hidden">28</Text>
-      <MaterialCommunityIcons name="chevron-right" size={19} color={colors.textMuted} />
-    </View>
-  );
-}
+const activityPagination = { currentPage: 1, pageSize: 5, totalItems: 142, totalPages: 29 };
 
 export default function MillionaireBoxActivityScreen() {
   const { theme } = useAppTheme();
@@ -197,12 +172,7 @@ export default function MillionaireBoxActivityScreen() {
               </Text>
             </View>
           ))}
-          <View className="flex-row items-center justify-between">
-            <Text className="px-6 font-display text-sm text-app-muted">
-              Showing <Text className="text-app-text">1-5</Text> of 142 entries
-            </Text>
-            <Pagination />
-          </View>
+          <TablePagination {...activityPagination} />
         </View>
 
         <View className="gap-3 md:hidden">
@@ -221,8 +191,8 @@ export default function MillionaireBoxActivityScreen() {
               </Text>
             </View>
           ))}
-          <View className="mt-6 items-center">
-            <Pagination />
+          <View className="mt-6">
+            <TablePagination {...activityPagination} />
           </View>
         </View>
 

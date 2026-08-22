@@ -5,13 +5,7 @@ import { Pressable, ScrollView, Text, TextInput, useWindowDimensions, View } fro
 
 import { Colors, Fonts } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
-
-type Participant = {
-  name: string;
-  email: string;
-  initials: string;
-  accentClassName: string;
-};
+import type { Participant } from "@/types/goals";
 
 const participants: Participant[] = [
   {

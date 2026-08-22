@@ -5,20 +5,7 @@ import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 
 import { Colors } from "@/constants/theme";
 import { useAppTheme } from "@/hooks/theme/useAppTheme";
-
-type Goal = {
-  name: string;
-  category: string;
-  categoryTag?: string;
-  type: "Personal" | "Shared";
-  saved: number;
-  target: number;
-  progress: number;
-  deadline: string;
-  daysLeft: string;
-  insight: string;
-  badgeTone: "purple" | "blue" | "neutral";
-};
+import type { Goal } from "@/types/goals";
 
 const goals: Goal[] = [
   {

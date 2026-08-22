@@ -26,21 +26,19 @@ const PROTECTED_ROUTE_BREADCRUMBS: Record<string, BreadcrumbItem[]> = {
     { href: "/crypto-assets", label: "Crypto Assets" },
   ],
   "/dashboard": [{ href: "/dashboard", label: "Dashboard" }],
-  "/goals": [{ href: "/goals" as BreadcrumbItem["href"], label: "Goals" }],
+  "/goals": [{ href: "/goals", label: "Goals" }],
   "/goals/add": [
-    { href: "/goals" as BreadcrumbItem["href"], label: "Goals" },
-    { href: "/goals" as BreadcrumbItem["href"], label: "Create New Goal" },
+    { href: "/goals", label: "Goals" },
+    { href: "/goals", label: "Create New Goal" },
   ],
-  "/millionaire-box": [
-    { href: "/millionaire-box" as BreadcrumbItem["href"], label: "Millionaire Box" },
-  ],
+  "/millionaire-box": [{ href: "/millionaire-box", label: "Millionaire Box" }],
   "/millionaire-box/activity": [
-    { href: "/millionaire-box" as BreadcrumbItem["href"], label: "Millionaire Box" },
-    { href: "/millionaire-box/activity" as BreadcrumbItem["href"], label: "Activity" },
+    { href: "/millionaire-box", label: "Millionaire Box" },
+    { href: "/millionaire-box/activity", label: "Activity" },
   ],
   "/millionaire-box/allocate": [
-    { href: "/millionaire-box" as BreadcrumbItem["href"], label: "Millionaire Box" },
-    { href: "/millionaire-box/allocate" as BreadcrumbItem["href"], label: "Allocate Funds" },
+    { href: "/millionaire-box", label: "Millionaire Box" },
+    { href: "/millionaire-box/allocate", label: "Allocate Funds" },
   ],
   "/recent-transactions": [
     { href: "/dashboard", label: "Dashboard" },
@@ -83,7 +81,7 @@ function getGoalRouteBreadcrumbs(segments: string[]) {
 
   const goalHref = `/goals/${segments[1]}` as BreadcrumbItem["href"];
   const breadcrumbs: BreadcrumbItem[] = [
-    { href: "/goals" as BreadcrumbItem["href"], label: "Goals" },
+    { href: "/goals", label: "Goals" },
     { href: goalHref, label: formatSegmentLabel(segments[1]) },
   ];
 
