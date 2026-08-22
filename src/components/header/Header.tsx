@@ -80,14 +80,18 @@ function ContextDropdown({ compact = false }: ContextDropdownProps) {
             "h-8 flex-row items-center gap-1.5 rounded-full bg-app-primary-muted px-3 active:opacity-80"
           : "h-11 flex-row items-center gap-2 rounded-lg border border-app-primary px-4 active:bg-app-primary-muted"
         }>
-        {!compact ?
-          <MaterialCommunityIcons name={selected.icon} size={18} color={colors.primaryStrong} />
-        : null}
-        <Text className="font-display text-sm font-semibold text-app-primary-strong">
-          {compact ?
-            <MaterialCommunityIcons name={selected.icon} color={colors.primaryStrong} />
-          : selected.label}
-        </Text>
+        {selected && (
+          <>
+            {!compact ?
+              <MaterialCommunityIcons name={selected.icon} size={18} color={colors.primaryStrong} />
+            : null}
+            <Text className="font-display text-sm font-semibold text-app-primary-strong">
+              {compact ?
+                <MaterialCommunityIcons name={selected.icon} color={colors.primaryStrong} />
+              : selected.label}
+            </Text>
+          </>
+        )}
         <MaterialCommunityIcons
           name={open ? "chevron-up" : "chevron-down"}
           size={compact ? 14 : 18}
